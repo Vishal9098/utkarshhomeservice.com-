@@ -1,0 +1,20 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Add Coupon{% endblock %}
+{% block content %}
+<div class="mb-4"><a href="{% url 'dashboard_coupons' %}" class="text-muted text-decoration-none"><i class="fas fa-arrow-left me-2"></i>Back</a><h4 class="fw-bold mt-1">Add Coupon</h4></div>
+<div class="card-dashboard p-4" style="max-width:600px;">
+  <form method="POST">{% csrf_token %}
+    <div class="row g-3">
+      <div class="col-md-6"><label class="form-label fw-semibold">Coupon Code *</label><input type="text" name="code" class="form-control text-uppercase" placeholder="e.g. SAVE20" required></div>
+      <div class="col-md-6"><label class="form-label fw-semibold">Discount Type *</label><select name="discount_type" class="form-select" required><option value="percent">Percentage (%)</option><option value="fixed">Fixed Amount (₹)</option></select></div>
+      <div class="col-md-6"><label class="form-label fw-semibold">Discount Value *</label><input type="number" name="discount_value" class="form-control" step="0.01" required></div>
+      <div class="col-md-6"><label class="form-label fw-semibold">Min Order Amount</label><input type="number" name="min_order_amount" class="form-control" value="0" step="0.01"></div>
+      <div class="col-md-6"><label class="form-label fw-semibold">Max Uses</label><input type="number" name="max_uses" class="form-control" value="100"></div>
+      <div class="col-md-6 d-flex align-items-end pb-1"><div class="form-check"><input type="checkbox" name="is_active" class="form-check-input" id="ca" checked><label class="form-check-label fw-semibold" for="ca">Active</label></div></div>
+      <div class="col-md-6"><label class="form-label fw-semibold">Valid From *</label><input type="datetime-local" name="valid_from" class="form-control" required></div>
+      <div class="col-md-6"><label class="form-label fw-semibold">Valid To *</label><input type="datetime-local" name="valid_to" class="form-control" required></div>
+      <div class="col-12"><button type="submit" class="btn btn-primary px-5">Create Coupon</button></div>
+    </div>
+  </form>
+</div>
+{% endblock %}

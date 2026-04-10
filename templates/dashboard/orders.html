@@ -1,0 +1,38 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Orders{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="fw-bold mb-0">Orders</h4>
+</div>
+<div class="card-dashboard mb-3 p-3">
+  <div class="d-flex gap-2 flex-wrap">
+    <a href="{% url 'dashboard_orders' %}" class="btn btn-sm {% if not status %}btn-primary{% else %}btn-outline-secondary{% endif %}">All</a>
+    {% for s,l in order.STATUS_CHOICES|default:"" %}{% endfor %}
+    <a href="?status=pending" class="btn btn-sm {% if status == 'pending' %}btn-primary{% else %}btn-outline-secondary{% endif %}">Pending</a>
+    <a href="?status=confirmed" class="btn btn-sm {% if status == 'confirmed' %}btn-primary{% else %}btn-outline-secondary{% endif %}">Confirmed</a>
+    <a href="?status=in_progress" class="btn btn-sm {% if status == 'in_progress' %}btn-primary{% else %}btn-outline-secondary{% endif %}">In Progress</a>
+    <a href="?status=completed" class="btn btn-sm {% if status == 'completed' %}btn-primary{% else %}btn-outline-secondary{% endif %}">Completed</a>
+    <a href="?status=cancelled" class="btn btn-sm {% if status == 'cancelled' %}btn-primary{% else %}btn-outline-secondary{% endif %}">Cancelled</a>
+  </div>
+</div>
+<div class="card-dashboard">
+  <div class="table-responsive">
+    <table class="table table-dashboard mb-0">
+      <thead><tr><th>ORDER ID</th><th>CUSTOMER</th><th>DATE</th><th>AMOUNT</th><th>PAYMENT</th><th>STATUS</th><th>ACTION</th></tr></thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td><a href="{% url 'dashboard_order_detail' order.order_id %}" style="color:var(--primary);font-weight:600;">{{ order.order_id }}</a></td>
+          <td><div class="d-flex align-items-center gap-2"><div style="width:32px;height:32px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">{{ order.user.username|first|upper }}</div><div><div class="fw-semibold">{{ order.name }}</div><small class="text-muted">{{ order.phone }}</small></div></div></td>
+          <td><small>{{ order.created_at|date:"d M Y" }}<br>{{ order.created_at|time:"h:i A" }}</small></td>
+          <td><strong>₹{{ order.total }}</strong></td>
+          <td><small>{{ order.get_payment_method_display }}</small></td>
+          <td><span class="badge-status badge-{{ order.status }}">{{ order.get_status_display }}</span></td>
+          <td><a href="{% url 'dashboard_order_detail' order.order_id %}" class="btn btn-sm btn-outline-primary">View</a></td>
+        </tr>
+        {% empty %}<tr><td colspan="7" class="text-center py-4 text-muted">No orders found</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

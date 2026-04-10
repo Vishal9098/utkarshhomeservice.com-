@@ -1,0 +1,30 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Products{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="fw-bold mb-0">Products / Services</h4>
+  <a href="{% url 'dashboard_product_add' %}" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Add Service</a>
+</div>
+<div class="card-dashboard">
+  <div class="table-responsive">
+    <table class="table table-dashboard mb-0">
+      <thead><tr><th>IMAGE</th><th>NAME</th><th>CATEGORY</th><th>PRICE</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
+      <tbody>
+        {% for s in services %}
+        <tr>
+          <td>{% if s.image %}<img src="{{ s.image.url }}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;">{% else %}<div style="width:50px;height:50px;background:#e8f0fe;border-radius:8px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-image text-muted"></i></div>{% endif %}</td>
+          <td><strong>{{ s.name }}</strong>{% if s.is_featured %}<span class="badge bg-warning text-dark ms-1" style="font-size:10px;">Featured</span>{% endif %}</td>
+          <td><small>{{ s.category.name }}</small></td>
+          <td><strong>₹{{ s.get_final_price }}</strong>{% if s.discount_price %}<br><small class="text-muted text-decoration-line-through">₹{{ s.price }}</small>{% endif %}</td>
+          <td>{% if s.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+          <td>
+            <a href="{% url 'dashboard_product_edit' s.pk %}" class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-edit"></i></a>
+            <a href="{% url 'dashboard_product_delete' s.pk %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this service?')"><i class="fas fa-trash"></i></a>
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="6" class="text-center py-4 text-muted">No services found. <a href="{% url 'dashboard_product_add' %}">Add one</a></td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

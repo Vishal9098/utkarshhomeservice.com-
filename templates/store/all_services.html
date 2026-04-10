@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block title %}
+  {% if selected_category %}{{ selected_category.name }}{% else %}All Services{% endif %} - Utkarsh Cleaning
+{% endblock %}
+
+{% block content %}
+<!-- BREADCRUMB -->
+<div class="breadcrumb-section">
+  <div class="container">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'all_services' %}">All Services</a></li>
+      {% if selected_category %}
+      <li class="breadcrumb-item active">{{ selected_category.name }}</li>
+      {% endif %}
+    </ol>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+
+      <!-- SIDEBAR -->
+      <div class="col-lg-3">
+        <!-- Search -->
+        <div class="card border-0 shadow-sm p-3 mb-3">
+          <h6 class="fw-bold mb-3"><i class="fas fa-search me-2" style="color:var(--primary);"></i>Search</h6>
+          <form method="GET" action="{% url 'all_services' %}">
+            {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category.slug }}">{% endif %}
+            <div class="input-group">
+              <input type="text" name="q" class="form-control" placeholder="Service dhundein..." value="{{ search|default:'' }}">
+              <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Sort -->
+        <div class="card border-0 shadow-sm p-3 mb-3">
+          <h6 class="fw-bold mb-3"><i class="fas fa-sort me-2" style="color:var(--primary);"></i>Sort By</h6>
+          <select class="form-select" onchange="window.location='{% url 'all_services' %}{% if selected_category %}?category={{ selected_category.slug }}&{% else %}?{% endif %}sort='+this.value">
+            <option value="" {% if not sort %}selected{% endif %}>Default</option>
+            <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+            <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+            <option value="rating" {% if sort == 'rating' %}selected{% endif %}>Top Rated</option>
+          </select>
+        </div>
+
+        <!-- Categories -->
+        <div class="card border-0 shadow-sm p-3">
+          <h6 class="fw-bold mb-3"><i class="fas fa-th-list me-2" style="color:var(--primary);"></i>Categories</h6>
+          <a href="{% url 'all_services' %}" class="d-flex justify-content-between align-items-center py-2 px-2 rounded mb-1 text-decoration-none {% if not selected_category %}fw-bold{% endif %}" style="color:{% if not selected_category %}var(--primary){% else %}#555{% endif %};">
+            All Services
+            <span class="badge bg-primary rounded-pill">{{ total_count }}</span>
+          </a>
+          {% for cat in categories %}
+          <a href="{% url 'all_services' %}?category={{ cat.slug }}" class="d-flex justify-content-between align-items-center py-2 px-2 rounded mb-1 text-decoration-none {% if selected_category.slug == cat.slug %}fw-bold{% endif %}" style="color:{% if selected_category.slug == cat.slug %}var(--primary){% else %}#555{% endif %};">
+            {{ cat.name }}
+            <span class="badge bg-primary rounded-pill">{{ cat.services.count }}</span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- SERVICES GRID -->
+      <div class="col-lg-9">
+        <!-- Page title -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h4 class="fw-bold mb-0">
+              {% if selected_category %}
+                {{ selected_category.name }}
+              {% else %}
+                All Services
+              {% endif %}
+            </h4>
+            <small class="text-muted">{{ services.count }} service{{ services.count|pluralize }} mili</small>
+          </div>
+        </div>
+
+        <!-- Cards -->
+        <div class="row g-3">
+          {% for service in services %}
+          <div class="col-md-4 col-6">
+            <div class="card border-0 shadow-sm h-100" style="border-radius:15px;overflow:hidden;transition:all .3s;">
+              <a href="{% url 'service_detail' service.slug %}" class="text-decoration-none">
+                <!-- Image -->
+                {% if service.image %}
+                  <img src="{{ service.image.url }}" class="card-img-top" style="height:200px;object-fit:cover;" alt="{{ service.name }}">
+                {% else %}
+                  <div style="height:200px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-spray-can-sparkles fa-3x" style="color:var(--primary);opacity:.5;"></i>
+                  </div>
+                {% endif %}
+                <!-- Body -->
+                <div class="card-body p-3">
+                  <h6 class="fw-bold mb-1" style="color:#1a1a2e;font-size:14px;">{{ service.name }}</h6>
+                  <p class="text-muted mb-2" style="font-size:12px;line-height:1.4;">{{ service.short_description|truncatewords:10 }}</p>
+                  <!-- Rating & Duration -->
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span style="color:#f0a500;font-size:12px;">
+                      {% for i in "12345" %}{% if forloop.counter <= service.rating|floatformat:0|add:"0" %}★{% else %}☆{% endif %}{% endfor %}
+                      <small class="text-muted">({{ service.reviews.count }})</small>
+                    </span>
+                    {% if service.duration %}
+                    <small class="text-muted"><i class="fas fa-clock me-1"></i>{{ service.duration }}</small>
+                    {% endif %}
+                  </div>
+                  <!-- Price -->
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <span style="color:var(--primary);font-weight:700;font-size:18px;">₹{{ service.get_final_price }}</span>
+                      {% if service.discount_price %}
+                        <span style="text-decoration:line-through;color:#999;font-size:13px;margin-left:4px;">₹{{ service.price }}</span>
+                      {% endif %}
+                    </div>
+                    {% if service.get_discount_percent > 0 %}
+                      <span style="background:#f0a500;color:#fff;font-size:11px;border-radius:4px;padding:2px 6px;font-weight:700;">{{ service.get_discount_percent }}% OFF</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+              <!-- Buttons -->
+              <div class="card-footer bg-transparent border-0 p-3 pt-0 d-flex gap-2">
+                <a href="{% url 'service_detail' service.slug %}" class="btn btn-outline-primary btn-sm flex-grow-1" style="border-radius:20px;font-size:12px;">Details</a>
+                <a href="{% url 'add_to_cart' service.id %}" class="btn btn-primary btn-sm flex-grow-1" style="border-radius:20px;font-size:12px;"><i class="fas fa-cart-plus me-1"></i>Cart</a>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="col-12 text-center py-5">
+            <i class="fas fa-search fa-4x text-muted mb-3 d-block"></i>
+            <h5 class="text-muted">Koi service nahi mili</h5>
+            <a href="{% url 'all_services' %}" class="btn btn-primary mt-3" style="border-radius:25px;">All Services Dekhein</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Order {{ order.order_id }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div><a href="{% url 'dashboard_orders' %}" class="text-muted text-decoration-none"><i class="fas fa-arrow-left me-2"></i>Back to Orders</a><h4 class="fw-bold mb-0 mt-1">Order {{ order.order_id }}</h4></div>
+  <span class="badge-status badge-{{ order.status }} px-3 py-2" style="font-size:13px;">{{ order.get_status_display }}</span>
+</div>
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="card-dashboard p-4 mb-3">
+      <h6 class="fw-bold mb-3">Order Items</h6>
+      {% for item in order.items.all %}
+      <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+        <div><strong>{{ item.service.name }}</strong><br><small class="text-muted">Qty: {{ item.quantity }} × ₹{{ item.price }}</small></div>
+        <strong>₹{{ item.get_total }}</strong>
+      </div>
+      {% endfor %}
+      <div class="mt-3">
+        <div class="d-flex justify-content-between mb-1"><span>Subtotal</span><strong>₹{{ order.subtotal }}</strong></div>
+        {% if order.discount > 0 %}<div class="d-flex justify-content-between mb-1 text-success"><span>Discount</span><strong>-₹{{ order.discount }}</strong></div>{% endif %}
+        <div class="d-flex justify-content-between fw-bold fs-5 mt-2"><span>Total</span><span style="color:var(--primary);">₹{{ order.total }}</span></div>
+      </div>
+    </div>
+    <div class="card-dashboard p-4">
+      <h6 class="fw-bold mb-3">Update Status</h6>
+      <form method="POST">{% csrf_token %}
+        <div class="d-flex gap-2">
+          <select name="status" class="form-select">
+            <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+            <option value="confirmed" {% if order.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+            <option value="in_progress" {% if order.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+            <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>Completed</option>
+            <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+          </select>
+          <button type="submit" class="btn btn-primary px-4">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card-dashboard p-4 mb-3">
+      <h6 class="fw-bold mb-3">Customer Info</h6>
+      <p class="mb-1"><strong>Name:</strong> {{ order.name }}</p>
+      <p class="mb-1"><strong>Phone:</strong> {{ order.phone }}</p>
+      <p class="mb-1"><strong>Email:</strong> {{ order.email }}</p>
+    </div>
+    <div class="card-dashboard p-4 mb-3">
+      <h6 class="fw-bold mb-3">Delivery Address</h6>
+      <p class="mb-1">{{ order.address }}</p>
+      <p class="mb-1">{{ order.city }} - {{ order.pincode }}</p>
+      {% if order.service_date %}<p class="mb-1"><strong>Date:</strong> {{ order.service_date }}</p>{% endif %}
+      {% if order.service_time %}<p class="mb-1"><strong>Time:</strong> {{ order.service_time }}</p>{% endif %}
+    </div>
+    <div class="card-dashboard p-4">
+      <h6 class="fw-bold mb-3">Payment Info</h6>
+      <p class="mb-1"><strong>Method:</strong> {{ order.get_payment_method_display }}</p>
+      <p><strong>Status:</strong> {% if order.payment_status %}<span class="text-success fw-bold">Paid</span>{% else %}<span class="text-warning fw-bold">Pending</span>{% endif %}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

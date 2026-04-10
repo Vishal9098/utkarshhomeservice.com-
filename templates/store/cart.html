@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Cart - Utkarsh Cleaning{% endblock %}
+{% block content %}
+<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li><li class="breadcrumb-item active">Cart</li></ol></div></div>
+<section class="py-5">
+  <div class="container">
+    <h3 class="fw-bold mb-4"><i class="fas fa-shopping-cart me-2" style="color:var(--primary);"></i>Your Cart</h3>
+    {% if items %}
+    <div class="row g-4">
+      <div class="col-lg-8">
+        {% for item in items %}
+        <div class="card border-0 shadow-sm mb-3">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-3 col-md-2">
+                {% if item.service.image %}<img src="{{ item.service.image.url }}" class="img-fluid rounded" style="height:70px;object-fit:cover;">
+                {% else %}<div style="height:70px;background:#e8f0fe;border-radius:8px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-spray-can-sparkles" style="color:var(--primary);"></i></div>{% endif %}
+              </div>
+              <div class="col-5 col-md-6">
+                <h6 class="fw-bold mb-1">{{ item.service.name }}</h6>
+                <span style="color:var(--primary);font-weight:700;">₹{{ item.service.get_final_price }}</span>
+              </div>
+              <div class="col-2 col-md-2">
+                <form method="POST" action="{% url 'update_cart' item.id %}">{% csrf_token %}
+                  <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="10" class="form-control form-control-sm text-center" onchange="this.form.submit()">
+                </form>
+              </div>
+              <div class="col-2 col-md-2 text-end">
+                <div class="fw-bold mb-1">₹{{ item.get_total }}</div>
+                <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm p-3 mb-3">
+          <h6 class="fw-bold mb-3">Apply Coupon</h6>
+          <form method="POST" action="{% url 'apply_coupon' %}">{% csrf_token %}
+            <div class="input-group">
+              <input type="text" name="coupon_code" class="form-control" placeholder="Enter coupon code">
+              <button class="btn btn-primary" type="submit">Apply</button>
+            </div>
+          </form>
+        </div>
+        <div class="card border-0 shadow-sm p-3">
+          <h6 class="fw-bold mb-3">Order Summary</h6>
+          <div class="d-flex justify-content-between mb-2"><span>Subtotal</span><strong>₹{{ subtotal }}</strong></div>
+          {% if discount > 0 %}<div class="d-flex justify-content-between mb-2 text-success"><span>Discount</span><strong>-₹{{ discount }}</strong></div>{% endif %}
+          <hr>
+          <div class="d-flex justify-content-between mb-3"><span class="fw-bold fs-5">Total</span><strong class="fs-5" style="color:var(--primary);">₹{{ total }}</strong></div>
+          <a href="{% url 'checkout' %}" class="btn btn-primary w-100 btn-lg" style="border-radius:30px;"><i class="fas fa-credit-card me-2"></i>Proceed to Checkout</a>
+          <a href="{% url 'all_services' %}" class="btn btn-outline-secondary w-100 mt-2" style="border-radius:30px;">Continue Shopping</a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <i class="fas fa-shopping-cart fa-5x text-muted mb-4"></i>
+      <h4 class="text-muted">Aapka cart khali hai</h4>
+      <a href="{% url 'all_services' %}" class="btn btn-primary mt-3 px-5" style="border-radius:30px;">Services Dekhein</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

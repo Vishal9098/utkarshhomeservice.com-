@@ -1,0 +1,26 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Coupons{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="fw-bold mb-0">Coupons</h4>
+  <a href="{% url 'dashboard_coupon_add' %}" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Add Coupon</a>
+</div>
+<div class="card-dashboard">
+  <table class="table table-dashboard mb-0">
+    <thead><tr><th>CODE</th><th>TYPE</th><th>VALUE</th><th>MIN ORDER</th><th>USES</th><th>VALID TO</th><th>STATUS</th></tr></thead>
+    <tbody>
+      {% for c in coupons %}
+      <tr>
+        <td><strong style="color:var(--primary);font-size:15px;">{{ c.code }}</strong></td>
+        <td><span class="badge bg-light text-dark border">{{ c.get_discount_type_display }}</span></td>
+        <td><strong>{% if c.discount_type == 'percent' %}{{ c.discount_value }}%{% else %}₹{{ c.discount_value }}{% endif %}</strong></td>
+        <td>₹{{ c.min_order_amount }}</td>
+        <td>{{ c.used_count }}/{{ c.max_uses }}</td>
+        <td><small>{{ c.valid_to|date:"d M Y" }}</small></td>
+        <td>{% if c.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+      </tr>
+      {% empty %}<tr><td colspan="7" class="text-center py-4 text-muted">No coupons. <a href="{% url 'dashboard_coupon_add' %}">Create one</a></td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Reviews{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4">Reviews</h4>
+<div class="card-dashboard">
+  <table class="table table-dashboard mb-0">
+    <thead><tr><th>USER</th><th>SERVICE</th><th>RATING</th><th>COMMENT</th><th>DATE</th><th>STATUS</th></tr></thead>
+    <tbody>
+      {% for r in reviews %}
+      <tr>
+        <td><strong>{{ r.user.username }}</strong></td>
+        <td><small>{{ r.service.name|truncatewords:4 }}</small></td>
+        <td><span style="color:#f59e0b;">{% for i in "12345" %}{% if forloop.counter <= r.rating %}★{% else %}☆{% endif %}{% endfor %}</span></td>
+        <td><small>{{ r.comment|truncatewords:10 }}</small></td>
+        <td><small>{{ r.created_at|date:"d M Y" }}</small></td>
+        <td>{% if r.is_approved %}<span class="badge bg-success">Approved</span>{% else %}<span class="badge bg-warning text-dark">Pending</span>{% endif %}</td>
+      </tr>
+      {% empty %}<tr><td colspan="6" class="text-center py-4 text-muted">No reviews yet</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

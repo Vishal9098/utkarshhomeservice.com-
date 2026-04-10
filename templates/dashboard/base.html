@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Dashboard{% endblock %} - Utkarsh Admin</title>
+{% load static %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#4f46e5;--primary-dark:#3730a3;--sidebar-bg:#1e1b4b;--sidebar-hover:#312e81;--text-light:#e0e7ff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;background:#f1f5f9;color:#1e293b;}
+.sidebar{width:250px;min-height:100vh;background:var(--sidebar-bg);position:fixed;top:0;left:0;z-index:100;transition:all .3s;display:flex;flex-direction:column;}
+.sidebar-brand{padding:20px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:12px;}
+.sidebar-brand .brand-icon{width:40px;height:40px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;}
+.sidebar-brand .brand-name{color:#fff;font-weight:700;font-size:14px;}
+.sidebar-brand .brand-sub{color:#a5b4fc;font-size:10px;}
+.sidebar-menu{padding:15px 0;flex:1;}
+.sidebar-section{padding:8px 20px 5px;color:#7c3aed;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.sidebar-link{display:flex;align-items:center;gap:12px;padding:10px 20px;color:#c7d2fe;text-decoration:none;transition:all .2s;font-size:14px;font-weight:500;margin:2px 10px;border-radius:8px;}
+.sidebar-link:hover,.sidebar-link.active{background:var(--sidebar-hover);color:#fff;}
+.sidebar-link i{width:18px;text-align:center;}
+.sidebar-footer{padding:15px;border-top:1px solid rgba(255,255,255,.1);}
+.main-content{margin-left:250px;min-height:100vh;display:flex;flex-direction:column;}
+.topbar{background:#fff;padding:12px 25px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,.08);position:sticky;top:0;z-index:99;}
+.topbar .search-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 15px;display:flex;align-items:center;gap:10px;width:280px;}
+.topbar .search-box input{border:none;background:transparent;outline:none;font-size:13px;width:100%;}
+.content-area{padding:25px;flex:1;}
+.stat-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06);border:1px solid #e2e8f0;}
+.stat-icon{width:50px;height:50px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.stat-number{font-size:28px;font-weight:700;margin:8px 0 4px;}
+.stat-label{font-size:12px;color:#64748b;}
+.stat-change{font-size:11px;font-weight:600;}
+.stat-change.up{color:#16a34a;}
+.stat-change.down{color:#dc2626;}
+.card-dashboard{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);border:1px solid #e2e8f0;}
+.table-dashboard thead th{background:#f8fafc;border:none;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;padding:12px 15px;}
+.table-dashboard tbody td{padding:12px 15px;border-color:#f1f5f9;vertical-align:middle;font-size:13px;}
+.badge-status{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge-pending{background:#fef3c7;color:#d97706;}
+.badge-confirmed{background:#dbeafe;color:#1d4ed8;}
+.badge-completed{background:#d1fae5;color:#059669;}
+.badge-cancelled{background:#fee2e2;color:#dc2626;}
+.badge-in_progress{background:#e0f2fe;color:#0369a1;}
+@media(max-width:768px){.sidebar{transform:translateX(-250px);}.sidebar.show{transform:translateX(0);}.main-content{margin-left:0;}}
+{% block extra_css %}{% endblock %}
+</style>
+</head>
+<body>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon">U</div>
+    <div><div class="brand-name">Utkarsh</div><div class="brand-sub">Admin Dashboard</div></div>
+  </div>
+  <div class="sidebar-menu">
+    <div class="sidebar-section">Menu</div>
+    <a href="{% url 'dashboard_home' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard_home' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
+    <a href="{% url 'dashboard_orders' %}" class="sidebar-link {% if 'order' in request.resolver_match.url_name %}active{% endif %}"><i class="fas fa-shopping-bag"></i>Orders</a>
+    <a href="{% url 'dashboard_products' %}" class="sidebar-link {% if 'product' in request.resolver_match.url_name %}active{% endif %}"><i class="fas fa-box"></i>Products</a>
+    <a href="{% url 'dashboard_customers' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard_customers' %}active{% endif %}"><i class="fas fa-users"></i>Customers</a>
+    <a href="{% url 'dashboard_categories' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard_categories' %}active{% endif %}"><i class="fas fa-tags"></i>Categories</a>
+    <a href="{% url 'dashboard_reviews' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard_reviews' %}active{% endif %}"><i class="fas fa-star"></i>Reviews</a>
+    <a href="{% url 'dashboard_coupons' %}" class="sidebar-link {% if 'coupon' in request.resolver_match.url_name %}active{% endif %}"><i class="fas fa-ticket-alt"></i>Coupons</a>
+    <a href="{% url 'dashboard_analytics' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard_analytics' %}active{% endif %}"><i class="fas fa-chart-line"></i>Analytics <span class="badge bg-primary ms-1" style="font-size:9px;">NEW</span></a>
+    <a href="{% url 'dashboard_contacts' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard_contacts' %}active{% endif %}"><i class="fas fa-envelope"></i>Contacts</a>
+  </div>
+  <div class="sidebar-footer">
+    <a href="{% url 'home' %}" class="sidebar-link"><i class="fas fa-store"></i>View Store</a>
+    <a href="{% url 'logout' %}" class="sidebar-link"><i class="fas fa-sign-out-alt"></i>Logout</a>
+  </div>
+</div>
+
+<div class="main-content">
+  <div class="topbar">
+    <div class="d-flex align-items-center gap-3">
+      <button class="btn btn-sm btn-light d-md-none" onclick="document.getElementById('sidebar').classList.toggle('show')"><i class="fas fa-bars"></i></button>
+      <div class="search-box d-none d-md-flex"><i class="fas fa-search text-muted"></i><input type="text" placeholder="Search... ⌘K"></div>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+      <button class="btn btn-sm btn-light" id="themeToggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
+      <div class="position-relative"><i class="fas fa-bell text-muted fs-5"></i><span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:9px;">3</span></div>
+      <div class="d-flex align-items-center gap-2"><div style="width:35px;height:35px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;">{{ user.username|first|upper }}</div><span class="fw-semibold" style="font-size:14px;">{{ user.username }}</span></div>
+    </div>
+  </div>
+
+  <div class="content-area">
+    {% if messages %}{% for msg in messages %}<div class="alert alert-{% if msg.tags == 'error' %}danger{% else %}{{ msg.tags }}{% endif %} alert-dismissible fade show mb-3"><i class="fas fa-info-circle me-2"></i>{{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>{% endfor %}{% endif %}
+    {% block content %}{% endblock %}
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.getElementById('themeToggle').addEventListener('click',function(){
+  document.body.classList.toggle('dark-mode');
+  this.querySelector('i').classList.toggle('fa-moon');
+  this.querySelector('i').classList.toggle('fa-sun');
+});
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

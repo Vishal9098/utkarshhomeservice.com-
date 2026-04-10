@@ -1,0 +1,44 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Analytics{% endblock %}
+{% block extra_js %}<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4">Analytics <span class="badge bg-primary ms-2" style="font-size:12px;">NEW</span></h4>
+<div class="row g-3 mb-4">
+  <div class="col-lg-8">
+    <div class="card-dashboard p-4">
+      <h6 class="fw-bold mb-3">Revenue (Last 6 Months)</h6>
+      <canvas id="revChart" height="80"></canvas>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card-dashboard p-4">
+      <h6 class="fw-bold mb-3">Top Services</h6>
+      {% for s in top_services %}
+      <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
+        <span>{{ s.service__name|truncatewords:4 }}</span>
+        <span class="badge bg-primary">{{ s.total }} orders</span>
+      </div>
+      {% empty %}<p class="text-muted">No data yet</p>{% endfor %}
+    </div>
+  </div>
+</div>
+<div class="card-dashboard p-4">
+  <h6 class="fw-bold mb-3">Monthly Summary</h6>
+  <div class="table-responsive">
+    <table class="table table-dashboard">
+      <thead><tr><th>MONTH</th><th>REVENUE</th><th>ORDERS</th></tr></thead>
+      <tbody>
+        {% for m in monthly %}<tr><td>{{ m.month }}</td><td><strong>₹{{ m.revenue }}</strong></td><td>{{ m.orders }}</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+const months = [{% for m in monthly %}'{{ m.month }}',{% endfor %}];
+const revenue = [{% for m in monthly %}{{ m.revenue }},{% endfor %}];
+new Chart(document.getElementById('revChart'), {
+  type:'line', data:{labels:months, datasets:[{label:'Revenue ₹',data:revenue,borderColor:'#4f46e5',backgroundColor:'rgba(79,70,229,.1)',fill:true,tension:.4,pointBackgroundColor:'#4f46e5'}]},
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'₹'+v}},x:{grid:{display:false}}}}
+});
+</script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Login - Utkarsh Cleaning{% endblock %}
+{% block content %}
+<section class="py-5" style="background:var(--light-bg);min-height:70vh;display:flex;align-items:center;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-7">
+        <div class="card border-0 shadow-lg p-4">
+          <div class="text-center mb-4">
+            <div style="width:70px;height:70px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;"><i class="fas fa-user fa-2x text-white"></i></div>
+            <h4 class="fw-bold">Welcome Back!</h4>
+            <p class="text-muted">Apne account mein login karein</p>
+          </div>
+          <form method="POST">{% csrf_token %}
+            <div class="mb-3"><label class="form-label fw-semibold">Username</label><div class="input-group"><span class="input-group-text"><i class="fas fa-user" style="color:var(--primary);"></i></span><input type="text" name="username" class="form-control" placeholder="Enter username" required></div></div>
+            <div class="mb-3"><label class="form-label fw-semibold">Password</label><div class="input-group"><span class="input-group-text"><i class="fas fa-lock" style="color:var(--primary);"></i></span><input type="password" name="password" class="form-control" placeholder="Enter password" required></div></div>
+            <button type="submit" class="btn btn-primary w-100 btn-lg mt-2" style="border-radius:30px;"><i class="fas fa-sign-in-alt me-2"></i>Login</button>
+          </form>
+          <div class="text-center mt-3"><p class="text-muted">Account nahi hai? <a href="{% url 'register' %}" style="color:var(--primary);font-weight:600;">Register karein</a></p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

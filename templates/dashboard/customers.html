@@ -1,0 +1,23 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Customers{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4">Customers</h4>
+<div class="card-dashboard">
+  <div class="table-responsive">
+    <table class="table table-dashboard mb-0">
+      <thead><tr><th>USER</th><th>EMAIL</th><th>PHONE</th><th>JOINED</th><th>ORDERS</th></tr></thead>
+      <tbody>
+        {% for c in customers %}
+        <tr>
+          <td><div class="d-flex align-items-center gap-2"><div style="width:35px;height:35px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">{{ c.username|first|upper }}</div><div><strong>{{ c.username }}</strong><br><small class="text-muted">{{ c.get_full_name }}</small></div></div></td>
+          <td><small>{{ c.email }}</small></td>
+          <td><small>{% if c.profile %}{{ c.profile.phone }}{% endif %}</small></td>
+          <td><small>{{ c.date_joined|date:"d M Y" }}</small></td>
+          <td><span class="badge bg-primary">{{ c.orders.count }}</span></td>
+        </tr>
+        {% empty %}<tr><td colspan="5" class="text-center py-4 text-muted">No customers yet</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

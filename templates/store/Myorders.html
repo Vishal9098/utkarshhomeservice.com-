@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+{% block title %}My Orders | Utkarsh Cleaning{% endblock %}
+{% block content %}
+{% load static %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --navy:   #0a1628;
+  --gold:   #c9a84c;
+  --ice:    #f4f8ff;
+  --white:  #ffffff;
+  --muted:  #7a8ba0;
+  --border: #dce6f5;
+}
+
+.orders-section {
+  background: var(--ice);
+  min-height: 80vh;
+  padding: 48px 0 72px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.orders-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 28px;
+}
+.orders-title span { color: var(--gold); }
+
+/* Order card */
+.order-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(10,22,40,0.07);
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease;
+}
+.order-card:hover {
+  box-shadow: 0 8px 30px rgba(10,22,40,0.12);
+}
+
+/* Card header */
+.order-card-head {
+  background: var(--navy);
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.order-id {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+.order-date {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+}
+
+/* Status badge */
+.status-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.status-pending    { background: #fff3cd; color: #856404; }
+.status-confirmed  { background: #cce5ff; color: #004085; }
+.status-in_progress{ background: #d4edda; color: #155724; }
+.status-completed  { background: #d4edda; color: #155724; }
+.status-cancelled  { background: #f8d7da; color: #721c24; }
+
+/* Card body */
+.order-card-body {
+  padding: 18px 22px;
+}
+
+/* Items list */
+.order-items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+}
+.order-items-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--navy);
+}
+.order-items-list li:last-child { border-bottom: none; }
+.order-items-list .item-name { font-weight: 500; }
+.order-items-list .item-qty  { color: var(--muted); font-size: 12px; }
+.order-items-list .item-price{ font-weight: 700; color: var(--gold); }
+
+/* Total row */
+.order-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0 0;
+  border-top: 2px solid var(--border);
+  margin-top: 4px;
+}
+.order-total-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+}
+.order-total-amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+/* Action buttons */
+.order-actions {
+  padding: 14px 22px;
+  background: var(--ice);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn-invoice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--navy);
+  color: var(--gold);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 22px;
+  border-radius: 30px;
+  text-decoration: none;
+  border: 2px solid var(--gold);
+  transition: all 0.25s ease;
+}
+.btn-invoice:hover {
+  background: var(--gold);
+  color: var(--navy);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(201,168,76,0.35);
+}
+.btn-invoice i { font-size: 14px; }
+
+.btn-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--navy);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 20px;
+  border-radius: 30px;
+  text-decoration: none;
+  border: 1.5px solid var(--border);
+  transition: all 0.25s ease;
+}
+.btn-detail:hover {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: var(--white);
+}
+
+/* Payment tag */
+.pay-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-left: auto;
+}
+.pay-tag i { color: var(--gold); margin-right: 4px; }
+
+/* Empty state */
+.empty-orders {
+  text-align: center;
+  padding: 80px 20px;
+}
+.empty-orders i {
+  font-size: 64px;
+  color: var(--border);
+  margin-bottom: 20px;
+  display: block;
+}
+.empty-orders h4 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.empty-orders p { color: var(--muted); font-size: 14px; }
+.empty-orders a {
+  display: inline-block;
+  margin-top: 20px;
+  background: var(--navy);
+  color: var(--gold);
+  padding: 12px 32px;
+  border-radius: 30px;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 14px;
+}
+</style>
+
+<section class="orders-section">
+  <div class="container">
+
+    <h2 class="orders-title">My <span>Orders</span></h2>
+
+    {% if orders %}
+      {% for order in orders %}
+      <div class="order-card">
+
+        <!-- ── HEADER ── -->
+        <div class="order-card-head">
+          <div>
+            <div class="order-id">{{ order.order_id }}</div>
+            <div class="order-date">{{ order.created_at|date:"d M Y, h:i A" }}</div>
+          </div>
+          <span class="status-badge status-{{ order.status }}">
+            {{ order.get_status_display }}
+          </span>
+        </div>
+
+        <!-- ── ITEMS ── -->
+        <div class="order-card-body">
+          <ul class="order-items-list">
+            {% for item in order.items.all %}
+            <li>
+              <span class="item-name">{{ item.service.name }}</span>
+              <span class="item-qty">x{{ item.quantity }}</span>
+              <span class="item-price">Rs. {{ item.get_total }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+
+          <!-- Total -->
+          <div class="order-total-row">
+            <span class="order-total-label">
+              {% if order.discount > 0 %}
+                Total
+                <small style="color:var(--muted);font-weight:400;font-size:12px;">
+                  (saved Rs. {{ order.discount }})
+                </small>
+              {% else %}
+                Total Amount
+              {% endif %}
+            </span>
+            <span class="order-total-amount">Rs. {{ order.total }}</span>
+          </div>
+        </div>
+
+        <!-- ── ACTIONS ── -->
+        <div class="order-actions">
+
+          <!-- ✅ DOWNLOAD INVOICE BUTTON -->
+          <a href="{% url 'download_invoice' order.order_id %}" class="btn-invoice">
+            <i class="fas fa-file-invoice"></i>
+            Download Invoice
+          </a>
+
+          <!-- View Detail -->
+          <a href="{% url 'order_detail' order.order_id %}" class="btn-detail">
+            <i class="fas fa-eye"></i>
+            View Details
+          </a>
+
+          <!-- Payment method tag -->
+          <span class="pay-tag">
+            <i class="fas fa-credit-card"></i>
+            {{ order.get_payment_method_display }}
+            {% if order.payment_status %}
+              &nbsp;<i class="fas fa-check-circle" style="color:#27ae60"></i>
+            {% else %}
+              &nbsp;<i class="fas fa-clock" style="color:#f0a500"></i>
+            {% endif %}
+          </span>
+
+        </div>
+
+      </div>
+      {% endfor %}
+
+    {% else %}
+      <div class="empty-orders">
+        <i class="fas fa-box-open"></i>
+        <h4>Koi Order nahi mila!</h4>
+        <p>Abhi tak aapne koi service book nahi ki.</p>
+        <a href="{% url 'all_services' %}">Services Dekhen &rarr;</a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% endblock %}

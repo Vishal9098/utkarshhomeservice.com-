@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}My Profile - Utkarsh Cleaning{% endblock %}
+{% block content %}
+<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li><li class="breadcrumb-item active">Profile</li></ol></div></div>
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm p-4 text-center">
+          {% if profile.profile_image %}<img src="{{ profile.profile_image.url }}" class="rounded-circle mb-3" style="width:100px;height:100px;object-fit:cover;">
+          {% else %}<div style="width:100px;height:100px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;"><i class="fas fa-user fa-2x text-white"></i></div>{% endif %}
+          <h5 class="fw-bold">{{ user.get_full_name|default:user.username }}</h5>
+          <p class="text-muted">{{ user.email }}</p>
+          <p><small class="text-muted">Member since {{ user.date_joined|date:"M Y" }}</small></p>
+          <div class="mt-3">
+            <a href="{% url 'my_orders' %}" class="btn btn-outline-primary w-100 mb-2" style="border-radius:25px;"><i class="fas fa-box me-2"></i>My Orders</a>
+            <a href="{% url 'logout' %}" class="btn btn-outline-danger w-100" style="border-radius:25px;"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+          </div>
+        </div>
+        <div class="card border-0 shadow-sm p-3 mt-3">
+          <h6 class="fw-bold mb-3">Recent Orders</h6>
+          {% for order in orders %}
+          <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+            <div><small class="fw-semibold" style="color:var(--primary);">{{ order.order_id }}</small><br><small class="text-muted">{{ order.created_at|date:"d M Y" }}</small></div>
+            <div class="text-end"><strong>₹{{ order.total }}</strong><br><span class="badge {% if order.status == 'completed' %}bg-success{% else %}bg-warning text-dark{% endif %}" style="font-size:10px;">{{ order.get_status_display }}</span></div>
+          </div>
+          {% empty %}<p class="text-muted text-center py-2">No orders yet</p>{% endfor %}
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm p-4">
+          <h5 class="fw-bold mb-4">Edit Profile</h5>
+          <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label fw-semibold">First Name</label><input type="text" name="first_name" class="form-control" value="{{ user.first_name }}"></div>
+              <div class="col-md-6"><label class="form-label fw-semibold">Last Name</label><input type="text" name="last_name" class="form-control" value="{{ user.last_name }}"></div>
+              <div class="col-md-6"><label class="form-label fw-semibold">Email</label><input type="email" name="email" class="form-control" value="{{ user.email }}"></div>
+              <div class="col-md-6"><label class="form-label fw-semibold">Phone</label><input type="tel" name="phone" class="form-control" value="{{ profile.phone }}"></div>
+              <div class="col-12"><label class="form-label fw-semibold">Address</label><textarea name="address" class="form-control" rows="2">{{ profile.address }}</textarea></div>
+              <div class="col-md-6"><label class="form-label fw-semibold">City</label><input type="text" name="city" class="form-control" value="{{ profile.city }}"></div>
+              <div class="col-md-6"><label class="form-label fw-semibold">Pincode</label><input type="text" name="pincode" class="form-control" value="{{ profile.pincode }}"></div>
+              <div class="col-12"><label class="form-label fw-semibold">Profile Image</label><input type="file" name="profile_image" class="form-control" accept="image/*"></div>
+              <div class="col-12"><button type="submit" class="btn btn-primary px-5" style="border-radius:30px;"><i class="fas fa-save me-2"></i>Save Changes</button></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

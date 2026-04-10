@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% block title %}Order Placed! - Utkarsh Cleaning{% endblock %}
+{% block content %}
+{% load static %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+
+:root {
+  --navy:   #0a1628;
+  --gold:   #c9a84c;
+  --ice:    #f4f8ff;
+  --white:  #ffffff;
+  --muted:  #7a8ba0;
+  --border: #dce6f5;
+  --green:  #27ae60;
+}
+
+.success-page {
+  background: var(--ice);
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  font-family: 'DM Sans', sans-serif;
+}
+.success-card {
+  background: var(--white);
+  border-radius: 24px;
+  box-shadow: 0 12px 48px rgba(10,22,40,0.12);
+  max-width: 520px;
+  width: 100%;
+  overflow: hidden;
+}
+.success-banner {
+  background: linear-gradient(135deg, #1a7a45, var(--green));
+  padding: 36px 32px 28px;
+  text-align: center;
+}
+.success-icon {
+  width: 72px; height: 72px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  border: 3px solid rgba(255,255,255,0.5);
+  animation: pop 0.5s ease both;
+}
+.success-icon i { font-size: 32px; color: #fff; }
+.success-banner h2 { font-family: 'Playfair Display', serif; font-size: 26px; color: #fff; margin: 0 0 6px; }
+.success-banner p  { font-size: 14px; color: rgba(255,255,255,0.85); margin: 0; }
+
+.order-info-box {
+  margin: 24px 28px;
+  background: var(--ice);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 22px;
+}
+.order-info-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px;
+}
+.order-info-row:last-child { border-bottom: none; }
+.order-info-row .label { color: var(--muted); font-weight: 500; }
+.order-info-row .value { font-weight: 700; color: var(--navy); }
+.order-info-row .value.gold { color: var(--gold); font-size: 16px; }
+.oid-tag { background: var(--navy); color: var(--gold); padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+.badge-pending    { background:#fff3cd; color:#856404;  padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+.badge-confirmed  { background:#cce5ff; color:#004085;  padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+.badge-completed  { background:#d4edda; color:#155724;  padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+.badge-in_progress{ background:#d4edda; color:#155724;  padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+.badge-cancelled  { background:#f8d7da; color:#721c24;  padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+
+.contact-note {
+  margin: 0 28px 20px;
+  background: #fff8e6; border: 1px solid #f0d080;
+  border-radius: 12px; padding: 13px 16px;
+  font-size: 13px; color: #7a5c00; line-height: 1.6;
+}
+.contact-note i { color: var(--gold); margin-right: 6px; }
+
+.success-actions { padding: 0 28px 28px; display: flex; flex-direction: column; gap: 12px; }
+
+.btn-download-invoice {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%;
+  background: var(--navy);
+  color: var(--gold) !important;
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
+  padding: 15px 28px; border-radius: 14px;
+  text-decoration: none !important;
+  border: 2px solid var(--gold);
+  transition: all 0.25s ease;
+}
+.btn-download-invoice:hover {
+  background: var(--gold); color: var(--navy) !important;
+  transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.4);
+}
+.btn-download-invoice i { font-size: 20px; }
+
+.btn-row { display: flex; gap: 10px; }
+.btn-my-orders {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--navy); color: #fff !important;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+  padding: 12px; border-radius: 12px; text-decoration: none !important;
+  transition: all 0.22s ease;
+}
+.btn-my-orders:hover { background: #112240; transform: translateY(-1px); }
+
+.btn-home {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: transparent; color: var(--navy) !important;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+  padding: 12px; border-radius: 12px; text-decoration: none !important;
+  border: 1.5px solid var(--border); transition: all 0.22s ease;
+}
+.btn-home:hover { border-color: var(--navy); background: var(--navy); color: #fff !important; }
+
+@keyframes pop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.1); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+</style>
+
+<div class="success-page">
+  <div class="success-card">
+
+    <div class="success-banner">
+      <div class="success-icon"><i class="fas fa-check"></i></div>
+      <h2>Order Successful!</h2>
+      <p>Aapka order successfully place ho gaya hai.</p>
+    </div>
+
+    <div class="order-info-box">
+      <div class="order-info-row">
+        <span class="label">Order ID</span>
+        <span class="oid-tag">{{ order.order_id }}</span>
+      </div>
+      <div class="order-info-row">
+        <span class="label">Total Amount</span>
+        <span class="value gold">&#8377;{{ order.total }}</span>
+      </div>
+      <div class="order-info-row">
+        <span class="label">Payment</span>
+        <span class="value">{{ order.get_payment_method_display }}</span>
+      </div>
+      <div class="order-info-row">
+        <span class="label">Status</span>
+        <span class="badge-{{ order.status }}">{{ order.get_status_display }}</span>
+      </div>
+      <div class="order-info-row">
+        <span class="label">Date</span>
+        <span class="value">{{ order.created_at|date:"d M Y, h:i A" }}</span>
+      </div>
+    </div>
+
+    <div class="contact-note">
+      <i class="fas fa-phone-alt"></i>
+      Hum aapke phone <strong>{{ order.phone }}</strong> par jald hi contact karenge service schedule karne ke liye.
+    </div>
+
+    <div class="success-actions">
+
+      <a href="{% url 'download_invoice' order.order_id %}" class="btn-download-invoice">
+        <i class="fas fa-file-invoice-dollar"></i>
+        Download Invoice (PDF)
+      </a>
+
+      <div class="btn-row">
+        <a href="{% url 'my_orders' %}" class="btn-my-orders">
+          <i class="fas fa-list-alt"></i> My Orders
+        </a>
+        <a href="{% url 'home' %}" class="btn-home">
+          <i class="fas fa-home"></i> Home
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Categories{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4">Categories</h4>
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card-dashboard p-4">
+      <h6 class="fw-bold mb-3">Add New Category</h6>
+      <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <div class="mb-3"><label class="form-label fw-semibold">Name *</label><input type="text" name="name" class="form-control" required></div>
+        <div class="mb-3"><label class="form-label fw-semibold">Description</label><textarea name="description" class="form-control" rows="2"></textarea></div>
+        <div class="mb-3"><label class="form-label fw-semibold">Image</label><input type="file" name="image" class="form-control"></div>
+        <button type="submit" class="btn btn-primary w-100">Add Category</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card-dashboard">
+      <table class="table table-dashboard mb-0">
+        <thead><tr><th>IMAGE</th><th>NAME</th><th>SERVICES</th><th>STATUS</th></tr></thead>
+        <tbody>
+          {% for cat in categories %}
+          <tr>
+            <td>{% if cat.image %}<img src="{{ cat.image.url }}" style="width:45px;height:45px;object-fit:cover;border-radius:8px;">{% else %}<div style="width:45px;height:45px;background:#e8f0fe;border-radius:8px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-tag" style="color:var(--primary);font-size:16px;"></i></div>{% endif %}</td>
+            <td><strong>{{ cat.name }}</strong></td>
+            <td><span class="badge bg-primary">{{ cat.services.count }}</span></td>
+            <td>{% if cat.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+          </tr>
+          {% empty %}<tr><td colspan="4" class="text-center py-4 text-muted">No categories yet</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}{{ service.name }} - Utkarsh Cleaning{% endblock %}
+{% block content %}
+<div class="breadcrumb-section">
+  <div class="container">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'all_services' %}">Services</a></li>
+      <li class="breadcrumb-item active">{{ service.name }}</li>
+    </ol>
+  </div>
+</div>
+<section class="py-5">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-6">
+        {% if service.image %}
+        <img src="{{ service.image.url }}" class="img-fluid rounded-3 shadow" alt="{{ service.name }}" style="width:100%;">
+        {% else %}
+        <div style="height:400px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);display:flex;align-items:center;justify-content:center;border-radius:15px;">
+          <i class="fas fa-spray-can-sparkles fa-5x" style="color:var(--primary);opacity:.5;"></i>
+        </div>
+        {% endif %}
+        {% if service.images.all %}
+        <div class="row g-2 mt-2">
+          {% for img in service.images.all %}
+          <div class="col-3"><img src="{{ img.image.url }}" class="img-fluid rounded" style="height:80px;object-fit:cover;cursor:pointer;"></div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      <div class="col-lg-6">
+        <span class="badge bg-primary mb-2">{{ service.category.name }}</span>
+        <h1 style="font-family:'Libre Baskerville',serif;font-size:32px;font-weight:700;">{{ service.name }}</h1>
+        <div class="d-flex align-items-center gap-3 my-3">
+          <div class="stars fs-5">{% for i in "12345" %}{% if forloop.counter <= service.rating|floatformat:0|add:"0" %}★{% else %}☆{% endif %}{% endfor %}</div>
+          <span style="font-size:18px;font-weight:700;color:var(--primary);">{{ service.rating }}/5</span>
+          <span class="text-muted">({{ reviews.count }} reviews)</span>
+        </div>
+        <div class="mb-3">
+          <span style="font-size:36px;font-weight:800;color:var(--primary);">₹{{ service.get_final_price }}</span>
+          {% if service.discount_price %}
+          <span style="text-decoration:line-through;color:#999;font-size:20px;margin-left:10px;">₹{{ service.price }}</span>
+          <span class="badge bg-warning text-dark ms-2 fs-6">{{ service.get_discount_percent }}% OFF</span>
+          {% endif %}
+        </div>
+        {% if service.duration %}<p class="text-muted"><i class="fas fa-clock me-2" style="color:var(--primary);"></i>Duration: {{ service.duration }}</p>{% endif %}
+        <p>{{ service.short_description }}</p>
+        <div class="d-flex gap-3 my-4">
+          <a href="{% url 'add_to_cart' service.id %}" class="btn btn-primary btn-lg px-4" style="border-radius:30px;"><i class="fas fa-cart-plus me-2"></i>Add to Cart</a>
+          <a href="{% url 'checkout' %}" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">Book Now</a>
+        </div>
+        <div class="row g-3 mt-2">
+          <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-shield-check text-success"></i><small>100% Guaranteed</small></div></div>
+          <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-leaf text-success"></i><small>Eco-friendly Products</small></div></div>
+          <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-user-check text-success"></i><small>Trained Professionals</small></div></div>
+          <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-phone text-success"></i><small>24/7 Support</small></div></div>
+        </div>
+      </div>
+    </div>
+    <!-- DESCRIPTION TABS -->
+    <div class="mt-5">
+      <ul class="nav nav-tabs" id="myTab">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#desc">Description</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews-tab">Reviews ({{ reviews.count }})</button></li>
+      </ul>
+      <div class="tab-content border border-top-0 p-4 rounded-bottom">
+        <div class="tab-pane active" id="desc">{{ service.description|linebreaks }}</div>
+        <div class="tab-pane" id="reviews-tab">
+          {% if user.is_authenticated %}
+          <div class="card p-3 mb-4 bg-light border-0">
+            <h6 class="fw-bold">Write a Review</h6>
+            <form method="POST" action="{% url 'add_review' service.id %}">{% csrf_token %}
+              <div class="mb-2">
+                <label>Rating:</label>
+                <select name="rating" class="form-select form-select-sm w-auto d-inline-block ms-2">
+                  <option value="5">★★★★★ (5)</option>
+                  <option value="4">★★★★☆ (4)</option>
+                  <option value="3">★★★☆☆ (3)</option>
+                  <option value="2">★★☆☆☆ (2)</option>
+                  <option value="1">★☆☆☆☆ (1)</option>
+                </select>
+              </div>
+              <textarea name="comment" class="form-control mb-2" rows="3" placeholder="Apna experience share karein..." required></textarea>
+              <button type="submit" class="btn btn-primary btn-sm">Submit Review</button>
+            </form>
+          </div>
+          {% endif %}
+          {% for review in reviews %}
+          <div class="border-bottom pb-3 mb-3">
+            <div class="d-flex justify-content-between">
+              <strong>{{ review.user.username }}</strong>
+              <small class="text-muted">{{ review.created_at|date:"d M Y" }}</small>
+            </div>
+            <div class="stars">{% for i in "12345" %}{% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}{% endfor %}</div>
+            <p class="mt-1 mb-0">{{ review.comment }}</p>
+          </div>
+          {% empty %}<p class="text-muted">Abhi koi review nahi hai.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <!-- RELATED SERVICES -->
+    {% if related %}
+    <div class="mt-5">
+      <h4 class="fw-bold mb-4">Related Services</h4>
+      <div class="row g-3">
+        {% for s in related %}
+        <div class="col-lg-3 col-md-6 col-6">
+          <a href="{% url 'service_detail' s.slug %}" class="text-decoration-none">
+            <div class="service-card">
+              {% if s.image %}<img src="{{ s.image.url }}" alt="{{ s.name }}">
+              {% else %}<div style="height:150px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);display:flex;align-items:center;justify-content:center;"><i class="fas fa-spray-can-sparkles fa-2x" style="color:var(--primary);opacity:.5;"></i></div>{% endif %}
+              <div class="card-body"><p class="card-title mb-1">{{ s.name }}</p><span class="price">₹{{ s.get_final_price }}</span></div>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

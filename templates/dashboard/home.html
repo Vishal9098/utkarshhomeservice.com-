@@ -1,0 +1,150 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}eCommerce Dashboard{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div><h4 class="fw-bold mb-0">eCommerce Dashboard</h4><p class="text-muted mb-0">Welcome back, {{ user.username }}!</p></div>
+  <div class="d-flex gap-2">
+    <span class="badge bg-light text-dark border px-3 py-2"><i class="fas fa-calendar me-1"></i>{{ today|date:"M j" }} – {{ week_end|date:"M j" }}</span>
+    <button class="btn btn-primary btn-sm px-3"><i class="fas fa-download me-1"></i>Export</button>
+  </div>
+</div>
+
+<!-- STAT CARDS -->
+<div class="row g-3 mb-4">
+  <div class="col-lg-3 col-md-6">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div><div class="stat-label">Customers</div><div class="stat-number">{{ total_customers }}</div><div class="stat-change up"><i class="fas fa-arrow-up me-1"></i>11.01% this month</div></div>
+        <div class="stat-icon" style="background:#ede9fe;"><i class="fas fa-users" style="color:#7c3aed;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div><div class="stat-label">Total Orders</div><div class="stat-number">{{ total_orders }}</div><div class="stat-change down"><i class="fas fa-exclamation-circle me-1"></i>{{ pending_orders }} pending</div></div>
+        <div class="stat-icon" style="background:#fef3c7;"><i class="fas fa-shopping-bag" style="color:#d97706;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div><div class="stat-label">Total Revenue</div><div class="stat-number">₹{{ total_revenue }}</div><div class="stat-change up"><i class="fas fa-arrow-up me-1"></i>₹0 today</div></div>
+        <div class="stat-icon" style="background:#d1fae5;"><i class="fas fa-rupee-sign" style="color:#059669;"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <div class="stat-card">
+      <div class="d-flex justify-content-between align-items-start">
+        <div><div class="stat-label">Total Products</div><div class="stat-number">{{ total_products }}</div><div class="stat-change up"><i class="fas fa-check me-1"></i>All stocked</div></div>
+        <div class="stat-icon" style="background:#e0e7ff;"><i class="fas fa-box" style="color:#4f46e5;"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHARTS ROW -->
+<div class="row g-3 mb-4">
+  <div class="col-lg-8">
+    <div class="card-dashboard p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0">Monthly Sales</h6>
+        <div class="btn-group btn-group-sm">
+          <button class="btn btn-primary btn-sm">Overview</button>
+          <button class="btn btn-outline-secondary btn-sm">Sales</button>
+          <button class="btn btn-outline-secondary btn-sm">Revenue</button>
+        </div>
+      </div>
+      <canvas id="salesChart" height="100"></canvas>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card-dashboard p-4 h-100">
+      <h6 class="fw-bold mb-3">Monthly Target</h6>
+      <div class="text-center">
+        <div style="font-size:48px;font-weight:800;color:var(--primary);">75.55%</div>
+        <div class="text-success fw-semibold">+10% vs last month</div>
+        <div class="text-muted small mb-4">You earned ₹0 today!</div>
+        <div class="row g-2 text-center">
+          <div class="col-4"><div class="fw-bold">₹20K</div><small class="text-muted">Target <i class="fas fa-arrow-down text-danger"></i></small></div>
+          <div class="col-4"><div class="fw-bold">₹{{ total_revenue }}</div><small class="text-muted">Revenue <i class="fas fa-arrow-up text-success"></i></small></div>
+          <div class="col-4"><div class="fw-bold">₹20K</div><small class="text-muted">Today <i class="fas fa-arrow-up text-success"></i></small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM ROW -->
+<div class="row g-3">
+  <div class="col-lg-5">
+    <div class="card-dashboard p-4">
+      <h6 class="fw-bold mb-3">Customer Demographics</h6>
+      <p class="text-muted small mb-3">Customers by location</p>
+      <div class="mb-3">
+        <div class="d-flex justify-content-between mb-1"><span><strong>IN</strong> India</span><strong>79%</strong></div>
+        <div class="progress" style="height:8px;"><div class="progress-bar bg-primary" style="width:79%"></div></div>
+      </div>
+      <div>
+        <div class="d-flex justify-content-between mb-1"><span><strong>US</strong> USA</span><strong>23%</strong></div>
+        <div class="progress" style="height:8px;"><div class="progress-bar" style="width:23%;background:#7c3aed;"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-7">
+    <div class="card-dashboard">
+      <div class="p-4 d-flex justify-content-between align-items-center border-bottom">
+        <h6 class="fw-bold mb-0">Recent Orders</h6>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-light"><i class="fas fa-filter me-1"></i>Filter</button>
+          <a href="{% url 'dashboard_orders' %}" class="btn btn-sm btn-primary">See all</a>
+        </div>
+      </div>
+      <table class="table table-dashboard mb-0">
+        <thead><tr><th>ORDER</th><th>CUSTOMER</th><th>AMOUNT</th><th>STATUS</th></tr></thead>
+        <tbody>
+          {% for order in recent_orders %}
+          <tr>
+            <td><a href="{% url 'dashboard_order_detail' order.order_id %}" style="color:var(--primary);font-weight:600;">{{ order.order_id }}</a><br><small class="text-muted">{{ order.created_at|date:"d M Y" }}</small></td>
+            <td><div class="d-flex align-items-center gap-2"><div style="width:32px;height:32px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;">{{ order.user.username|first|upper }}</div>{{ order.user.username }}</div></td>
+            <td><strong>₹{{ order.total }}</strong></td>
+            <td><span class="badge-status badge-{{ order.status }}">{{ order.get_status_display }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const ctx = document.getElementById('salesChart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: {{ months|safe }},
+    datasets: [{
+      label: 'Revenue (₹)',
+      data: {{ revenue_data|safe }},
+      backgroundColor: 'rgba(79,70,229,0.2)',
+      borderColor: '#4f46e5',
+      borderWidth: 2,
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { callback: v => '₹' + v } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+{% endblock %}

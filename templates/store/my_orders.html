@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}My Orders - Utkarsh Cleaning{% endblock %}
+{% block content %}
+<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li><li class="breadcrumb-item active">My Orders</li></ol></div></div>
+<section class="py-5">
+  <div class="container">
+    <h3 class="fw-bold mb-4">My Orders</h3>
+    {% if orders %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light"><tr><th>Order ID</th><th>Date</th><th>Amount</th><th>Payment</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td><strong style="color:var(--primary);">{{ order.order_id }}</strong></td>
+            <td>{{ order.created_at|date:"d M Y" }}</td>
+            <td><strong>₹{{ order.total }}</strong></td>
+            <td>{{ order.get_payment_method_display }}</td>
+            <td>
+              <span class="badge {% if order.status == 'completed' %}bg-success{% elif order.status == 'cancelled' %}bg-danger{% elif order.status == 'in_progress' %}bg-info{% else %}bg-warning text-dark{% endif %}">
+                {{ order.get_status_display }}
+              </span>
+            </td>
+            <td><a href="{% url 'order_detail' order.order_id %}" class="btn btn-sm btn-outline-primary">View</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <i class="fas fa-box-open fa-5x text-muted mb-3"></i>
+      <h5 class="text-muted">Abhi koi order nahi hai</h5>
+      <a href="{% url 'all_services' %}" class="btn btn-primary mt-3" style="border-radius:25px;">Services Book Karein</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

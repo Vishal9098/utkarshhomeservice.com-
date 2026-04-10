@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+{% block title %}Utkarsh Cleaning Home Services | Home{% endblock %}
+{% block content %}
+
+{% load static %}
+<style>
+/* BANNER */
+.banner-img { width:100%; height:420px; object-fit:cover; display:block; }
+@media(max-width:768px){ .banner-img{ height:200px; } }
+@media(max-width:480px){ .banner-img{ height:150px; } }
+#carouselExampleControls{ width:100%; overflow:hidden; }
+
+/* CATEGORY CARDS - DESKTOP */
+.cat-card {
+  border: 2px solid #e0e6ef;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all .3s;
+  cursor: pointer;
+  background: #fff;
+  text-decoration: none;
+  display: block;
+}
+.cat-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(26,95,168,.18);
+  border-color: var(--primary);
+}
+.cat-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+.cat-card .cat-label {
+  background: var(--primary);
+  color: #fff;
+  text-align: center;
+  padding: 12px 10px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.3;
+}
+.cat-card .cat-count {
+  font-size: 11px;
+  font-weight: 400;
+  opacity: .85;
+  display: block;
+  margin-top: 2px;
+}
+
+/* MOBILE NAKODA STYLE */
+@media(max-width:768px){
+  .cat-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3,1fr) !important;
+    gap: 12px !important;
+  }
+  .cat-grid > div { width:100% !important; padding:0 !important; }
+
+  .cat-card {
+    border: none !important;
+    border-radius: 22px !important;
+    background: #f2f2f2 !important;
+    padding: 10px !important;
+    box-shadow: 0 8px 18px rgba(0,0,0,.18), 0 3px 8px rgba(0,0,0,.12) !important;
+    overflow: visible !important;
+  }
+  .cat-card:hover { transform:translateY(-4px) !important; }
+
+  .cat-card .mobile-img-box {
+    height: 90px;
+    background: #fff;
+    border-radius: 18px;
+    padding: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cat-card .mobile-img-box img {
+    width:100%; height:100%; object-fit:cover; border-radius:14px;
+  }
+
+  /* hide desktop label strip on mobile */
+  .cat-card .cat-label { display: none !important; }
+
+  /* mobile title below image */
+  .cat-card .mobile-title {
+    display: block !important;
+    font-size: 11px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    padding: 5px 2px 0;
+    line-height: 1.3;
+  }
+
+  /* hide desktop image on mobile */
+  .cat-card .desktop-img { display: none !important; }
+  .cat-card .desktop-placeholder { display: none !important; }
+}
+
+/* show mobile title only on mobile, hide on desktop */
+.cat-card .mobile-title { display: none; }
+</style>
+
+<!-- BANNER SLIDER -->
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{% static 'app/images/banner/new2.jpg' %}" class="d-block w-100 banner-img" alt="Cleaning Service 1">
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'app/images/banner/new4.jpg' %}" class="d-block w-100 banner-img" alt="Cleaning Service 2">
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'app/images/banner/nn1.jpg' %}" class="d-block w-100 banner-img" alt="Cleaning Service 3">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+<!-- CATEGORY CARDS SECTION -->
+<section class="py-5">
+  <!-- <div class="container">
+    <div class="section-title">
+      <h2>Our Cleaning Services</h2>
+      <p>Professional cleaning solutions for every need</p>
+      <div class="title-line"></div>
+    </div> -->
+
+    <div class="row g-3 cat-grid">
+      {% for category in categories %}
+      {% if category.services.count > 0 %}
+      <div class="col-lg-3 col-md-4 col-6">
+        <!-- Click karo → all_services page par us category ki services dikhegi -->
+        <a href="{% url 'all_services' %}?category={{ category.slug }}" class="cat-card">
+
+          <!-- MOBILE: round image box -->
+          <div class="mobile-img-box d-md-none">
+            {% with category.services.first as first_service %}
+              {% if first_service and first_service.image %}
+                <img src="{{ first_service.image.url }}" alt="{{ category.name }}">
+              {% elif category.image %}
+                <img src="{{ category.image.url }}" alt="{{ category.name }}">
+              {% else %}
+                <span style="font-size:32px;">🧹</span>
+              {% endif %}
+            {% endwith %}
+          </div>
+
+          <!-- DESKTOP: full image -->
+          {% with category.services.first as first_service %}
+            {% if first_service and first_service.image %}
+              <img src="{{ first_service.image.url }}" alt="{{ category.name }}" class="desktop-img d-none d-md-block">
+            {% elif category.image %}
+              <img src="{{ category.image.url }}" alt="{{ category.name }}" class="desktop-img d-none d-md-block">
+            {% else %}
+              <div class="desktop-placeholder d-none d-md-flex" style="height:200px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);align-items:center;justify-content:center;">
+                <i class="fas fa-spray-can-sparkles fa-3x" style="color:var(--primary);opacity:.5;"></i>
+              </div>
+            {% endif %}
+          {% endwith %}
+
+          <!-- DESKTOP: blue label at bottom -->
+          <div class="cat-label">
+            {{ category.name }}
+            <span class="cat-count">{{ category.services.count }} service{{ category.services.count|pluralize }}</span>
+          </div>
+
+          <!-- MOBILE: title below image -->
+          <span class="mobile-title">{{ category.name }}</span>
+
+        </a>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+      <!-- <a href="{% url 'all_services' %}" class="btn btn-primary btn-lg px-5" style="border-radius:30px;">
+        View All Services <i class="fas fa-arrow-right ms-2"></i>
+      </a> -->
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="why-section">
+  <div class="container">
+    <div class="section-title">
+      <h2>WHY CHOOSE US ?</h2>
+      <div class="title-line"></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-star"></i></div>
+          <h5 class="fw-bold">4.9 Rated on Google.</h5>
+          <p class="text-muted">Trusted by hundreds of happy customers across Bhopal with genuine Google reviews and proven quality service.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-rupee-sign"></i></div>
+          <h5 class="fw-bold">Top-Rated Cleaning Company.</h5>
+          <p class="text-muted">Known for professionalism, punctual service, and high cleaning standards for homes and businesses.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-user-shield"></i></div>
+          <h5 class="fw-bold">Expert & Trained Cleaners.</h5>
+          <p class="text-muted">Well-trained, polite staff experienced in sofa, home, kitchen, water tank, and office cleaning.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-cogs"></i></div>
+          <h5 class="fw-bold">Advanced Cleaning Equipment</h5>
+          <p class="text-muted">We use modern machines and eco-friendly products for deep, safe, and long-lasting cleaning.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-thumbs-up"></i></div>
+          <h5 class="fw-bold">On-Time & Hassle-Free Service.</h5>
+          <p class="text-muted">Our team arrives on schedule and completes work smoothly without disturbing your routine.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="why-card">
+          <div class="why-icon"><i class="fas fa-link"></i></div>
+          <h5 class="fw-bold">Affordable & Transparent Pricing.</h5>
+          <p class="text-muted">Fair pricing with no hidden charges. Complete clarity before starting the service.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Elfsight Google Reviews -->
+<script src="https://elfsightcdn.com/platform.js" async></script>
+<div class="elfsight-app-19930266-816d-4647-9139-42f0e90d5803" data-elfsight-app-lazy></div>
+
+<!-- TESTIMONIALS -->
+{% if testimonials %}
+<section class="py-5" style="background:#fff;">
+  <div class="container">
+    <div class="section-title">
+      <h2>EXPERIENCES SHARED BY OUR VALUED CUSTOMERS</h2>
+      <div class="title-line"></div>
+    </div>
+    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        {% for i in "0123456789" %}
+        {% if forloop.counter0|divisibleby:3 %}
+        <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+          <div class="row g-3">
+            {% for t in testimonials %}
+            {% if forloop.counter0 >= i|add:"0"|add:"0" and forloop.counter0 < i|add:"0"|add:"3" %}
+            <div class="col-md-4">
+              <div class="card p-3 shadow-sm h-100">
+                <div class="stars mb-2" style="color:#f0a500;">{% for j in "12345" %}★{% endfor %}</div>
+                <p class="text-muted">{{ t.comment }}</p>
+                <strong>— {{ t.name }}{% if t.location %}, {{ t.location }}{% endif %}</strong>
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- BLOG -->
+{% if blogs %}
+<section class="py-5" style="background:var(--light-bg);">
+  <div class="container">
+    <div class="section-title">
+      <h2>Latest From Our Blog</h2>
+      <div class="title-line"></div>
+    </div>
+    <div class="row g-4">
+      {% for blog in blogs %}
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          {% if blog.image %}
+            <img src="{{ blog.image.url }}" class="card-img-top" style="height:200px;object-fit:cover;" alt="{{ blog.title }}">
+          {% endif %}
+          <div class="card-body">
+            <small class="text-muted">{{ blog.created_at|date:"d M Y" }}</small>
+            <h6 class="card-title mt-2 fw-bold">{{ blog.title }}</h6>
+            <p class="card-text text-muted" style="font-size:13px;">{{ blog.excerpt|truncatewords:15 }}</p>
+            <a href="{% url 'blog_detail' blog.slug %}" class="btn btn-primary btn-sm" style="border-radius:20px;">Read More</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Register - Utkarsh Cleaning{% endblock %}
+{% block content %}
+<section class="py-5" style="background:var(--light-bg);min-height:70vh;display:flex;align-items:center;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <div class="card border-0 shadow-lg p-4">
+          <div class="text-center mb-4">
+            <div style="width:70px;height:70px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;"><i class="fas fa-user-plus fa-2x text-white"></i></div>
+            <h4 class="fw-bold">Create Account</h4>
+            <p class="text-muted">Naya account banayein</p>
+          </div>
+          <form method="POST">{% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label fw-semibold">Username *</label><input type="text" name="username" class="form-control" required></div>
+              <div class="col-md-6"><label class="form-label fw-semibold">Phone *</label><input type="tel" name="phone" class="form-control" required></div>
+              <div class="col-12"><label class="form-label fw-semibold">Email *</label><input type="email" name="email" class="form-control" required></div>
+              <div class="col-md-6"><label class="form-label fw-semibold">Password *</label><input type="password" name="password" class="form-control" required></div>
+              <div class="col-md-6"><label class="form-label fw-semibold">Confirm Password *</label><input type="password" name="password2" class="form-control" required></div>
+              <div class="col-12"><button type="submit" class="btn btn-primary w-100 btn-lg" style="border-radius:30px;"><i class="fas fa-user-plus me-2"></i>Create Account</button></div>
+            </div>
+          </form>
+          <div class="text-center mt-3"><p class="text-muted">Already account hai? <a href="{% url 'login' %}" style="color:var(--primary);font-weight:600;">Login karein</a></p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

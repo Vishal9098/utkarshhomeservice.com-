@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Checkout - Utkarsh Cleaning{% endblock %}
+{% block content %}
+<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li><li class="breadcrumb-item"><a href="{% url 'cart' %}">Cart</a></li><li class="breadcrumb-item active">Checkout</li></ol></div></div>
+<section class="py-5">
+  <div class="container">
+    <h3 class="fw-bold mb-4">Checkout</h3>
+    <form method="POST">{% csrf_token %}
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="card border-0 shadow-sm p-4 mb-4">
+          <h5 class="fw-bold mb-3"><i class="fas fa-user me-2" style="color:var(--primary);"></i>Personal Information</h5>
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label fw-semibold">Full Name *</label><input type="text" name="name" class="form-control" value="{{ user.get_full_name }}" required></div>
+            <div class="col-md-6"><label class="form-label fw-semibold">Email *</label><input type="email" name="email" class="form-control" value="{{ user.email }}" required></div>
+            <div class="col-md-6"><label class="form-label fw-semibold">Phone *</label><input type="tel" name="phone" class="form-control" value="{% if profile %}{{ profile.phone }}{% endif %}" required></div>
+            <div class="col-md-6"><label class="form-label fw-semibold">City *</label><input type="text" name="city" class="form-control" value="{% if profile %}{{ profile.city }}{% endif %}" required></div>
+            <div class="col-12"><label class="form-label fw-semibold">Full Address *</label><textarea name="address" class="form-control" rows="2" required>{% if profile %}{{ profile.address }}{% endif %}</textarea></div>
+            <div class="col-md-6"><label class="form-label fw-semibold">Pincode *</label><input type="text" name="pincode" class="form-control" value="{% if profile %}{{ profile.pincode }}{% endif %}" required></div>
+          </div>
+        </div>
+        <div class="card border-0 shadow-sm p-4 mb-4">
+          <h5 class="fw-bold mb-3"><i class="fas fa-calendar me-2" style="color:var(--primary);"></i>Service Scheduling</h5>
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label fw-semibold">Preferred Date</label><input type="date" name="service_date" class="form-control"></div>
+            <div class="col-md-6"><label class="form-label fw-semibold">Preferred Time</label>
+              <select name="service_time" class="form-select">
+                <option value="">Select Time</option>
+                <option>8:00 AM - 10:00 AM</option>
+                <option>10:00 AM - 12:00 PM</option>
+                <option>12:00 PM - 2:00 PM</option>
+                <option>2:00 PM - 4:00 PM</option>
+                <option>4:00 PM - 6:00 PM</option>
+              </select>
+            </div>
+            <div class="col-12"><label class="form-label fw-semibold">Special Instructions</label><textarea name="special_instructions" class="form-control" rows="2" placeholder="Koi special instructions ho toh yahan likhein..."></textarea></div>
+          </div>
+        </div>
+        <div class="card border-0 shadow-sm p-4">
+          <h5 class="fw-bold mb-3"><i class="fas fa-credit-card me-2" style="color:var(--primary);"></i>Payment Method</h5>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="d-block border rounded p-3 text-center" style="cursor:pointer;">
+                <input type="radio" name="payment_method" value="cod" checked class="me-2">
+                <i class="fas fa-money-bill-wave fa-2x d-block mb-2" style="color:var(--primary);"></i>
+                <strong>Cash on Delivery</strong>
+              </label>
+            </div>
+            <div class="col-md-4">
+              <label class="d-block border rounded p-3 text-center" style="cursor:pointer;">
+                <input type="radio" name="payment_method" value="upi" class="me-2">
+                <i class="fas fa-mobile-alt fa-2x d-block mb-2" style="color:#6b21a8;"></i>
+                <strong>UPI</strong>
+              </label>
+            </div>
+            <div class="col-md-4">
+              <label class="d-block border rounded p-3 text-center" style="cursor:pointer;">
+                <input type="radio" name="payment_method" value="online" class="me-2">
+                <i class="fas fa-credit-card fa-2x d-block mb-2" style="color:#0369a1;"></i>
+                <strong>Online Payment</strong>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="card border-0 shadow-sm p-4 sticky-top" style="top:100px;">
+          <h5 class="fw-bold mb-3">Order Summary</h5>
+          {% for item in items %}
+          <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+            <div>
+              <small class="fw-semibold d-block">{{ item.service.name }}</small>
+              <small class="text-muted">Qty: {{ item.quantity }}</small>
+            </div>
+            <strong>₹{{ item.get_total }}</strong>
+          </div>
+          {% endfor %}
+          <div class="d-flex justify-content-between mt-2 mb-1"><span>Subtotal</span><strong>₹{{ subtotal }}</strong></div>
+          {% if discount > 0 %}<div class="d-flex justify-content-between mb-1 text-success"><span>Discount</span><strong>-₹{{ discount }}</strong></div>{% endif %}
+          <div class="d-flex justify-content-between mb-1"><span>Service Charges</span><strong class="text-success">FREE</strong></div>
+          <hr>
+          <div class="d-flex justify-content-between mb-4"><span class="fw-bold fs-5">Total</span><strong class="fs-5" style="color:var(--primary);">₹{{ total }}</strong></div>
+          <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold" style="border-radius:30px;font-size:18px;">
+            <i class="fas fa-check-circle me-2"></i>Place Order
+          </button>
+          <div class="text-center mt-3">
+            <small class="text-muted"><i class="fas fa-lock me-1"></i>Secure & Safe Checkout</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    </form>
+  </div>
+</section>
+{% endblock %}
