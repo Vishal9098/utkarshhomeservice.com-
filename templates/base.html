@@ -225,9 +225,50 @@ footer a:hover { color:#fff; }
         <p style="font-size:13px;"><i class="fas fa-clock me-2" style="color:var(--primary);"></i>We reply within 1 working day</p>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>Copyright &copy; 2026 All Rights Reserved By <strong style="color:#fff;">Utkarsh Cleaning Home Services</strong> | Developed with ❤️</p>
-    </div>
+    <!-- <div class="footer-bottom">
+      <p>Copyright &copy; 2026 All Rights Reserved By <strong style="color:#fff;">Utkarsh Cleaning Home Services</strong> | Developed with  <a href="https://www.webcraftagency.com/" target="_blank" style="color:#fff; text-decoration: none;">Web Craft Agency </a></p>
+    </div> -->
+
+
+
+<div class="footer-bottom">
+  <p>
+    Copyright &copy; 2026 All Rights Reserved By 
+    <strong>Utkarsh Cleaning Home Services</strong> | 
+    Developed with 
+    <a href="https://www.webcraftagency.com/" target="_blank">
+      Web Craft Agency
+    </a>
+  </p>
+</div>
+
+<style>
+.footer-bottom p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  text-align: center;
+  flex-wrap: wrap; /* mobile ke liye */
+}
+
+.footer-bottom a {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Desktop pe single line */
+@media (min-width: 768px) {
+  .footer-bottom p {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+}
+</style>
+
+
+   
   </div>
 </footer>
 
