@@ -62,7 +62,7 @@
             </div>
           </div>
 
-          <!-- ✅ Live Total Amount Box -->
+          <!-- Live Total Amount Box -->
           <div class="mb-3 p-3 rounded-3" style="background:#f0f7ff;border:1.5px solid #c7d7f5;">
             <div class="d-flex justify-content-between align-items-center mb-1">
               <span class="text-muted" style="font-size:14px;">Unit Price</span>
@@ -86,21 +86,28 @@
 
           <div class="d-flex gap-3">
             {% if slug == 'bathroom-deep-cleaning' or slug == 'sofa-cleaning' or slug == 'mattress-cleaning' %}
+            <!-- Add to Cart form with quantity -->
             <form method="GET" action="{% url 'add_to_cart' service.id %}" id="cart-form">
               <input type="hidden" name="quantity" id="cart-qty" value="1">
               <button type="submit" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
                 <i class="fas fa-cart-plus me-2"></i>Add to Cart
               </button>
             </form>
+            <!-- Book Now form with quantity -->
+            <form method="GET" action="{% url 'book_now' service.id %}" id="booknow-form">
+              <input type="hidden" name="quantity" id="booknow-qty" value="1">
+              <button type="submit" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">
+                <i class="fas fa-bolt me-2"></i>Book Now
+              </button>
+            </form>
             {% else %}
             <a href="{% url 'add_to_cart' service.id %}" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
               <i class="fas fa-cart-plus me-2"></i>Add to Cart
             </a>
-            {% endif %}
-
             <a href="{% url 'book_now' service.id %}" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">
               <i class="fas fa-bolt me-2"></i>Book Now
             </a>
+            {% endif %}
           </div>
         </div>
 
@@ -113,6 +120,7 @@
           const plusBtn    = document.getElementById('qty-plus');
           const qtyInput   = document.getElementById('qty-input');
           const cartQty    = document.getElementById('cart-qty');
+          const booknowQty = document.getElementById('booknow-qty');
           const summaryQty = document.getElementById('summary-qty');
           const summaryGst = document.getElementById('summary-gst');
           const summaryTot = document.getElementById('summary-total');
@@ -126,7 +134,8 @@
             summaryQty.textContent = qty;
             summaryGst.textContent = '₹' + gst.toFixed(2);
             summaryTot.textContent = '₹' + total.toFixed(2);
-            cartQty.value = qty;
+            cartQty.value    = qty;
+            booknowQty.value = qty;  // ✅ Book Now ko bhi quantity milegi
           }
 
           // Page load pe ek baar chalao

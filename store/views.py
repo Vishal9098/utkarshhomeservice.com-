@@ -307,14 +307,36 @@ def checkout(request):
 
 
 
+# @login_required
+# def book_now(request, service_id):
+#     service = get_object_or_404(Service, id=service_id)
+#     # Pehle cart clear karo aur sirf yahi service daalo
+#     cart, _ = Cart.objects.get_or_create(user=request.user)
+#     cart.items.all().delete()  # purani items hataao
+#     CartItem.objects.create(cart=cart, service=service, quantity=1)
+#     return redirect('checkout')
+
+
+
 @login_required
 def book_now(request, service_id):
     service = get_object_or_404(Service, id=service_id)
-    # Pehle cart clear karo aur sirf yahi service daalo
+    try:
+        quantity = int(request.GET.get('quantity', 1))
+        if quantity < 1: quantity = 1
+        if quantity > 10: quantity = 10
+    except:
+        quantity = 1
     cart, _ = Cart.objects.get_or_create(user=request.user)
-    cart.items.all().delete()  # purani items hataao
-    CartItem.objects.create(cart=cart, service=service, quantity=1)
+    cart.items.all().delete()
+    CartItem.objects.create(cart=cart, service=service, quantity=quantity)
     return redirect('checkout')
+
+
+
+
+
+
 
 
 
@@ -714,3 +736,449 @@ def download_invoice(request, order_id):
 
     filename = f"Invoice_{order.order_id.replace('#','')}.pdf"
     return FileResponse(buffer, as_attachment=True, filename=filename)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required
+def download_invoice(request, order_id):
+    order = get_object_or_404(Order, order_id=order_id)
+
+    if order.user != request.user:
+        return HttpResponseForbidden("Access denied.")
+
+    if not order.invoice_approved:
+        messages.error(request, "Invoice abhi approved nahi hai. Admin ke approve karne ka wait karein.")
+        return redirect('order_success', order_id=order.order_id)
+
+    import io
+    import os
+    from num2words import num2words
+    from django.conf import settings
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib import colors
+    from reportlab.lib.units import mm
+    from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, HRFlowable, Image
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.enums import TA_RIGHT, TA_CENTER, TA_LEFT
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    from reportlab.pdfgen import canvas as rl_canvas
+
+    # ── Constants ──
+    COMPANY_NAME    = "UTKARSH CLEANING AND HOME SERVICE"
+    COMPANY_ADDR    = "Shop No 3/2 Sanskaar Bhawan\nNarela Sankri, Bhopal"
+    COMPANY_PHONE   = "7806061048"
+    COMPANY_EMAIL   = "utkarshcleaninghomeservices@gmail.com"
+    COMPANY_GSTIN   = "23BPEPN6081G1ZX"
+    COMPANY_STATE   = "23-Madhya Pradesh"
+    BANK_NAME       = "CENTRAL BANK OF INDIA, NARELA SHANKARI"
+    BANK_ACCOUNT    = "5924306353"
+    BANK_IFSC       = "CBIN0282171"
+    BANK_HOLDER     = "NARESH"
+    TERMS           = "Thank you for doing business with us."
+    HSN_SAC         = "998531"
+
+    # ── Amount in words helper ──
+    def amount_in_words(amount):
+        try:
+            rupees = int(amount)
+            paise  = round((float(amount) - rupees) * 100)
+            words  = num2words(rupees, lang='en_IN').title()
+            if paise:
+                words += f" and {num2words(paise, lang='en_IN').title()} Paise"
+            return words + " Rupees Only"
+        except:
+            return ""
+
+    # ── Calculate amounts ──
+    subtotal     = float(order.subtotal)
+    discount     = float(order.discount)
+    taxable      = subtotal - discount
+    gst_amount   = round(taxable * 18 / 100, 2)
+    total        = taxable + gst_amount
+    received     = total if order.payment_status else 0.0
+    balance      = total - received
+
+    # ── Invoice number (sequential-style from order_id) ──
+    inv_number = order.order_id.replace('#', '')
+
+    # ── Build PDF ──
+    buffer = io.BytesIO()
+    W, H   = A4
+
+    # Use canvas for pixel-perfect layout
+    c = rl_canvas.Canvas(buffer, pagesize=A4)
+    c.setTitle(f"Invoice {inv_number}")
+
+    margin_l = 15 * mm
+    margin_r = W - 15 * mm
+    margin_t = H - 15 * mm
+    col_w    = W - 30 * mm   # usable width
+
+    def draw_cell_border(x, y, w, h, fill=None, stroke_color=colors.black, stroke_width=0.5):
+        c.saveState()
+        c.setLineWidth(stroke_width)
+        c.setStrokeColor(stroke_color)
+        if fill:
+            c.setFillColor(fill)
+            c.rect(x, y, w, h, fill=1, stroke=1)
+        else:
+            c.rect(x, y, w, h, fill=0, stroke=1)
+        c.restoreState()
+
+    def text(x, y, txt, font="Helvetica", size=8, color=colors.black, align="left"):
+        c.saveState()
+        c.setFont(font, size)
+        c.setFillColor(color)
+        if align == "right":
+            c.drawRightString(x, y, str(txt))
+        elif align == "center":
+            c.drawCentredString(x, y, str(txt))
+        else:
+            c.drawString(x, y, str(txt))
+        c.restoreState()
+
+    y = margin_t  # current y position (top to bottom)
+
+    # ══════════════════════════════════════
+    #  TITLE
+    # ══════════════════════════════════════
+    text(W / 2, y - 6*mm, "Invoice", "Helvetica-Bold", 12, align="center")
+    y -= 12 * mm
+
+    # ══════════════════════════════════════
+    #  HEADER BOX — Logo+Company | Invoice No+Date
+    # ══════════════════════════════════════
+    header_h = 35 * mm
+    left_w   = 95 * mm
+    right_w  = col_w - left_w
+
+    # outer box
+    draw_cell_border(margin_l, y - header_h, col_w, header_h)
+
+    # vertical divider
+    c.setLineWidth(0.5)
+    c.line(margin_l + left_w, y - header_h, margin_l + left_w, y)
+
+    # Logo
+    logo_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'logo.png')
+    try:
+        logo_img = Image(logo_path, width=18*mm, height=18*mm)
+        logo_img.drawOn(c, margin_l + 3*mm, y - header_h + 10*mm)
+    except:
+        pass  # logo nahi mila toh skip
+
+    # Company info
+    tx = margin_l + 24 * mm
+    text(tx, y - 7*mm,  COMPANY_NAME,   "Helvetica-Bold", 9)
+    addr_lines = COMPANY_ADDR.split('\n')
+    for i, line in enumerate(addr_lines):
+        text(tx, y - (11 + i*4)*mm, line, "Helvetica", 7.5, colors.HexColor('#333333'))
+    text(tx, y - (11 + len(addr_lines)*4)*mm, f"Phone no.: {COMPANY_PHONE}", "Helvetica", 7.5, colors.HexColor('#333333'))
+    text(tx, y - (15 + len(addr_lines)*4)*mm, f"Email: {COMPANY_EMAIL}", "Helvetica", 7.5, colors.HexColor('#333333'))
+    text(tx, y - (19 + len(addr_lines)*4)*mm, f"GSTIN: {COMPANY_GSTIN}", "Helvetica", 7.5, colors.HexColor('#333333'))
+    text(tx, y - (23 + len(addr_lines)*4)*mm, f"State: {COMPANY_STATE}", "Helvetica", 7.5, colors.HexColor('#333333'))
+
+    # Right side: Invoice No / Date / Place of supply
+    rx = margin_l + left_w
+    rw = right_w
+
+    # horizontal lines inside right box
+    c.setLineWidth(0.5)
+    c.line(rx, y - 10*mm, rx + rw, y - 10*mm)
+    c.line(rx, y - 20*mm, rx + rw, y - 20*mm)
+    c.line(rx + rw/2, y, rx + rw/2, y - 20*mm)  # vertical split for top 2 rows
+
+    text(rx + 2*mm, y - 5*mm,  "Invoice No.",      "Helvetica",      7.5, colors.HexColor('#555'))
+    text(rx + 2*mm, y - 9*mm,  inv_number,          "Helvetica-Bold", 8)
+    text(rx + rw/2 + 2*mm, y - 5*mm, "Date",         "Helvetica",      7.5, colors.HexColor('#555'))
+    text(rx + rw/2 + 2*mm, y - 9*mm, order.created_at.strftime("%d-%m-%Y"), "Helvetica-Bold", 8)
+
+    text(rx + 2*mm, y - 14*mm, "Place of supply",   "Helvetica",      7.5, colors.HexColor('#555'))
+    text(rx + 2*mm, y - 18*mm, "23-Madhya Pradesh", "Helvetica-Bold", 8)
+
+    y -= header_h
+
+    # ══════════════════════════════════════
+    #  BILL TO
+    # ══════════════════════════════════════
+    bill_h = 28 * mm
+    draw_cell_border(margin_l, y - bill_h, col_w, bill_h)
+
+    text(margin_l + 2*mm, y - 4*mm,  "Bill To",          "Helvetica-Bold", 8)
+    text(margin_l + 2*mm, y - 9*mm,  order.name.upper(), "Helvetica-Bold", 9)
+    text(margin_l + 2*mm, y - 13*mm, order.address,      "Helvetica",      7.5)
+    text(margin_l + 2*mm, y - 17*mm, f"{order.city}, Madhya Pradesh, India - {order.pincode}", "Helvetica", 7.5)
+    text(margin_l + 2*mm, y - 22*mm, f"Phone: {order.phone}", "Helvetica", 7.5)
+    text(margin_l + 2*mm, y - 26*mm, f"Email: {order.email}", "Helvetica", 7.5)
+
+    y -= bill_h
+
+    # ══════════════════════════════════════
+    #  ITEMS TABLE HEADER
+    # ══════════════════════════════════════
+    # Column widths (mm): #=8, Item=65, HSN=20, Qty=15, Unit=12, Price=20, Disc=22, Amt=22 → total=184
+    cols = [8*mm, 62*mm, 20*mm, 15*mm, 13*mm, 20*mm, 22*mm, 22*mm]
+    col_x = [margin_l]
+    for cw in cols[:-1]:
+        col_x.append(col_x[-1] + cw)
+
+    row_h = 7 * mm
+
+    # Header row fill
+    draw_cell_border(margin_l, y - row_h, col_w, row_h, fill=colors.HexColor('#f0f0f0'))
+
+    headers = ['#', 'Item Name', 'HSN/SAC', 'Quantity', 'Unit', 'Price/Unit', 'Discount', 'Amount']
+    for i, (hdr, cx) in enumerate(zip(headers, col_x)):
+        # vertical line
+        if i > 0:
+            c.setLineWidth(0.5)
+            c.line(cx, y - row_h, cx, y)
+        align = "left" if i == 1 else "center"
+        tx_off = 2*mm if align == "left" else cols[i]/2
+        text(cx + tx_off, y - 5*mm, hdr, "Helvetica-Bold", 7.5, align=align)
+
+    y -= row_h
+
+    # ── Item rows ──
+    order_items = order.items.select_related('service').all()
+    for idx, item in enumerate(order_items):
+        unit_price   = float(item.price)
+        qty          = item.quantity
+        item_subtotal = unit_price * qty
+        item_discount = 0.0   # per-item discount (0 for now)
+        item_amount   = item_subtotal - item_discount
+
+        draw_cell_border(margin_l, y - row_h, col_w, row_h)
+        row_data = [
+            str(idx+1), item.service.name, HSN_SAC,
+            str(qty), "Nos",
+            f"Rs. {unit_price:,.2f}",
+            f"Rs. {item_discount:,.2f}" if item_discount else "-",
+            f"Rs. {item_amount:,.2f}"
+        ]
+        for i, (val, cx) in enumerate(zip(row_data, col_x)):
+            if i > 0:
+                c.setLineWidth(0.5)
+                c.line(cx, y - row_h, cx, y)
+            align = "left" if i == 1 else "center"
+            tx_off = 2*mm if align == "left" else cols[i]/2
+            text(cx + tx_off, y - 5*mm, val, "Helvetica", 7.5, align=align)
+        y -= row_h
+
+    # ══════════════════════════════════════
+    #  TOTAL ROW
+    # ══════════════════════════════════════
+    draw_cell_border(margin_l, y - row_h, col_w, row_h, fill=colors.HexColor('#f0f0f0'))
+    c.setLineWidth(0.5)
+    for cx in col_x[1:]:
+        c.line(cx, y - row_h, cx, y)
+    text(col_x[2] + 2*mm, y - 5*mm, "Total", "Helvetica-Bold", 8)
+    # discount total
+    text(col_x[6] + cols[6]/2, y - 5*mm,
+         f"Rs. {discount:,.2f}" if discount else "-", "Helvetica-Bold", 7.5, align="center")
+    text(col_x[7] + cols[7]/2, y - 5*mm,
+         f"Rs. {taxable:,.2f}", "Helvetica-Bold", 7.5, align="center")
+    y -= row_h
+
+    # ══════════════════════════════════════
+    #  AMOUNT IN WORDS + AMOUNTS SUMMARY
+    # ══════════════════════════════════════
+    summary_left_w  = 95 * mm
+    summary_right_w = col_w - summary_left_w
+    summary_h       = 30 * mm
+
+    draw_cell_border(margin_l, y - summary_h, summary_left_w, summary_h)
+    draw_cell_border(margin_l + summary_left_w, y - summary_h, summary_right_w, summary_h)
+
+    text(margin_l + 2*mm, y - 5*mm,  "Invoice Amount in Words", "Helvetica-Bold", 8)
+    words = amount_in_words(total)
+    # wrap long text
+    if len(words) > 45:
+        mid = words[:45].rfind(' ')
+        text(margin_l + 2*mm, y - 10*mm, words[:mid],  "Helvetica", 7.5)
+        text(margin_l + 2*mm, y - 14*mm, words[mid+1:], "Helvetica", 7.5)
+    else:
+        text(margin_l + 2*mm, y - 10*mm, words, "Helvetica", 7.5)
+
+    # Right: amounts
+    rx2  = margin_l + summary_left_w
+    rw2  = summary_right_w
+
+    # horizontal lines
+    for i, offset in enumerate([8, 14, 20, 25]):
+        c.setLineWidth(0.3)
+        c.line(rx2, y - offset*mm, rx2 + rw2, y - offset*mm)
+
+    # label col / value col
+    lx = rx2 + 2*mm
+    vx = rx2 + rw2 - 2*mm
+
+    rows_amounts = [
+        ("Amounts",    "",                    3),
+        ("Sub Total",  f"Rs. {taxable:,.2f}", 7),
+        (f"Tax (18%)", f"Rs. {gst_amount:,.2f}", 11),
+        ("Total",      f"Rs. {total:,.2f}",   16),
+        ("Received",   f"Rs. {received:,.2f}", 21),
+        ("Balance",    f"Rs. {balance:,.2f}", 26),
+    ]
+    for label, value, offset in rows_amounts:
+        bold = label in ("Amounts", "Total")
+        fn = "Helvetica-Bold" if bold else "Helvetica"
+        text(lx, y - offset*mm, label, fn, 8)
+        if value:
+            text(vx, y - offset*mm, value, fn, 8, align="right")
+
+    y -= summary_h
+
+    # ══════════════════════════════════════
+    #  GST TABLE
+    # ══════════════════════════════════════
+    gst_row_h = 6 * mm
+    gst_cols  = [30*mm, 35*mm, 20*mm, 20*mm, 25*mm, 25*mm]   # total ~155mm — adjust if needed
+    gst_col_x = [margin_l]
+    for cw in gst_cols[:-1]:
+        gst_col_x.append(gst_col_x[-1] + cw)
+
+    # header
+    draw_cell_border(margin_l, y - gst_row_h, col_w, gst_row_h, fill=colors.HexColor('#f0f0f0'))
+    gst_headers = ['HSN/SAC', 'Taxable Amount', 'IGST Rate', 'IGST Amt', 'Total Tax Amt', '']
+    for i, (hdr, cx) in enumerate(zip(gst_headers, gst_col_x)):
+        if i > 0:
+            c.setLineWidth(0.5)
+            c.line(cx, y - gst_row_h, cx, y)
+        text(cx + gst_cols[i]/2, y - 4*mm, hdr, "Helvetica-Bold", 7, align="center")
+    y -= gst_row_h
+
+    # data row
+    draw_cell_border(margin_l, y - gst_row_h, col_w, gst_row_h)
+    gst_data = [HSN_SAC, f"Rs. {taxable:,.2f}", "18%", f"Rs. {gst_amount:,.2f}", f"Rs. {gst_amount:,.2f}", ""]
+    for i, (val, cx) in enumerate(zip(gst_data, gst_col_x)):
+        if i > 0:
+            c.setLineWidth(0.5)
+            c.line(cx, y - gst_row_h, cx, y)
+        text(cx + gst_cols[i]/2, y - 4*mm, val, "Helvetica", 7.5, align="center")
+    y -= gst_row_h
+
+    # total row
+    draw_cell_border(margin_l, y - gst_row_h, col_w, gst_row_h, fill=colors.HexColor('#f0f0f0'))
+    for i, cx in enumerate(gst_col_x[1:], 1):
+        c.setLineWidth(0.5)
+        c.line(cx, y - gst_row_h, cx, y)
+    text(gst_col_x[0] + gst_cols[0]/2, y - 4*mm, "Total", "Helvetica-Bold", 7.5, align="center")
+    text(gst_col_x[1] + gst_cols[1]/2, y - 4*mm, f"Rs. {taxable:,.2f}", "Helvetica-Bold", 7.5, align="center")
+    text(gst_col_x[3] + gst_cols[3]/2, y - 4*mm, f"Rs. {gst_amount:,.2f}", "Helvetica-Bold", 7.5, align="center")
+    text(gst_col_x[4] + gst_cols[4]/2, y - 4*mm, f"Rs. {gst_amount:,.2f}", "Helvetica-Bold", 7.5, align="center")
+    y -= gst_row_h
+
+    # ══════════════════════════════════════
+    #  FOOTER — Bank Details | Terms | Signatory
+    # ══════════════════════════════════════
+    footer_h = 35 * mm
+    foot_col  = col_w / 3
+
+    draw_cell_border(margin_l,               y - footer_h, foot_col, footer_h)
+    draw_cell_border(margin_l + foot_col,    y - footer_h, foot_col, footer_h)
+    draw_cell_border(margin_l + foot_col*2,  y - footer_h, foot_col, footer_h)
+
+    # Bank Details
+    bx = margin_l + 2*mm
+    text(bx, y - 4*mm,  "Bank Details",          "Helvetica-Bold", 8)
+    text(bx, y - 9*mm,  f"Name: {BANK_NAME}",    "Helvetica",      7)
+    text(bx, y - 13*mm, f"Account No.: {BANK_ACCOUNT}", "Helvetica", 7)
+    text(bx, y - 17*mm, f"IFSC code: {BANK_IFSC}", "Helvetica",    7)
+    text(bx, y - 21*mm, f"Account holder: {BANK_HOLDER}", "Helvetica", 7)
+
+    # Terms
+    tx2 = margin_l + foot_col + 2*mm
+    text(tx2, y - 4*mm, "Terms and conditions", "Helvetica-Bold", 8)
+    text(tx2, y - 9*mm, TERMS, "Helvetica", 7.5)
+
+    # Signatory
+    sx = margin_l + foot_col*2 + 2*mm
+    text(sx, y - 4*mm,  f"For: {COMPANY_NAME[:25]}", "Helvetica-Bold", 7)
+    text(sx, y - 25*mm, "Authorized Signatory",       "Helvetica-Bold", 7.5)
+
+    y -= footer_h
+
+    # ══════════════════════════════════════
+    #  Save
+    # ══════════════════════════════════════
+    c.save()
+    buffer.seek(0)
+
+    filename = f"Invoice_{inv_number}.pdf"
+    return FileResponse(buffer, as_attachment=True, filename=filename)
+
+# ============================================================
+# ✅ 2. Dashboard order detail view — approve/revoke logic
+#    Yeh function apne dashboard views.py mein update karo
+# ============================================================
+
+# Dashboard views.py mein (dashboard/views.py ya jahan bhi hai)
+from store.models import Order  # apna import path adjust karo
+
+def dashboard_order_detail(request, order_id):
+    order = get_object_or_404(Order, order_id=order_id)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'update_status':
+            order.status = request.POST.get('status')
+            order.save()
+            messages.success(request, f'Order status update ho gaya: {order.get_status_display()}')
+
+        elif action == 'approve_invoice':
+            order.invoice_approved = True
+            order.save()
+            messages.success(request, f'Invoice approved! Customer ab download kar sakta hai.')
+
+        elif action == 'revoke_invoice':
+            order.invoice_approved = False
+            order.save()
+            messages.warning(request, f'Invoice approval revoke kar diya gaya.')
+
+        return redirect('dashboard_order_detail', order_id=order.order_id)
+
+    return render(request, 'dashboard/order_detail.html', {'order': order})

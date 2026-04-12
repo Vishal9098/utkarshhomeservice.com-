@@ -81,6 +81,32 @@
 }
 .contact-note i { color: var(--gold); margin-right: 6px; }
 
+/* ✅ Invoice locked box */
+.invoice-locked-box {
+  margin: 0 28px 20px;
+  background: #f1f3f5;
+  border: 1.5px dashed #adb5bd;
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.invoice-locked-box .lock-icon {
+  font-size: 26px;
+  color: #adb5bd;
+}
+.invoice-locked-box .lock-text strong {
+  display: block;
+  font-size: 14px;
+  color: #495057;
+  margin-bottom: 2px;
+}
+.invoice-locked-box .lock-text small {
+  font-size: 12px;
+  color: #868e96;
+}
+
 .success-actions { padding: 0 28px 28px; display: flex; flex-direction: column; gap: 12px; }
 
 .btn-download-invoice {
@@ -165,10 +191,22 @@
 
     <div class="success-actions">
 
-      <a href="{% url 'download_invoice' order.order_id %}" class="btn-download-invoice">
-        <i class="fas fa-file-invoice-dollar"></i>
-        Download Invoice (PDF)
-      </a>
+      {% if order.invoice_approved %}
+        <!-- ✅ Admin ne approve kiya — download allow -->
+        <a href="{% url 'download_invoice' order.order_id %}" class="btn-download-invoice">
+          <i class="fas fa-file-invoice-dollar"></i>
+          Download Invoice (PDF)
+        </a>
+      {% else %}
+        <!-- 🔒 Admin ne approve nahi kiya — locked box -->
+        <div class="invoice-locked-box">
+          <div class="lock-icon"><i class="fas fa-lock"></i></div>
+          <div class="lock-text">
+            <strong>Invoice abhi available nahi hai</strong>
+            <small>Admin ke approve karne ke baad aap invoice download kar payenge. My Orders mein check karte rahein.</small>
+          </div>
+        </div>
+      {% endif %}
 
       <div class="btn-row">
         <a href="{% url 'my_orders' %}" class="btn-my-orders">

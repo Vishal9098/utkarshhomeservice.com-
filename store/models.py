@@ -126,6 +126,7 @@ class Order(models.Model):
     special_instructions = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    invoice_approved = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.order_id:
