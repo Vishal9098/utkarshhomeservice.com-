@@ -10,44 +10,52 @@
 @media(max-width:480px){ .banner-img{ height:150px; } }
 #carouselExampleControls{ width:100%; overflow:hidden; }
 
-/* CATEGORY CARDS - DESKTOP */
+/* CATEGORY CARDS - DESKTOP (Nakoda exact style) */
 .cat-card {
-  border: 2px solid #e0e6ef;
-  border-radius: 15px;
+  border-radius: 10px;
   overflow: hidden;
   transition: all .3s;
   cursor: pointer;
   background: #fff;
   text-decoration: none;
   display: block;
+  border: 2px solid #c8d6e8;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  position: relative;
 }
 .cat-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(26,95,168,.18);
-  border-color: var(--primary);
+  transform: translateY(-5px);
+  box-shadow: 0 14px 30px rgba(26,95,168,.22);
+  border-color: #1a5fa8;
 }
 .cat-card img {
   width: 100%;
-  height: 200px;
+  height: 250px;
   object-fit: cover;
+  object-position: center top;
   display: block;
 }
+.cat-card .desktop-placeholder {
+  height: 250px !important;
+}
 .cat-card .cat-label {
-  background: var(--primary);
+  position: static;
+  background: #1a5fa8;
   color: #fff;
   text-align: center;
-  padding: 12px 10px;
-  font-size: 14px;
+  padding: 15px 10px 14px;
+  font-size: 16px;
   font-weight: 700;
   font-family: 'Poppins', sans-serif;
   line-height: 1.3;
+  letter-spacing: 0.3px;
 }
 .cat-card .cat-count {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
-  opacity: .85;
+  opacity: .88;
   display: block;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
 /* MOBILE NAKODA STYLE */
@@ -84,10 +92,8 @@
     width:100%; height:100%; object-fit:cover; border-radius:14px;
   }
 
-  /* hide desktop label strip on mobile */
   .cat-card .cat-label { display: none !important; }
 
-  /* mobile title below image */
   .cat-card .mobile-title {
     display: block !important;
     font-size: 11px;
@@ -98,12 +104,10 @@
     line-height: 1.3;
   }
 
-  /* hide desktop image on mobile */
   .cat-card .desktop-img { display: none !important; }
   .cat-card .desktop-placeholder { display: none !important; }
 }
 
-/* show mobile title only on mobile, hide on desktop */
 .cat-card .mobile-title { display: none; }
 </style>
 
@@ -130,18 +134,10 @@
 
 <!-- CATEGORY CARDS SECTION -->
 <section class="py-5">
-  <!-- <div class="container">
-    <div class="section-title">
-      <h2>Our Cleaning Services</h2>
-      <p>Professional cleaning solutions for every need</p>
-      <div class="title-line"></div>
-    </div> -->
-
     <div class="row g-3 cat-grid">
       {% for category in categories %}
       {% if category.services.count > 0 %}
-      <div class="col-lg-3 col-md-4 col-6">
-        <!-- Click karo → all_services page par us category ki services dikhegi -->
+      <div class="col-lg-4 col-md-4 col-6">
         <a href="{% url 'all_services' %}?category={{ category.slug }}" class="cat-card">
 
           <!-- MOBILE: round image box -->
@@ -164,7 +160,7 @@
             {% elif category.image %}
               <img src="{{ category.image.url }}" alt="{{ category.name }}" class="desktop-img d-none d-md-block">
             {% else %}
-              <div class="desktop-placeholder d-none d-md-flex" style="height:200px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);align-items:center;justify-content:center;">
+              <div class="desktop-placeholder d-none d-md-flex" style="height:250px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);align-items:center;justify-content:center;">
                 <i class="fas fa-spray-can-sparkles fa-3x" style="color:var(--primary);opacity:.5;"></i>
               </div>
             {% endif %}
@@ -183,12 +179,6 @@
       </div>
       {% endif %}
       {% endfor %}
-    </div>
-
-    <div class="text-center mt-4">
-      <!-- <a href="{% url 'all_services' %}" class="btn btn-primary btn-lg px-5" style="border-radius:30px;">
-        View All Services <i class="fas fa-arrow-right ms-2"></i>
-      </a> -->
     </div>
   </div>
 </section>

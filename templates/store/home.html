@@ -10,62 +10,87 @@
 @media(max-width:480px){ .banner-img{ height:150px; } }
 #carouselExampleControls{ width:100%; overflow:hidden; }
 
-/* CATEGORY CARDS - DESKTOP (Nakoda exact style) */
+/* ===== NAKODA EXACT CARD STYLE - DESKTOP ===== */
+.cat-section {
+  padding: 40px 0;
+  background: #fff;
+}
+.cat-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 ;
+}
+.cat-grid-wrap {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
 .cat-card {
+  display: block;
+  text-decoration: none;
   border-radius: 10px;
   overflow: hidden;
-  transition: all .3s;
-  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,.12);
+  border: 1.5px solid #dce8f5;
   background: #fff;
-  text-decoration: none;
-  display: block;
-  border: 2px solid #c8d6e8;
-  box-shadow: 0 2px 8px rgba(0,0,0,.08);
-  position: relative;
+  transition: transform .3s, box-shadow .3s;
+  cursor: pointer;
 }
 .cat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 14px 30px rgba(26,95,168,.22);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(26,95,168,.22);
   border-color: #1a5fa8;
 }
-.cat-card img {
+.cat-card .img-wrap {
   width: 100%;
-  height: 250px;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
+  padding-top: 68%;
+  position: relative;
+  overflow: hidden;
+  background: #eef2f7;
 }
-.cat-card .desktop-placeholder {
-  height: 250px !important;
+.cat-card .img-wrap img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  transition: transform .4s ease;
+}
+.cat-card:hover .img-wrap img {
+  transform: scale(1.04);
+}
+.cat-card .img-wrap .no-img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, #1a5fa8, #3a8fd4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .cat-card .cat-label {
-  position: static;
-  background: #1a5fa8;
+  background: #1a52a8;
   color: #fff;
   text-align: center;
-  padding: 15px 10px 14px;
+  padding: 13px 10px 14px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
   font-family: 'Poppins', sans-serif;
   line-height: 1.3;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
 }
-.cat-card .cat-count {
-  font-size: 12px;
-  font-weight: 400;
-  opacity: .88;
-  display: block;
-  margin-top: 3px;
-}
+.cat-card .mobile-title { display: none; }
 
-/* MOBILE NAKODA STYLE */
+/* ===== MOBILE - PURANA WALA SAME ===== */
 @media(max-width:768px){
-  .cat-grid {
+  .cat-grid-wrap {
     display: grid !important;
     grid-template-columns: repeat(3,1fr) !important;
     gap: 12px !important;
+    padding: 0 10px !important;
   }
-  .cat-grid > div { width:100% !important; padding:0 !important; }
 
   .cat-card {
     border: none !important;
@@ -75,21 +100,28 @@
     box-shadow: 0 8px 18px rgba(0,0,0,.18), 0 3px 8px rgba(0,0,0,.12) !important;
     overflow: visible !important;
   }
-  .cat-card:hover { transform:translateY(-4px) !important; }
+  .cat-card:hover { transform: translateY(-4px) !important; }
 
+  /* img-wrap desktop wala hide karo mobile pe */
+  .cat-card .img-wrap { display: none !important; }
+
+  /* mobile-img-box show karo */
   .cat-card .mobile-img-box {
+    display: flex !important;
     height: 90px;
     background: #fff;
     border-radius: 18px;
     padding: 6px;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,.15);
-    display: flex;
     align-items: center;
     justify-content: center;
   }
   .cat-card .mobile-img-box img {
-    width:100%; height:100%; object-fit:cover; border-radius:14px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
   }
 
   .cat-card .cat-label { display: none !important; }
@@ -103,12 +135,7 @@
     padding: 5px 2px 0;
     line-height: 1.3;
   }
-
-  .cat-card .desktop-img { display: none !important; }
-  .cat-card .desktop-placeholder { display: none !important; }
 }
-
-.cat-card .mobile-title { display: none; }
 </style>
 
 <!-- BANNER SLIDER -->
@@ -133,15 +160,31 @@
 </div>
 
 <!-- CATEGORY CARDS SECTION -->
-<section class="py-5">
-    <div class="row g-3 cat-grid">
+<section class="cat-section">
+  <!-- <div class="container"> -->
+  <div class="container-fluid"> 
+    <div class="cat-grid-wrap">
       {% for category in categories %}
       {% if category.services.count > 0 %}
-      <div class="col-lg-4 col-md-4 col-6">
         <a href="{% url 'all_services' %}?category={{ category.slug }}" class="cat-card">
 
+          <!-- DESKTOP: img-wrap -->
+          <div class="img-wrap">
+            {% with category.services.first as first_service %}
+              {% if first_service and first_service.image %}
+                <img src="{{ first_service.image.url }}" alt="{{ category.name }}">
+              {% elif category.image %}
+                <img src="{{ category.image.url }}" alt="{{ category.name }}">
+              {% else %}
+                <div class="no-img">
+                  <i class="fas fa-spray-can-sparkles fa-3x" style="color:#fff;opacity:.6;"></i>
+                </div>
+              {% endif %}
+            {% endwith %}
+          </div>
+
           <!-- MOBILE: round image box -->
-          <div class="mobile-img-box d-md-none">
+          <div class="mobile-img-box" style="display:none;">
             {% with category.services.first as first_service %}
               {% if first_service and first_service.image %}
                 <img src="{{ first_service.image.url }}" alt="{{ category.name }}">
@@ -153,30 +196,13 @@
             {% endwith %}
           </div>
 
-          <!-- DESKTOP: full image -->
-          {% with category.services.first as first_service %}
-            {% if first_service and first_service.image %}
-              <img src="{{ first_service.image.url }}" alt="{{ category.name }}" class="desktop-img d-none d-md-block">
-            {% elif category.image %}
-              <img src="{{ category.image.url }}" alt="{{ category.name }}" class="desktop-img d-none d-md-block">
-            {% else %}
-              <div class="desktop-placeholder d-none d-md-flex" style="height:250px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);align-items:center;justify-content:center;">
-                <i class="fas fa-spray-can-sparkles fa-3x" style="color:var(--primary);opacity:.5;"></i>
-              </div>
-            {% endif %}
-          {% endwith %}
-
-          <!-- DESKTOP: blue label at bottom -->
-          <div class="cat-label">
-            {{ category.name }}
-            <span class="cat-count">{{ category.services.count }} service{{ category.services.count|pluralize }}</span>
-          </div>
+          <!-- DESKTOP: blue label -->
+          <div class="cat-label">{{ category.name }}</div>
 
           <!-- MOBILE: title below image -->
           <span class="mobile-title">{{ category.name }}</span>
 
         </a>
-      </div>
       {% endif %}
       {% endfor %}
     </div>
