@@ -3,6 +3,19 @@
   {% if selected_category %}{{ selected_category.name }}{% else %}All Services{% endif %} - Utkarsh Cleaning
 {% endblock %}
 
+{% block extra_css %}
+<style>
+@media (max-width: 992px) {
+  .col-6 { flex: 0 0 auto; width: 50% !important; }
+  .card-img-top { height: 130px !important; }
+  .card-body p.text-muted { display: none; }
+  .card-body h6 { font-size: 12px !important; }
+  .card-body span[style*="font-size:18px"] { font-size: 14px !important; }
+  .sidebar-col { display: none !important; }
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- BREADCRUMB -->
 <div class="breadcrumb-section">
@@ -22,7 +35,7 @@
     <div class="row g-4">
 
       <!-- SIDEBAR -->
-      <div class="col-lg-3">
+      <div class="col-lg-3 sidebar-col">
         <!-- Search -->
         <div class="card border-0 shadow-sm p-3 mb-3">
           <h6 class="fw-bold mb-3"><i class="fas fa-search me-2" style="color:var(--primary);"></i>Search</h6>
@@ -63,7 +76,7 @@
       </div>
 
       <!-- SERVICES GRID -->
-      <div class="col-lg-9">
+      <div class="col-12 col-lg-9">
         <!-- Page title -->
         <div class="d-flex justify-content-between align-items-center mb-4">
           <div>
@@ -79,13 +92,10 @@
         </div>
 
         <!-- Cards -->
-        <div class="row g-3">
+        <div class="row g-2">
           {% for service in services %}
-
-          {# ✅ Jab category selected ho aur service ka naam category ke naam se match kare toh skip karo #}
-         \
-           {% if not selected_category or selected_category.slug not in 'furnished-apartment-cleaning,unfurnished-apartment-cleaning' or service.name != selected_category.name %}
-          <div class="col-md-4 col-6">
+          {% if not selected_category or selected_category.slug not in 'furnished-apartment-cleaning,unfurnished-apartment-cleaning' or service.name != selected_category.name %}
+          <div class="col-6 col-md-4">
             <div class="card border-0 shadow-sm h-100" style="border-radius:15px;overflow:hidden;transition:all .3s;">
               <a href="{% url 'service_detail' service.slug %}" class="text-decoration-none">
                 <!-- Image -->

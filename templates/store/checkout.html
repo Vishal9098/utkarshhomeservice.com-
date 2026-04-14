@@ -1,43 +1,281 @@
 {% extends 'base.html' %}
 {% block title %}Checkout - Utkarsh Cleaning{% endblock %}
 {% block content %}
-<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li><li class="breadcrumb-item"><a href="{% url 'cart' %}">Cart</a></li><li class="breadcrumb-item active">Checkout</li></ol></div></div>
+
+<style>
+/* ── Slot Grid ── */
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.slot-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  position: relative;
+  min-height: 64px;
+}
+
+.slot-btn:hover:not(.booked):not(.loading) {
+  border-color: var(--primary, #f59e0b);
+  background: #fffbeb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245,158,11,0.15);
+}
+
+.slot-btn.selected {
+  border-color: var(--primary, #f59e0b);
+  background: var(--primary, #f59e0b);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(245,158,11,0.35);
+}
+
+.slot-btn.booked {
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.slot-btn.booked::after {
+  content: "Booked";
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ef4444;
+  text-decoration: none;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.slot-btn.loading {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+  cursor: wait;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.slot-icon {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+/* ── Full day booked alert ── */
+.day-full-alert {
+  display: none;
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border: 1px solid #fca5a5;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-top: 12px;
+}
+
+.day-full-alert.show { display: block; }
+
+/* ── Date hint ── */
+.date-hint {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 6px;
+}
+
+.date-hint.success { color: #059669; }
+.date-hint.error   { color: #dc2626; }
+
+/* ── Slot loading placeholder ── */
+.slot-placeholder {
+  display: none;
+  color: #6b7280;
+  font-size: 13px;
+  padding: 20px;
+  text-align: center;
+  border: 2px dashed #e5e7eb;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+.slot-placeholder.show { display: block; }
+
+/* ── Selected slot summary ── */
+.selected-slot-badge {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: #ecfdf5;
+  border: 1px solid #6ee7b7;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #065f46;
+}
+.selected-slot-badge.show { display: flex; }
+</style>
+
+<div class="breadcrumb-section">
+  <div class="container">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'cart' %}">Cart</a></li>
+      <li class="breadcrumb-item active">Checkout</li>
+    </ol>
+  </div>
+</div>
+
 <section class="py-5">
   <div class="container">
     <h3 class="fw-bold mb-4">Checkout</h3>
-    <form method="POST">{% csrf_token %}
+
+    {% if messages %}
+      {% for msg in messages %}
+        <div class="alert alert-{{ msg.tags }} alert-dismissible fade show" role="alert">
+          {{ msg }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST" id="checkout-form">{% csrf_token %}
+
+      <!-- Hidden field for selected time -->
+      <input type="hidden" name="service_time" id="service_time_hidden" value="">
+
     <div class="row g-4">
+
+      <!-- ─── LEFT COLUMN ─── -->
       <div class="col-lg-7">
+
+        <!-- Personal Info -->
         <div class="card border-0 shadow-sm p-4 mb-4">
-          <h5 class="fw-bold mb-3"><i class="fas fa-user me-2" style="color:var(--primary);"></i>Personal Information</h5>
+          <h5 class="fw-bold mb-3">
+            <i class="fas fa-user me-2" style="color:var(--primary);"></i>Personal Information
+          </h5>
           <div class="row g-3">
-            <div class="col-md-6"><label class="form-label fw-semibold">Full Name *</label><input type="text" name="name" class="form-control" value="{{ user.get_full_name }}" required></div>
-            <div class="col-md-6"><label class="form-label fw-semibold">Email *</label><input type="email" name="email" class="form-control" value="{{ user.email }}" required></div>
-            <div class="col-md-6"><label class="form-label fw-semibold">Phone *</label><input type="tel" name="phone" class="form-control" value="{% if profile %}{{ profile.phone }}{% endif %}" required></div>
-            <div class="col-md-6"><label class="form-label fw-semibold">City *</label><input type="text" name="city" class="form-control" value="{% if profile %}{{ profile.city }}{% endif %}" required></div>
-            <div class="col-12"><label class="form-label fw-semibold">Full Address *</label><textarea name="address" class="form-control" rows="2" required>{% if profile %}{{ profile.address }}{% endif %}</textarea></div>
-            <div class="col-md-6"><label class="form-label fw-semibold">Pincode *</label><input type="text" name="pincode" class="form-control" value="{% if profile %}{{ profile.pincode }}{% endif %}" required></div>
-          </div>
-        </div>
-        <div class="card border-0 shadow-sm p-4 mb-4">
-          <h5 class="fw-bold mb-3"><i class="fas fa-calendar me-2" style="color:var(--primary);"></i>Service Scheduling</h5>
-          <div class="row g-3">
-            <div class="col-md-6"><label class="form-label fw-semibold">Preferred Date</label><input type="date" name="service_date" class="form-control"></div>
-            <div class="col-md-6"><label class="form-label fw-semibold">Preferred Time</label>
-              <select name="service_time" class="form-select">
-                <option value="">Select Time</option>
-                <option>8:00 AM - 10:00 AM</option>
-                <option>10:00 AM - 12:00 PM</option>
-                <option>12:00 PM - 2:00 PM</option>
-                <option>2:00 PM - 4:00 PM</option>
-                <option>4:00 PM - 6:00 PM</option>
-              </select>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Full Name *</label>
+              <input type="text" name="name" class="form-control" value="{{ user.get_full_name }}" required>
             </div>
-            <div class="col-12"><label class="form-label fw-semibold">Special Instructions</label><textarea name="special_instructions" class="form-control" rows="2" placeholder="Koi special instructions ho toh yahan likhein..."></textarea></div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Email *</label>
+              <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Phone *</label>
+              <input type="tel" name="phone" class="form-control"
+                     value="{% if profile %}{{ profile.phone }}{% endif %}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">City *</label>
+              <input type="text" name="city" class="form-control"
+                     value="{% if profile %}{{ profile.city }}{% endif %}" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Full Address *</label>
+              <textarea name="address" class="form-control" rows="2" required>{% if profile %}{{ profile.address }}{% endif %}</textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Pincode *</label>
+              <input type="text" name="pincode" class="form-control"
+                     value="{% if profile %}{{ profile.pincode }}{% endif %}" required>
+            </div>
           </div>
         </div>
+
+        <!-- ✅ Service Scheduling — Dynamic Slot System -->
+        <div class="card border-0 shadow-sm p-4 mb-4">
+          <h5 class="fw-bold mb-3">
+            <i class="fas fa-calendar-alt me-2" style="color:var(--primary);"></i>Service Scheduling
+          </h5>
+
+          <!-- Date Picker -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              📅 Service Date *
+              <span class="text-muted fw-normal">(Minimum 1 din advance)</span>
+            </label>
+            <input type="date"
+                   name="service_date"
+                   id="service_date"
+                   class="form-control"
+                   min="{{ min_date }}"
+                   max="{{ max_date }}"
+                   {% if next_available_date %}value="{{ next_available_date }}"{% endif %}
+                   required>
+            <div class="date-hint" id="date-hint"></div>
+          </div>
+
+          <!-- Time Slot Grid -->
+          <div>
+            <label class="form-label fw-semibold">
+              🕐 Available Time Slots *
+            </label>
+
+            <!-- Loading placeholder -->
+            <div class="slot-placeholder show" id="slot-placeholder">
+              <i class="fas fa-calendar-day fa-2x mb-2 d-block" style="color:#d1d5db;"></i>
+              Pehle date select karein — phir slots dikhenge
+            </div>
+
+            <!-- Slot grid -->
+            <div class="slot-grid" id="slot-grid" style="display:none !important;">
+              <!-- JS se dynamically fill hoga -->
+            </div>
+
+            <!-- All slots booked alert -->
+            <div class="day-full-alert" id="day-full-alert">
+              <div class="d-flex align-items-start gap-3">
+                <span style="font-size:24px;">😔</span>
+                <div>
+                  <strong class="d-block mb-1">Is din ke saare slots booked hain!</strong>
+                  <span id="next-available-msg" class="text-muted" style="font-size:13px;"></span>
+                  <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-block"
+                          id="jump-to-next-btn" style="display:none !important;">
+                    <i class="fas fa-arrow-right me-1"></i>Next Available Date Pe Jaao
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Selected slot badge -->
+            <div class="selected-slot-badge" id="selected-slot-badge">
+              <i class="fas fa-check-circle" style="color:#10b981;"></i>
+              <span id="selected-slot-text">Slot selected</span>
+            </div>
+          </div>
+
+          <!-- Special Instructions -->
+          <div class="mt-3">
+            <label class="form-label fw-semibold">Special Instructions</label>
+            <textarea name="special_instructions" class="form-control" rows="2"
+                      placeholder="Koi special instructions ho toh yahan likhein..."></textarea>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
         <div class="card border-0 shadow-sm p-4">
-          <h5 class="fw-bold mb-3"><i class="fas fa-credit-card me-2" style="color:var(--primary);"></i>Payment Method</h5>
+          <h5 class="fw-bold mb-3">
+            <i class="fas fa-credit-card me-2" style="color:var(--primary);"></i>Payment Method
+          </h5>
           <div class="row g-3">
             <div class="col-md-4">
               <label class="d-block border rounded p-3 text-center" style="cursor:pointer;">
@@ -62,35 +300,253 @@
             </div>
           </div>
         </div>
-      </div>
+
+      </div><!-- end col-lg-7 -->
+
+      <!-- ─── RIGHT COLUMN: Order Summary ─── -->
       <div class="col-lg-5">
         <div class="card border-0 shadow-sm p-4 sticky-top" style="top:100px;">
           <h5 class="fw-bold mb-3">Order Summary</h5>
+
           {% for item in items %}
           <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
             <div>
               <small class="fw-semibold d-block">{{ item.service.name }}</small>
-              <small class="text-muted">Qty: {{ item.quantity }}</small>
+              <small class="text-muted">Qty: {{ item.quantity }} × ₹{{ item.service.get_final_price }}</small>
             </div>
             <strong>₹{{ item.get_total }}</strong>
           </div>
           {% endfor %}
-          <div class="d-flex justify-content-between mt-2 mb-1"><span>Subtotal</span><strong>₹{{ subtotal }}</strong></div>
-          {% if discount > 0 %}<div class="d-flex justify-content-between mb-1 text-success"><span>Discount</span><strong>-₹{{ discount }}</strong></div>{% endif %}
-          <div class="d-flex justify-content-between mb-1"><span>Service Charges</span><strong class="text-success">FREE</strong></div>
-          <div class="d-flex justify-content-between mb-2 text-muted"><span>GST (18%)</span><strong>+₹{{ gst_amount }}</strong></div>
+
+          <div class="d-flex justify-content-between mt-2 mb-1">
+            <span>Subtotal</span><strong>₹{{ subtotal }}</strong>
+          </div>
+          {% if discount > 0 %}
+          <div class="d-flex justify-content-between mb-1 text-success">
+            <span>Discount</span><strong>-₹{{ discount }}</strong>
+          </div>
+          {% endif %}
+          <div class="d-flex justify-content-between mb-1">
+            <span>Service Charges</span><strong class="text-success">FREE</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-2 text-muted">
+            <span>GST (18%)</span><strong>+₹{{ gst_amount }}</strong>
+          </div>
           <hr>
-          <div class="d-flex justify-content-between mb-4"><span class="fw-bold fs-5">Total</span><strong class="fs-5" style="color:var(--primary);">₹{{ total }}</strong></div>
-          <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold" style="border-radius:30px;font-size:18px;">
+          <div class="d-flex justify-content-between mb-4">
+            <span class="fw-bold fs-5">Total</span>
+            <strong class="fs-5" style="color:var(--primary);">₹{{ total }}</strong>
+          </div>
+
+          <!-- Selected booking summary -->
+          <div id="booking-summary" class="mb-3 p-3 rounded" style="background:#f8fafc;display:none;">
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <i class="fas fa-calendar-check" style="color:var(--primary);"></i>
+              <strong style="font-size:13px;">Booking Summary</strong>
+            </div>
+            <small class="text-muted d-block" id="booking-date-display"></small>
+            <small class="text-muted d-block" id="booking-time-display"></small>
+          </div>
+
+          <button type="submit" id="place-order-btn"
+                  class="btn btn-warning btn-lg w-100 fw-bold"
+                  style="border-radius:30px;font-size:18px;" disabled>
             <i class="fas fa-check-circle me-2"></i>Place Order
           </button>
-          <div class="text-center mt-3">
-            <small class="text-muted"><i class="fas fa-lock me-1"></i>Secure & Safe Checkout</small>
+          <div class="text-center mt-2">
+            <small class="text-muted" id="btn-hint">
+              <i class="fas fa-info-circle me-1"></i>Date aur slot select karein
+            </small>
+          </div>
+          <div class="text-center mt-2">
+            <small class="text-muted">
+              <i class="fas fa-lock me-1"></i>Secure &amp; Safe Checkout
+            </small>
           </div>
         </div>
       </div>
-    </div>
+
+    </div><!-- end row -->
     </form>
   </div>
 </section>
+
+<script>
+const SLOT_ICONS = {
+  "08:00 AM - 10:00 AM": "🌅",
+  "10:00 AM - 12:00 PM": "☀️",
+  "12:00 PM - 02:00 PM": "🌤️",
+  "02:00 PM - 04:00 PM": "🌇",
+  "04:00 PM - 06:00 PM": "🌆",
+};
+
+const dateInput       = document.getElementById('service_date');
+const slotGrid        = document.getElementById('slot-grid');
+const slotPlaceholder = document.getElementById('slot-placeholder');
+const dayFullAlert    = document.getElementById('day-full-alert');
+const nextAvailableMsg= document.getElementById('next-available-msg');
+const jumpBtn         = document.getElementById('jump-to-next-btn');
+const slotHiddenInput = document.getElementById('service_time_hidden');
+const submitBtn       = document.getElementById('place-order-btn');
+const selectedBadge   = document.getElementById('selected-slot-badge');
+const selectedText    = document.getElementById('selected-slot-text');
+const dateHint        = document.getElementById('date-hint');
+const bookingSummary  = document.getElementById('booking-summary');
+const bookingDateDisp = document.getElementById('booking-date-display');
+const bookingTimeDisp = document.getElementById('booking-time-display');
+const btnHint         = document.getElementById('btn-hint');
+
+let selectedSlot = '';
+let nextAvailableDate = '';
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('hi-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+function setSubmitState() {
+  const hasDate = dateInput.value !== '';
+  const hasSlot = selectedSlot !== '';
+  submitBtn.disabled = !(hasDate && hasSlot);
+
+  if (!hasDate) {
+    btnHint.textContent = '📅 Date select karein';
+  } else if (!hasSlot) {
+    btnHint.textContent = '🕐 Time slot select karein';
+  } else {
+    btnHint.textContent = '✅ Booking ready hai!';
+  }
+
+  if (hasDate && hasSlot) {
+    bookingSummary.style.display = 'block';
+    bookingDateDisp.textContent = '📅 ' + formatDate(dateInput.value);
+    bookingTimeDisp.textContent = '🕐 ' + selectedSlot;
+  } else {
+    bookingSummary.style.display = 'none';
+  }
+}
+
+async function loadSlots(dateStr) {
+  // Reset
+  selectedSlot = '';
+  slotHiddenInput.value = '';
+  selectedBadge.classList.remove('show');
+  dayFullAlert.classList.remove('show');
+  setSubmitState();
+
+  // Show loading
+  slotPlaceholder.innerHTML = '<i class="fas fa-spinner fa-spin fa-2x mb-2 d-block" style="color:#d1d5db;"></i>Slots load ho rahe hain...';
+  slotPlaceholder.classList.add('show');
+  slotGrid.style.setProperty('display', 'none', 'important');
+
+  try {
+    const res = await fetch(`/api/slots/?date=${dateStr}`);
+    const data = await res.json();
+
+    if (data.error) {
+      dateHint.textContent = '⚠️ ' + data.error;
+      dateHint.className = 'date-hint error';
+      slotPlaceholder.innerHTML = '<i class="fas fa-exclamation-triangle fa-2x mb-2 d-block" style="color:#f59e0b;"></i>' + data.error;
+      return;
+    }
+
+    dateHint.textContent = '';
+    dateHint.className = 'date-hint';
+
+    if (data.all_booked) {
+      slotPlaceholder.classList.remove('show');
+      slotGrid.style.setProperty('display', 'none', 'important');
+      dayFullAlert.classList.add('show');
+      nextAvailableDate = data.next_available || '';
+
+      if (data.next_available) {
+        nextAvailableMsg.innerHTML = `Agli available date: <strong>${formatDate(data.next_available)}</strong>`;
+        jumpBtn.style.setProperty('display', 'inline-block', 'important');
+      } else {
+        nextAvailableMsg.textContent = 'Filhaal koi date available nahi hai. Baad mein try karein.';
+        jumpBtn.style.setProperty('display', 'none', 'important');
+      }
+      return;
+    }
+
+    // Build slot buttons
+    slotGrid.innerHTML = '';
+    data.slots.forEach(slot => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'slot-btn' + (slot.is_booked ? ' booked' : '');
+      const icon = SLOT_ICONS[slot.time] || '🕐';
+      btn.innerHTML = `<span class="slot-icon">${icon}</span>${slot.time}`;
+      btn.dataset.time = slot.time;
+
+      if (!slot.is_booked) {
+        btn.addEventListener('click', () => selectSlot(btn, slot.time));
+      }
+
+      slotGrid.appendChild(btn);
+    });
+
+    slotPlaceholder.classList.remove('show');
+    slotGrid.style.setProperty('display', 'grid', 'important');
+
+    const availableCount = data.slots.filter(s => !s.is_booked).length;
+    dateHint.textContent = `✅ ${availableCount} slots available hain`;
+    dateHint.className = 'date-hint success';
+
+  } catch (e) {
+    slotPlaceholder.innerHTML = '<i class="fas fa-wifi fa-2x mb-2 d-block" style="color:#d1d5db;"></i>Network error. Refresh karein.';
+    console.error(e);
+  }
+}
+
+function selectSlot(btn, time) {
+  // Deselect all
+  document.querySelectorAll('.slot-btn.selected').forEach(b => b.classList.remove('selected'));
+
+  // Select clicked
+  btn.classList.add('selected');
+  selectedSlot = time;
+  slotHiddenInput.value = time;
+
+  selectedText.textContent = `✅ ${time} — Selected`;
+  selectedBadge.classList.add('show');
+  setSubmitState();
+}
+
+// Jump to next available date
+jumpBtn.addEventListener('click', () => {
+  if (nextAvailableDate) {
+    dateInput.value = nextAvailableDate;
+    loadSlots(nextAvailableDate);
+  }
+});
+
+// Date change
+dateInput.addEventListener('change', () => {
+  const dateStr = dateInput.value;
+  if (dateStr) {
+    loadSlots(dateStr);
+  }
+});
+
+// Form submit validation
+document.getElementById('checkout-form').addEventListener('submit', (e) => {
+  if (!dateInput.value || !selectedSlot) {
+    e.preventDefault();
+    alert('Date aur time slot dono select karna zaroori hai!');
+    return;
+  }
+  slotHiddenInput.value = selectedSlot;
+});
+
+// Auto-load if default date set
+window.addEventListener('DOMContentLoaded', () => {
+  if (dateInput.value) {
+    loadSlots(dateInput.value);
+  }
+  setSubmitState();
+});
+</script>
+
 {% endblock %}

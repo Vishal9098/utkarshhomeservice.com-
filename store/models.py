@@ -45,14 +45,14 @@ class Service(models.Model):
         super().save(*args, **kwargs)
 
     def get_discount_percent(self):
-        if self.discount_price and self.price:  # FIX: guard against None price
+        if self.discount_price and self.price:
             return int(((self.price - self.discount_price) / self.price) * 100)
         return 0
 
     def get_final_price(self):
         if self.discount_price:
             return self.discount_price
-        return self.price or 0  # FIX: return 0 instead of None
+        return self.price or 0
 
     def __str__(self):
         return self.name
@@ -91,7 +91,7 @@ class CartItem(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
     def get_total(self):
-        return (self.service.get_final_price() or 0) * self.quantity  # FIX: extra guard
+        return (self.service.get_final_price() or 0) * self.quantity
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -208,3 +208,41 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+# ============================================================
+# ✅ BOOKING SLOT MODEL — Global lock (ek team = ek slot)
+# ============================================================
+
+# Saare available time slots — yahan se manage karo
+ALL_TIME_SLOTS = [
+    "08:00 AM - 10:00 AM",
+    "10:00 AM - 12:00 PM",
+    "12:00 PM - 02:00 PM",
+    "02:00 PM - 04:00 PM",
+    "04:00 PM - 06:00 PM",
+]
+
+class BookingSlot(models.Model):
+    """
+    Global slot lock — ek team hai toh ek time pe sirf EK booking.
+    Service-independent: koi bhi service ho, ek time slot ek baar book hoga.
+    """
+    service_date = models.DateField()
+    service_time = models.CharField(max_length=50)
+    order = models.ForeignKey(
+        'Order',
+        on_delete=models.CASCADE,
+        related_name='slots',
+        null=True, blank=True
+    )
+    is_booked = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # DB level pe guarantee: ek date+time pe sirf ek record
+        unique_together = ('service_date', 'service_time')
+        ordering = ['service_date', 'service_time']
+
+    def __str__(self):
+        return f"{self.service_date} | {self.service_time} | {'Booked' if self.is_booked else 'Available'}"
