@@ -94,7 +94,7 @@
         <!-- Cards -->
         <div class="row g-2">
           {% for service in services %}
-          {% if not selected_category or selected_category.slug not in 'furnished-apartment-cleaning,unfurnished-apartment-cleaning' or service.name != selected_category.name %}
+          {% if not selected_category or selected_category.slug not in 'furnished-apartment-cleaning,unfurnished-apartment-cleaning,kitchen-deep-cleaning,bathroom-deep-cleanings' or service.name != selected_category.name %}
           <div class="col-6 col-md-4">
             <div class="card border-0 shadow-sm h-100" style="border-radius:15px;overflow:hidden;transition:all .3s;">
               <a href="{% url 'service_detail' service.slug %}" class="text-decoration-none">
