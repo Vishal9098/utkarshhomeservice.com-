@@ -675,3 +675,12 @@ def dashboard_order_detail(request, order_id):
             messages.warning(request, 'Invoice approval revoke kar diya gaya.')
         return redirect('dashboard_order_detail', order_id=order.order_id)
     return render(request, 'dashboard/order_detail.html', {'order': order})
+
+
+@login_required
+def dashboard(request):
+    orders = Order.objects.all().order_by('-created_at')[:10]
+
+    return render(request, 'dashboard/index.html', {
+        'orders': orders
+    })
