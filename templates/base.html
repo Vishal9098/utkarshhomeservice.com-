@@ -318,9 +318,9 @@ html, body { font-family: "Libre Baskerville", serif; }
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">HOME</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a></li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="{% url 'all_services' %}" data-bs-toggle="dropdown">ALL SERVICES</a>
+          <a class="nav-link dropdown-toggle" href="{% url 'all_services' %}" data-bs-toggle="dropdown">All Services</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="{% url 'all_services' %}">All Services</a></li>
             {% for cat in categories_global %}
@@ -328,9 +328,9 @@ html, body { font-family: "Libre Baskerville", serif; }
             {% endfor %}
           </ul>
         </li>
-        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}" href="{% url 'gallery' %}">GALLERY</a></li>
-        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'blog_list' %}active{% endif %}" href="{% url 'blog_list' %}">BLOG</a></li>
-        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}">CONTACT</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}" href="{% url 'gallery' %}">Gallery</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'blog_list' %}active{% endif %}" href="{% url 'blog_list' %}">Blog</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}">Contact</a></li>
       </ul>
       <form class="d-flex me-3" action="{% url 'search' %}" method="GET">
         <div class="input-group">
