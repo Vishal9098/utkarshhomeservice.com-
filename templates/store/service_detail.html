@@ -3,7 +3,24 @@
 
 {% block extra_css %}
 <style>
+/* ── MOBILE ONLY ── */
 @media (max-width: 991.98px) {
+
+  /* HIDE DESKTOP LAYOUT ON MOBILE */
+  .desktop-layout,
+  .desktop-layout *,
+  #desktop-layout-block,
+  #desktop-layout-block * {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Quantity buttons */
   #qty-minus, #qty-plus {
     width: 44px !important;
     height: 44px !important;
@@ -24,6 +41,23 @@
     font-size: 15px !important;
   }
 }
+
+/* ── DESKTOP ONLY ── */
+@media (min-width: 992px) {
+  .mobile-only-image,
+  .mobile-only-desc,
+  .mobile-only-price {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .desktop-layout {
+    display: block !important;
+  }
+}
 </style>
 {% endblock %}
 
@@ -37,171 +71,42 @@
     </ol>
   </div>
 </div>
+
 <section class="py-5">
   <div class="container">
-    <div class="row g-5">
-      <div class="col-lg-6">
-        {% if service.image %}
-        <img src="{{ service.image.url }}" class="img-fluid rounded-3 shadow" alt="{{ service.name }}" style="width:100%;">
-        {% else %}
-        <div style="height:400px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);display:flex;align-items:center;justify-content:center;border-radius:15px;">
-          <i class="fas fa-spray-can-sparkles fa-5x" style="color:var(--primary);opacity:.5;"></i>
-        </div>
-        {% endif %}
-        {% if service.images.all %}
-        <div class="row g-2 mt-2">
-          {% for img in service.images.all %}
-          <div class="col-3"><img src="{{ img.image.url }}" class="img-fluid rounded" style="height:80px;object-fit:cover;cursor:pointer;"></div>
-          {% endfor %}
-        </div>
-        {% endif %}
+
+    <!-- ══════════════════════════════════════
+         MOBILE LAYOUT (< 992px)
+         Order: Image → Description → Price+Qty+Buttons
+    ══════════════════════════════════════ -->
+
+    <!-- MOBILE: 1. IMAGE -->
+    <div class="mobile-only-image mb-4">
+      {% if service.image %}
+      <img src="{{ service.image.url }}" class="img-fluid rounded-3 shadow" alt="{{ service.name }}" style="width:100%;">
+      {% else %}
+      <div style="height:300px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);display:flex;align-items:center;justify-content:center;border-radius:15px;">
+        <i class="fas fa-spray-can-sparkles fa-5x" style="color:var(--primary);opacity:.5;"></i>
       </div>
-
-      <div class="col-lg-6">
-        <span class="badge bg-primary mb-2">{{ service.category.name }}</span>
-        <h1 style="font-family:'Libre Baskerville',serif;font-size:32px;font-weight:700;">{{ service.name }}</h1>
-        <div class="d-flex align-items-center gap-3 my-3">
-          <div class="stars fs-5">{% for i in "12345" %}{% if forloop.counter <= service.rating|floatformat:0|add:"0" %}★{% else %}☆{% endif %}{% endfor %}</div>
-          <span style="font-size:18px;font-weight:700;color:var(--primary);">{{ service.rating }}/5</span>
-          <span class="text-muted">({{ reviews.count }} reviews)</span>
-        </div>
-        <div class="mb-3">
-          <span style="font-size:36px;font-weight:800;color:var(--primary);">₹{{ service.get_final_price }}</span>
-          {% if service.discount_price %}
-          <span style="text-decoration:line-through;color:#999;font-size:20px;margin-left:10px;">₹{{ service.price }}</span>
-          <span class="badge bg-warning text-dark ms-2 fs-6">{{ service.get_discount_percent }}% OFF</span>
-          {% endif %}
-        </div>
-        {% if service.duration %}
-        <p class="text-muted"><i class="fas fa-clock me-2" style="color:var(--primary);"></i>Duration: {{ service.duration }}</p>
-        {% endif %}
-        <p>{{ service.short_description }}</p>
-
-        {% with slug=service.category.slug %}
-        <div class="my-4">
-
-          <!-- Quantity Selector -->
-          <div class="d-flex align-items-center gap-2 mb-3">
-            {% if slug == 'sofa-cleaning' %}
-              <span class="fw-bold" style="color:var(--primary);">(Per seat)</span>
-            {% elif service.slug == 'Cushions-Cleaning' %}
-              <span class="fw-bold" style="color:var(--primary);">(Per cushion)</span>
-            {% else %}
-              <span class="fw-bold" style="color:var(--primary);">Quantity:</span>
-            {% endif %}
-            <div class="qty-wrapper d-flex align-items-center border rounded-pill overflow-hidden" style="width:140px;">
-              <button type="button" id="qty-minus" class="btn btn-light border-0 px-3 py-2" style="font-size:18px;font-weight:700;">−</button>
-              <input type="number" id="qty-input" value="1" min="1" max="10" readonly
-                class="form-control border-0 text-center fw-bold p-0" style="width:44px;font-size:16px;box-shadow:none;">
-              <button type="button" id="qty-plus" class="btn btn-light border-0 px-3 py-2" style="font-size:18px;font-weight:700;">+</button>
-            </div>
-          </div>
-
-          <!-- Live Total Amount Box -->
-          <div class="live-total-box mb-3 p-3 rounded-3" style="background:#f0f7ff;border:1.5px solid #c7d7f5;">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <span class="text-muted" style="font-size:14px;">Unit Price</span>
-              <span style="font-size:14px;">₹{{ service.get_final_price }}</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <span class="text-muted" style="font-size:14px;">Quantity</span>
-              <span id="summary-qty" style="font-size:14px;">1</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <span class="text-muted" style="font-size:14px;">GST (18%)</span>
-              <span id="summary-gst" style="font-size:14px;color:#6c757d;">₹0.00</span>
-            </div>
-            <hr class="my-2">
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="fw-bold" style="font-size:16px;">Total Amount</span>
-              <span id="summary-total" class="fw-bold total-amount" style="font-size:20px;color:var(--primary);">₹0.00</span>
-            </div>
-          </div>
-
-          <!-- Add to Cart + Book Now Buttons -->
-          <div class="d-flex gap-3 mb-4">
-            {% if slug %}
-            <form method="GET" action="{% url 'add_to_cart' service.id %}" id="cart-form">
-              <input type="hidden" name="quantity" id="cart-qty" value="1">
-              <button type="submit" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
-                <i class="fas fa-cart-plus me-2"></i>Add to Cart
-              </button>
-            </form>
-            <form method="GET" action="{% url 'book_now' service.id %}" id="booknow-form">
-              <input type="hidden" name="quantity" id="booknow-qty" value="1">
-              <button type="submit" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">
-                <i class="fas fa-bolt me-2"></i>Book Now
-              </button>
-            </form>
-            {% else %}
-            <a href="{% url 'add_to_cart' service.id %}" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
-              <i class="fas fa-cart-plus me-2"></i>Add to Cart
-            </a>
-            <a href="{% url 'book_now' service.id %}" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">
-              <i class="fas fa-bolt me-2"></i>Book Now
-            </a>
-            {% endif %}
-          </div>
-
-          <!-- Trust Badges — Buttons ke BILKUL NEECHE -->
-          <div class="row g-3 mt-1">
-            <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-shield-check text-success"></i><small>100% Guaranteed</small></div></div>
-            <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-leaf text-success"></i><small>Eco-friendly Products</small></div></div>
-            <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-user-check text-success"></i><small>Trained Professionals</small></div></div>
-            <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-phone text-success"></i><small>24/7 Support</small></div></div>
-          </div>
-
-        </div>
-
-        <script>
-          const unitPrice = {{ service.get_final_price }};
-          const GST_RATE  = 0.18;
-
-          const minusBtn   = document.getElementById('qty-minus');
-          const plusBtn    = document.getElementById('qty-plus');
-          const qtyInput   = document.getElementById('qty-input');
-          const cartQty    = document.getElementById('cart-qty');
-          const booknowQty = document.getElementById('booknow-qty');
-          const summaryQty = document.getElementById('summary-qty');
-          const summaryGst = document.getElementById('summary-gst');
-          const summaryTot = document.getElementById('summary-total');
-
-          function updateSummary() {
-            const qty      = parseInt(qtyInput.value);
-            const subtotal = unitPrice * qty;
-            const gst      = subtotal * GST_RATE;
-            const total    = subtotal + gst;
-            summaryQty.textContent = qty;
-            summaryGst.textContent = '₹' + gst.toFixed(2);
-            summaryTot.textContent = '₹' + total.toFixed(2);
-            cartQty.value    = qty;
-            booknowQty.value = qty;
-          }
-
-          updateSummary();
-
-          minusBtn.addEventListener('click', () => {
-            let val = parseInt(qtyInput.value);
-            if (val > 1) { qtyInput.value = val - 1; updateSummary(); }
-          });
-          plusBtn.addEventListener('click', () => {
-            let val = parseInt(qtyInput.value);
-            if (val < 10) { qtyInput.value = val + 1; updateSummary(); }
-          });
-        </script>
-        {% endwith %}
+      {% endif %}
+      {% if service.images.all %}
+      <div class="row g-2 mt-2">
+        {% for img in service.images.all %}
+        <div class="col-3"><img src="{{ img.image.url }}" class="img-fluid rounded" style="height:80px;object-fit:cover;cursor:pointer;"></div>
+        {% endfor %}
       </div>
+      {% endif %}
     </div>
 
-    <!-- DESCRIPTION TABS -->
-    <div class="mt-5">
-      <ul class="nav nav-tabs" id="myTab">
-        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#desc">Description</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews-tab">Reviews ({{ reviews.count }})</button></li>
+    <!-- MOBILE: 2. DESCRIPTION TABS -->
+    <div class="mobile-only-desc mb-4">
+      <ul class="nav nav-tabs" id="myTabMobile">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#desc-mobile">Description</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews-tab-mobile">Reviews ({{ reviews.count }})</button></li>
       </ul>
       <div class="tab-content border border-top-0 p-4 rounded-bottom">
-        <div class="tab-pane active" id="desc">{{ service.description|linebreaks }}</div>
-        <div class="tab-pane" id="reviews-tab">
+        <div class="tab-pane active" id="desc-mobile">{{ service.description|linebreaks }}</div>
+        <div class="tab-pane" id="reviews-tab-mobile">
           {% if user.is_authenticated %}
           <div class="card p-3 mb-4 bg-light border-0">
             <h6 class="fw-bold">Write a Review</h6>
@@ -236,7 +141,303 @@
       </div>
     </div>
 
-    <!-- RELATED SERVICES -->
+    <!-- MOBILE: 3. PRICE + QUANTITY + BUTTONS -->
+    <div class="mobile-only-price mb-4">
+      <span class="badge bg-primary mb-2">{{ service.category.name }}</span>
+      <h1 style="font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;">{{ service.name }}</h1>
+      <div class="d-flex align-items-center gap-3 my-3">
+        <div class="stars fs-5">{% for i in "12345" %}{% if forloop.counter <= service.rating|floatformat:0|add:"0" %}★{% else %}☆{% endif %}{% endfor %}</div>
+        <span style="font-size:18px;font-weight:700;color:var(--primary);">{{ service.rating }}/5</span>
+        <span class="text-muted">({{ reviews.count }} reviews)</span>
+      </div>
+      <div class="mb-3">
+        <span style="font-size:32px;font-weight:800;color:var(--primary);">₹{{ service.get_final_price }}</span>
+        {% if service.discount_price %}
+        <span style="text-decoration:line-through;color:#999;font-size:18px;margin-left:10px;">₹{{ service.price }}</span>
+        <span class="badge bg-warning text-dark ms-2">{{ service.get_discount_percent }}% OFF</span>
+        {% endif %}
+      </div>
+      {% if service.duration %}
+      <p class="text-muted"><i class="fas fa-clock me-2" style="color:var(--primary);"></i>Duration: {{ service.duration }}</p>
+      {% endif %}
+      <p>{{ service.short_description }}</p>
+
+      {% with slug=service.category.slug %}
+      <div class="my-3">
+        <!-- Quantity -->
+        <div class="d-flex align-items-center gap-2 mb-3">
+          {% if slug == 'sofa-cleaning' %}
+            <span class="fw-bold" style="color:var(--primary);">(Per seat)</span>
+          {% elif service.slug == 'Cushions-Cleaning' %}
+            <span class="fw-bold" style="color:var(--primary);">(Per cushion)</span>
+          {% else %}
+            <span class="fw-bold" style="color:var(--primary);">Quantity:</span>
+          {% endif %}
+          <div class="qty-wrapper d-flex align-items-center border rounded-pill overflow-hidden" style="width:140px;">
+            <button type="button" id="qty-minus" class="btn btn-light border-0 px-3 py-2" style="font-size:18px;font-weight:700;">−</button>
+            <input type="number" id="qty-input" value="1" min="1" max="10" readonly
+              class="form-control border-0 text-center fw-bold p-0" style="width:44px;font-size:16px;box-shadow:none;">
+            <button type="button" id="qty-plus" class="btn btn-light border-0 px-3 py-2" style="font-size:18px;font-weight:700;">+</button>
+          </div>
+        </div>
+
+        <!-- Live Total -->
+        <div class="live-total-box mb-3 p-3 rounded-3" style="background:#f0f7ff;border:1.5px solid #c7d7f5;">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="text-muted" style="font-size:14px;">Unit Price</span>
+            <span style="font-size:14px;">₹{{ service.get_final_price }}</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="text-muted" style="font-size:14px;">Quantity</span>
+            <span id="summary-qty" style="font-size:14px;">1</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="text-muted" style="font-size:14px;">GST (18%)</span>
+            <span id="summary-gst" style="font-size:14px;color:#6c757d;">₹0.00</span>
+          </div>
+          <hr class="my-2">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="fw-bold" style="font-size:16px;">Total Amount</span>
+            <span id="summary-total" class="fw-bold total-amount" style="font-size:20px;color:var(--primary);">₹0.00</span>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex gap-3 mb-4">
+          {% if slug %}
+          <form method="GET" action="{% url 'add_to_cart' service.id %}" id="cart-form">
+            <input type="hidden" name="quantity" id="cart-qty" value="1">
+            <button type="submit" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
+              <i class="fas fa-cart-plus me-2"></i>Add to Cart
+            </button>
+          </form>
+          <form method="GET" action="{% url 'book_now' service.id %}" id="booknow-form">
+            <input type="hidden" name="quantity" id="booknow-qty" value="1">
+            <button type="submit" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">
+              <i class="fas fa-bolt me-2"></i>Book Now
+            </button>
+          </form>
+          {% else %}
+          <a href="{% url 'add_to_cart' service.id %}" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
+            <i class="fas fa-cart-plus me-2"></i>Add to Cart
+          </a>
+          <a href="{% url 'book_now' service.id %}" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">
+            <i class="fas fa-bolt me-2"></i>Book Now
+          </a>
+          {% endif %}
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="row g-3 mt-1">
+          <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-shield-check text-success"></i><small>100% Guaranteed</small></div></div>
+          <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-leaf text-success"></i><small>Eco-friendly Products</small></div></div>
+          <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-user-check text-success"></i><small>Trained Professionals</small></div></div>
+          <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-phone text-success"></i><small>24/7 Support</small></div></div>
+        </div>
+      </div>
+      {% endwith %}
+    </div>
+    <!-- END MOBILE LAYOUT -->
+
+
+    <!-- ══════════════════════════════════════
+         DESKTOP LAYOUT (>= 992px)
+         Original 2-column layout — UNTOUCHED
+    ══════════════════════════════════════ -->
+    <div class="desktop-layout d-none d-lg-block" id="desktop-layout-block">
+      <div class="row g-5">
+        <!-- LEFT: Image -->
+        <div class="col-lg-6">
+          {% if service.image %}
+          <img src="{{ service.image.url }}" class="img-fluid rounded-3 shadow" alt="{{ service.name }}" style="width:100%;">
+          {% else %}
+          <div style="height:400px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);display:flex;align-items:center;justify-content:center;border-radius:15px;">
+            <i class="fas fa-spray-can-sparkles fa-5x" style="color:var(--primary);opacity:.5;"></i>
+          </div>
+          {% endif %}
+          {% if service.images.all %}
+          <div class="row g-2 mt-2">
+            {% for img in service.images.all %}
+            <div class="col-3"><img src="{{ img.image.url }}" class="img-fluid rounded" style="height:80px;object-fit:cover;cursor:pointer;"></div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- RIGHT: Price + Buttons -->
+        <div class="col-lg-6">
+          <span class="badge bg-primary mb-2">{{ service.category.name }}</span>
+          <h1 style="font-family:'Libre Baskerville',serif;font-size:32px;font-weight:700;">{{ service.name }}</h1>
+          <div class="d-flex align-items-center gap-3 my-3">
+            <div class="stars fs-5">{% for i in "12345" %}{% if forloop.counter <= service.rating|floatformat:0|add:"0" %}★{% else %}☆{% endif %}{% endfor %}</div>
+            <span style="font-size:18px;font-weight:700;color:var(--primary);">{{ service.rating }}/5</span>
+            <span class="text-muted">({{ reviews.count }} reviews)</span>
+          </div>
+          <div class="mb-3">
+            <span style="font-size:36px;font-weight:800;color:var(--primary);">₹{{ service.get_final_price }}</span>
+            {% if service.discount_price %}
+            <span style="text-decoration:line-through;color:#999;font-size:20px;margin-left:10px;">₹{{ service.price }}</span>
+            <span class="badge bg-warning text-dark ms-2 fs-6">{{ service.get_discount_percent }}% OFF</span>
+            {% endif %}
+          </div>
+          {% if service.duration %}
+          <p class="text-muted"><i class="fas fa-clock me-2" style="color:var(--primary);"></i>Duration: {{ service.duration }}</p>
+          {% endif %}
+          <p>{{ service.short_description }}</p>
+
+          {% with slug=service.category.slug %}
+          <div class="my-4">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              {% if slug == 'sofa-cleaning' %}
+                <span class="fw-bold" style="color:var(--primary);">(Per seat)</span>
+              {% elif service.slug == 'Cushions-Cleaning' %}
+                <span class="fw-bold" style="color:var(--primary);">(Per cushion)</span>
+              {% else %}
+                <span class="fw-bold" style="color:var(--primary);">Quantity:</span>
+              {% endif %}
+              <div class="qty-wrapper d-flex align-items-center border rounded-pill overflow-hidden" style="width:140px;">
+                <button type="button" id="qty-minus-d" class="btn btn-light border-0 px-3 py-2" style="font-size:18px;font-weight:700;">−</button>
+                <input type="number" id="qty-input-d" value="1" min="1" max="10" readonly
+                  class="form-control border-0 text-center fw-bold p-0" style="width:44px;font-size:16px;box-shadow:none;">
+                <button type="button" id="qty-plus-d" class="btn btn-light border-0 px-3 py-2" style="font-size:18px;font-weight:700;">+</button>
+              </div>
+            </div>
+
+            <div class="live-total-box mb-3 p-3 rounded-3" style="background:#f0f7ff;border:1.5px solid #c7d7f5;">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="text-muted" style="font-size:14px;">Unit Price</span>
+                <span style="font-size:14px;">₹{{ service.get_final_price }}</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="text-muted" style="font-size:14px;">Quantity</span>
+                <span id="summary-qty-d" style="font-size:14px;">1</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="text-muted" style="font-size:14px;">GST (18%)</span>
+                <span id="summary-gst-d" style="font-size:14px;color:#6c757d;">₹0.00</span>
+              </div>
+              <hr class="my-2">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="fw-bold" style="font-size:16px;">Total Amount</span>
+                <span id="summary-total-d" class="fw-bold total-amount" style="font-size:20px;color:var(--primary);">₹0.00</span>
+              </div>
+            </div>
+
+            <div class="d-flex gap-3 mb-4">
+              {% if slug %}
+              <form method="GET" action="{% url 'add_to_cart' service.id %}" id="cart-form-d">
+                <input type="hidden" name="quantity" id="cart-qty-d" value="1">
+                <button type="submit" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
+                  <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                </button>
+              </form>
+              <form method="GET" action="{% url 'book_now' service.id %}" id="booknow-form-d">
+                <input type="hidden" name="quantity" id="booknow-qty-d" value="1">
+                <button type="submit" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">
+                  <i class="fas fa-bolt me-2"></i>Book Now
+                </button>
+              </form>
+              {% else %}
+              <a href="{% url 'add_to_cart' service.id %}" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
+                <i class="fas fa-cart-plus me-2"></i>Add to Cart
+              </a>
+              <a href="{% url 'book_now' service.id %}" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">
+                <i class="fas fa-bolt me-2"></i>Book Now
+              </a>
+              {% endif %}
+            </div>
+
+            <div class="row g-3 mt-1">
+              <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-shield-check text-success"></i><small>100% Guaranteed</small></div></div>
+              <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-leaf text-success"></i><small>Eco-friendly Products</small></div></div>
+              <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-user-check text-success"></i><small>Trained Professionals</small></div></div>
+              <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-phone text-success"></i><small>24/7 Support</small></div></div>
+            </div>
+          </div>
+
+          <script>
+            const unitPriceD = {{ service.get_final_price }};
+            const GST_RATE_D = 0.18;
+            const minusBtnD   = document.getElementById('qty-minus-d');
+            const plusBtnD    = document.getElementById('qty-plus-d');
+            const qtyInputD   = document.getElementById('qty-input-d');
+            const cartQtyD    = document.getElementById('cart-qty-d');
+            const booknowQtyD = document.getElementById('booknow-qty-d');
+            const summaryQtyD = document.getElementById('summary-qty-d');
+            const summaryGstD = document.getElementById('summary-gst-d');
+            const summaryTotD = document.getElementById('summary-total-d');
+            function updateSummaryD() {
+              const qty      = parseInt(qtyInputD.value);
+              const subtotal = unitPriceD * qty;
+              const gst      = subtotal * GST_RATE_D;
+              const total    = subtotal + gst;
+              summaryQtyD.textContent = qty;
+              summaryGstD.textContent = '₹' + gst.toFixed(2);
+              summaryTotD.textContent = '₹' + total.toFixed(2);
+              cartQtyD.value    = qty;
+              booknowQtyD.value = qty;
+            }
+            updateSummaryD();
+            minusBtnD.addEventListener('click', () => {
+              let val = parseInt(qtyInputD.value);
+              if (val > 1) { qtyInputD.value = val - 1; updateSummaryD(); }
+            });
+            plusBtnD.addEventListener('click', () => {
+              let val = parseInt(qtyInputD.value);
+              if (val < 10) { qtyInputD.value = val + 1; updateSummaryD(); }
+            });
+          </script>
+          {% endwith %}
+        </div>
+      </div>
+
+      <!-- Desktop Description Tabs -->
+      <div class="mt-5">
+        <ul class="nav nav-tabs" id="myTab">
+          <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#desc">Description</button></li>
+          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews-tab">Reviews ({{ reviews.count }})</button></li>
+        </ul>
+        <div class="tab-content border border-top-0 p-4 rounded-bottom">
+          <div class="tab-pane active" id="desc">{{ service.description|linebreaks }}</div>
+          <div class="tab-pane" id="reviews-tab">
+            {% if user.is_authenticated %}
+            <div class="card p-3 mb-4 bg-light border-0">
+              <h6 class="fw-bold">Write a Review</h6>
+              <form method="POST" action="{% url 'add_review' service.id %}">{% csrf_token %}
+                <div class="mb-2">
+                  <label>Rating:</label>
+                  <select name="rating" class="form-select form-select-sm w-auto d-inline-block ms-2">
+                    <option value="5">★★★★★ (5)</option>
+                    <option value="4">★★★★☆ (4)</option>
+                    <option value="3">★★★☆☆ (3)</option>
+                    <option value="2">★★☆☆☆ (2)</option>
+                    <option value="1">★☆☆☆☆ (1)</option>
+                  </select>
+                </div>
+                <textarea name="comment" class="form-control mb-2" rows="3" placeholder="Apna experience share karein..." required></textarea>
+                <button type="submit" class="btn btn-primary btn-sm">Submit Review</button>
+              </form>
+            </div>
+            {% endif %}
+            {% for review in reviews %}
+            <div class="border-bottom pb-3 mb-3">
+              <div class="d-flex justify-content-between">
+                <strong>{{ review.user.username }}</strong>
+                <small class="text-muted">{{ review.created_at|date:"d M Y" }}</small>
+              </div>
+              <div class="stars">{% for i in "12345" %}{% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}{% endfor %}</div>
+              <p class="mt-1 mb-0">{{ review.comment }}</p>
+            </div>
+            {% empty %}<p class="text-muted">Abhi koi review nahi hai.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END DESKTOP LAYOUT -->
+
+
+    <!-- RELATED SERVICES (dono mein same) -->
     {% if related %}
     <div class="mt-5">
       <h4 class="fw-bold mb-4">Related Services</h4>
@@ -255,6 +456,48 @@
       </div>
     </div>
     {% endif %}
+
   </div>
 </section>
+
+<!-- Mobile JS: Quantity logic -->
+<script>
+(function() {
+  if (window.innerWidth >= 992) return;
+
+  const unitPrice = {{ service.get_final_price }};
+  const GST_RATE  = 0.18;
+  const minusBtn   = document.getElementById('qty-minus');
+  const plusBtn    = document.getElementById('qty-plus');
+  const qtyInput   = document.getElementById('qty-input');
+  const cartQty    = document.getElementById('cart-qty');
+  const booknowQty = document.getElementById('booknow-qty');
+  const summaryQty = document.getElementById('summary-qty');
+  const summaryGst = document.getElementById('summary-gst');
+  const summaryTot = document.getElementById('summary-total');
+
+  function updateSummary() {
+    const qty      = parseInt(qtyInput.value);
+    const subtotal = unitPrice * qty;
+    const gst      = subtotal * GST_RATE;
+    const total    = subtotal + gst;
+    summaryQty.textContent = qty;
+    summaryGst.textContent = '₹' + gst.toFixed(2);
+    summaryTot.textContent = '₹' + total.toFixed(2);
+    if (cartQty)    cartQty.value    = qty;
+    if (booknowQty) booknowQty.value = qty;
+  }
+  updateSummary();
+
+  minusBtn.addEventListener('click', () => {
+    let val = parseInt(qtyInput.value);
+    if (val > 1) { qtyInput.value = val - 1; updateSummary(); }
+  });
+  plusBtn.addEventListener('click', () => {
+    let val = parseInt(qtyInput.value);
+    if (val < 10) { qtyInput.value = val + 1; updateSummary(); }
+  });
+})();
+</script>
+
 {% endblock %}

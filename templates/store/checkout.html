@@ -89,7 +89,7 @@
             <div class="col-md-6">
               <label class="form-label fw-semibold">🕐 Service Time *</label>
               <select name="service_time" id="service_time" class="form-select" required>
-                <option value="">-- Time select karein --</option>
+                <option value="">-- Time select  --</option>
                 {% for slot in all_time_slots %}
                 <option value="{{ slot }}">{{ slot }}</option>
                 {% endfor %}
@@ -98,7 +98,7 @@
             <div class="col-12">
               <label class="form-label fw-semibold">Special Instructions</label>
               <textarea name="special_instructions" class="form-control" rows="2"
-                        placeholder="Koi special instructions ho toh yahan likhein..."></textarea>
+                        placeholder="Please mention any special instructions here..."></textarea>
             </div>
           </div>
         </div>
@@ -182,7 +182,7 @@
 
           <!-- ✅ GPS Status Badge -->
           <div id="gps-status" class="mb-2 text-center" style="font-size:12px; color:#888;">
-            <i class="fas fa-map-marker-alt me-1"></i><span id="gps-text">📍 Location detect ho rahi hai...</span>
+            <i class="fas fa-map-marker-alt me-1"></i><span id="gps-text">📍 Location is being detected…</span>
           </div>
 
           <button type="submit" id="place-order-btn"
@@ -192,7 +192,7 @@
           </button>
           <div class="text-center mt-2">
             <small class="text-muted" id="btn-hint">
-              <i class="fas fa-info-circle me-1"></i>Date aur time select karein
+              <i class="fas fa-info-circle me-1"></i>Please select date and time.
             </small>
           </div>
           <div class="text-center mt-2">
@@ -228,10 +228,10 @@ function updateSubmitState() {
   const hasTime = timeInput.value !== '';
   submitBtn.disabled = !(hasDate && hasTime);
 
-  if (!hasDate && !hasTime)   btnHint.textContent = '📅 Date aur time select karein';
-  else if (!hasDate)          btnHint.textContent = '📅 Date select karein';
-  else if (!hasTime)          btnHint.textContent = '🕐 Time select karein';
-  else                        btnHint.textContent = '✅ Booking ready hai!';
+  if (!hasDate && !hasTime)   btnHint.textContent = '📅 Select date and time';
+  else if (!hasDate)          btnHint.textContent = '📅 Date select ';
+  else if (!hasTime)          btnHint.textContent = '🕐 Time select ';
+  else                        btnHint.textContent = '✅ Booking ready!';
 
   if (hasDate && hasTime) {
     bookingSummary.style.display = 'block';
@@ -248,7 +248,7 @@ timeInput.addEventListener('change', updateSubmitState);
 document.getElementById('checkout-form').addEventListener('submit', function(e) {
   if (!dateInput.value || !timeInput.value) {
     e.preventDefault();
-    alert('Date aur time dono select karna zaroori hai!');
+    alert('Selecting both date and time is required.!');
   }
 });
 
@@ -260,16 +260,16 @@ if (navigator.geolocation) {
     function(pos) {
       document.getElementById('dest_latitude').value  = pos.coords.latitude;
       document.getElementById('dest_longitude').value = pos.coords.longitude;
-      document.getElementById('gps-text').textContent = '✅ Location save ho gayi!';
+      document.getElementById('gps-text').textContent = '✅Location has been saved.!';
       document.getElementById('gps-text').style.color = 'green';
     },
     function(err) {
-      document.getElementById('gps-text').textContent = '⚠️ Location nahi mili (order phir bhi hoga)';
+      document.getElementById('gps-text').textContent = '⚠️ “Location not found (order will still be placed).';
       document.getElementById('gps-text').style.color = '#f59e0b';
     }
   );
 } else {
-  document.getElementById('gps-text').textContent = '⚠️ Browser location support nahi karta';
+  document.getElementById('gps-text').textContent = '⚠️Your browser does not support location services';
 }
 </script>
 

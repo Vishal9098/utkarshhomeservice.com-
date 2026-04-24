@@ -97,7 +97,7 @@
           {% endfor %}
         </div>
       {% else %}
-        <p style="color:#aaa;text-align:center;padding:16px 0;">⏳ Abhi koi update nahi hai.</p>
+        <p style="color:#aaa;text-align:center;padding:16px 0;">⏳ There are no updates at the moment.</p>
       {% endif %}
 
       <div class="btn-row">
@@ -127,7 +127,7 @@
         </div>
         <div class="eta-stat">
           <div class="val" id="etaArrival">--</div>
-          <div class="lbl">Pahunchega</div>
+          <div class="lbl">Will reach</div>
         </div>
       </div>
     </div>
@@ -140,7 +140,7 @@
     </div>
     <div id="mapContainer">
       <div class="no-location" id="noLocation">
-        📍 Abhi delivery team ne location share nahi ki hai
+        📍The delivery team has not shared their location yet
       </div>
       <div id="map" style="display:none;"></div>
     </div>
@@ -336,12 +336,12 @@
           document.getElementById('mapStatus').innerHTML = '🟢 Live tracking active';
           document.getElementById('lastUpdate').textContent = 'Updated: ' + data.updated;
         } else {
-          document.getElementById('mapStatus').innerHTML = '⏳ Location share hone ka wait kar rahe hain...';
+          document.getElementById('mapStatus').innerHTML = '⏳ Waiting for the location to be shared…';
           document.getElementById('lastUpdate').textContent = '';
         }
       })
       .catch(() => {
-        document.getElementById('mapStatus').innerHTML = '⚠️ Connection error, retry ho raha hai...';
+        document.getElementById('mapStatus').innerHTML = '⚠️ Connection error, retrying… ';
       });
   }
 
