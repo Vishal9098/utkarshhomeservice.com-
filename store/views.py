@@ -302,10 +302,17 @@ def book_now(request, service_id):
     except:
         quantity = 1
     cart, _ = Cart.objects.get_or_create(user=request.user)
-    cart.items.all().delete()
-    CartItem.objects.create(cart=cart, service=service, quantity=quantity)
+    
+    # ✅ Cart clear NAHI karo — sirf is service ka item add/update karo
+    item, created = CartItem.objects.get_or_create(cart=cart, service=service)
+    if not created:
+        item.quantity += quantity  # Already hai toh quantity add karo
+    else:
+        item.quantity = quantity   # Naya item toh quantity set karo
+    item.save()
+    
+    messages.success(request, f'"{service.name}" added to cart!')
     return redirect('checkout')
-
 @login_required
 def order_success(request, order_id):
     order = get_object_or_404(Order, order_id=order_id, user=request.user)

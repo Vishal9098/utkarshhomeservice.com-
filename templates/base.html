@@ -1016,5 +1016,425 @@ setTimeout(()=>{
 }, 4000);
 </script>
 {% block extra_js %}{% endblock %}
+
+
+<!--
+  ============================================================
+  UTKARSH CLEANING - AI CHATBOT WIDGET
+  ============================================================
+  Ye code apni website ke <body> tag ke end se pehle paste karo.
+  
+  SETUP:
+  1. Backend server chalao (chatbot.py)
+  2. Niche BACKEND_URL apni server URL se replace karo
+  3. Is code ko website ke HTML mein paste karo (</body> se pehle)
+  ============================================================
+-->
+
+<style>
+  #utkarsh-chat-launcher {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    background: #1D9E75;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(29,158,117,0.4);
+    z-index: 9999;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  #utkarsh-chat-launcher:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(29,158,117,0.5);
+  }
+  #utkarsh-chat-launcher svg {
+    width: 28px;
+    height: 28px;
+    fill: white;
+  }
+  #utkarsh-badge {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    width: 18px;
+    height: 18px;
+    background: #e24b4a;
+    border-radius: 50%;
+    border: 2px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+  }
+  #utkarsh-chat-window {
+    position: fixed;
+    bottom: 96px;
+    right: 24px;
+    width: 360px;
+    max-height: 540px;
+    background: #ffffff;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    z-index: 9998;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  #utkarsh-chat-window.uc-open {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+  @media (max-width: 480px) {
+    #utkarsh-chat-window {
+      width: calc(100vw - 32px);
+      right: 16px;
+      bottom: 88px;
+    }
+    #utkarsh-chat-launcher {
+      right: 16px;
+      bottom: 80px;
+    }
+  }
+  #uc-header {
+    background: linear-gradient(135deg, #1D9E75, #0F6E56);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    flex-shrink: 0;
+  }
+  .uc-bot-avatar {
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .uc-header-info { flex: 1; }
+  .uc-header-name {
+    font-weight: 600;
+    font-size: 15px;
+    font-family: sans-serif;
+    margin: 0;
+  }
+  .uc-header-status {
+    font-size: 11px;
+    opacity: 0.85;
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 2px 0 0;
+  }
+  .uc-online-dot {
+    width: 6px;
+    height: 6px;
+    background: #a0ffce;
+    border-radius: 50%;
+    display: inline-block;
+    animation: uc-pulse 2s infinite;
+  }
+  @keyframes uc-pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  #uc-close-btn {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  #uc-close-btn:hover { background: rgba(255,255,255,0.3); }
+  #uc-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 280px;
+    max-height: 340px;
+    background: #f8fffe;
+    scroll-behavior: smooth;
+  }
+  .uc-msg { display: flex; gap: 8px; align-items: flex-end; }
+  .uc-msg.uc-user { flex-direction: row-reverse; }
+  .uc-bubble {
+    max-width: 82%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    font-family: sans-serif;
+  }
+  .uc-msg.uc-bot .uc-bubble {
+    background: white;
+    color: #1a1a1a;
+    border: 1px solid #e8f5f0;
+    border-bottom-left-radius: 4px;
+  }
+  .uc-msg.uc-user .uc-bubble {
+    background: #1D9E75;
+    color: white;
+    border-bottom-right-radius: 4px;
+  }
+  .uc-msg-icon {
+    width: 30px;
+    height: 30px;
+    background: #E1F5EE;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .uc-quick-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 14px 12px;
+    background: #f8fffe;
+    flex-shrink: 0;
+  }
+  .uc-quick-btn {
+    background: white;
+    border: 1px solid #b5e8d5;
+    border-radius: 20px;
+    padding: 6px 13px;
+    font-size: 12px;
+    cursor: pointer;
+    color: #0F6E56;
+    font-weight: 500;
+    font-family: sans-serif;
+    transition: all 0.15s;
+  }
+  .uc-quick-btn:hover {
+    background: #E1F5EE;
+    border-color: #1D9E75;
+  }
+  #uc-input-row {
+    display: flex;
+    gap: 8px;
+    padding: 10px 12px;
+    border-top: 1px solid #e8f5f0;
+    background: white;
+    flex-shrink: 0;
+  }
+  #uc-input {
+    flex: 1;
+    border: 1px solid #c8e8dc;
+    border-radius: 22px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-family: sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+    color: #1a1a1a;
+    background: white;
+  }
+  #uc-input:focus { border-color: #1D9E75; }
+  #uc-send-btn {
+    width: 38px;
+    height: 38px;
+    background: #1D9E75;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, background 0.15s;
+    flex-shrink: 0;
+  }
+  #uc-send-btn:hover { transform: scale(1.08); background: #0F6E56; }
+  #uc-send-btn:disabled { background: #ccc; transform: none; cursor: not-allowed; }
+  #uc-send-btn svg { width: 17px; height: 17px; fill: white; }
+  .uc-typing {
+    display: flex;
+    gap: 4px;
+    padding: 10px 14px;
+    background: white;
+    border: 1px solid #e8f5f0;
+    border-radius: 16px;
+    border-bottom-left-radius: 4px;
+    width: fit-content;
+  }
+  .uc-typing span {
+    width: 7px;
+    height: 7px;
+    background: #1D9E75;
+    border-radius: 50%;
+    animation: uc-blink 1.2s infinite;
+  }
+  .uc-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .uc-typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes uc-blink { 0%,80%,100%{opacity:0.15} 40%{opacity:1} }
+  #uc-footer {
+    text-align: center;
+    font-size: 10px;
+    color: #aaa;
+    padding: 4px 0 8px;
+    font-family: sans-serif;
+    background: white;
+    flex-shrink: 0;
+  }
+</style>
+
+<!-- Chat Button -->
+<button id="utkarsh-chat-launcher" onclick="ucToggle()" aria-label="Chat with us">
+  <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+  <div id="utkarsh-badge">1</div>
+</button>
+
+<!-- Chat Window -->
+<div id="utkarsh-chat-window" role="dialog" aria-label="Utkarsh Cleaning Chat">
+  <div id="uc-header">
+    <div class="uc-bot-avatar">🧹</div>
+    <div class="uc-header-info">
+      <p class="uc-header-name">Utkarsh Assistant</p>
+      <p class="uc-header-status"><span class="uc-online-dot"></span> Online — 24/7 Available</p>
+    </div>
+    <button id="uc-close-btn" onclick="ucToggle()" aria-label="Close chat">×</button>
+  </div>
+
+  <div id="uc-messages">
+    <div class="uc-msg uc-bot">
+      <div class="uc-msg-icon">🤖</div>
+      <div class="uc-bubble">
+        Namaste! 🙏 Main Utkarsh Cleaning ka AI assistant hoon.<br><br>
+        Aap services, pricing, ya booking ke baare mein koi bhi sawaal pooch sakte hain!
+      </div>
+    </div>
+  </div>
+
+  <div class="uc-quick-btns" id="uc-quick-btns">
+    <button class="uc-quick-btn" onclick="ucAsk('Kaunsi services available hain?')">🧹 Services?</button>
+    <button class="uc-quick-btn" onclick="ucAsk('Sofa cleaning ki price kya hai?')">🛋️ Sofa price</button>
+    <button class="uc-quick-btn" onclick="ucAsk('Booking kaise karein?')">📅 Booking</button>
+    <button class="uc-quick-btn" onclick="ucAsk('Contact number kya hai?')">📞 Contact</button>
+    <button class="uc-quick-btn" onclick="ucAsk('AC service available hai?')">❄️ AC service</button>
+  </div>
+
+  <div id="uc-input-row">
+    <input
+      id="uc-input"
+      type="text"
+      placeholder="Sawaal poochein Hindi ya English mein..."
+      onkeydown="if(event.key==='Enter') ucSend()"
+      autocomplete="off"
+    />
+    <button id="uc-send-btn" onclick="ucSend()" aria-label="Send">
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+  <div id="uc-footer">Powered by Utkarsh AI ✦ Available 24/7</div>
+</div>
+
+<script>
+  // ============================================================
+  // CONFIG — Apna backend URL yahan change karo
+  // ============================================================
+  const UC_BACKEND_URL = "http://localhost:5000/chat";
+  // Production mein: "https://your-server.com/chat"
+  // ============================================================
+
+  let ucIsOpen = false;
+
+  function ucToggle() {
+    ucIsOpen = !ucIsOpen;
+    document.getElementById("utkarsh-chat-window").classList.toggle("uc-open", ucIsOpen);
+    document.getElementById("utkarsh-badge").style.display = "none";
+    if (ucIsOpen) {
+      setTimeout(() => document.getElementById("uc-input").focus(), 300);
+    }
+  }
+
+  function ucAddMsg(text, who) {
+    const msgs = document.getElementById("uc-messages");
+    const div = document.createElement("div");
+    div.className = `uc-msg uc-${who}`;
+    if (who === "bot") {
+      div.innerHTML = `<div class="uc-msg-icon">🤖</div><div class="uc-bubble">${text}</div>`;
+    } else {
+      div.innerHTML = `<div class="uc-bubble">${ucEscape(text)}</div>`;
+    }
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function ucShowTyping() {
+    const msgs = document.getElementById("uc-messages");
+    const t = document.createElement("div");
+    t.className = "uc-msg uc-bot";
+    t.id = "uc-typing";
+    t.innerHTML = `<div class="uc-msg-icon">🤖</div><div class="uc-typing"><span></span><span></span><span></span></div>`;
+    msgs.appendChild(t);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function ucEscape(text) {
+    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  async function ucSendToBackend(question) {
+    try {
+      const response = await fetch(UC_BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: question })
+      });
+      const data = await response.json();
+      return data.reply || "Maafi chahta hoon, kuch error aa gayi. Please call karein: +91-7806061048";
+    } catch (err) {
+      return "Network error. Please directly call karein: 📞 <b>+91-7806061048</b>";
+    }
+  }
+
+  async function ucAsk(q) {
+    document.getElementById("uc-quick-btns").style.display = "none";
+    ucAddMsg(q, "user");
+    document.getElementById("uc-send-btn").disabled = true;
+    ucShowTyping();
+
+    const reply = await ucSendToBackend(q);
+    document.getElementById("uc-typing")?.remove();
+    ucAddMsg(reply.replace(/\n/g, "<br>"), "bot");
+    document.getElementById("uc-send-btn").disabled = false;
+  }
+
+  async function ucSend() {
+    const inp = document.getElementById("uc-input");
+    const q = inp.value.trim();
+    if (!q) return;
+    inp.value = "";
+    await ucAsk(q);
+    inp.focus();
+  }
+</script>
 </body>
 </html>
