@@ -1,10 +1,44 @@
 {% extends 'base.html' %}
-{% block title %}Gallery - Utkarsh Cleaning{% endblock %}
+{% block title %}
+Profession Cleaning Service in Bhopal | Utkarsh Cleaning
+{% endblock %}
+{% block meta_description %}
+
+Explore our professional sofa cleaning, watertank cleaning,
+bathroom cleaning,
+kitchen cleaning,
+and deep cleaning work gallery in Bhopal.
+
+{% endblock %}
 {% block content %}
-<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li><li class="breadcrumb-item active">Gallery</li></ol></div></div>
+<!-- GALLERY SEO SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"ImageGallery",
+  "name":"Utkarsh Cleaning Work Gallery",
+  "description":"Professional cleaning services in Bhopal",
+  "publisher":{
+    "@type":"Organization",
+    "name":"Utkarsh Cleaning"
+  }
+}
+</script>
+<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home Cleaning Services Bhopal</a></li><li class="breadcrumb-item active">Gallery</li></ol></div></div>
 <section class="py-5">
   <div class="container">
-    <div class="section-title"><h2>Our Work Gallery</h2><div class="title-line"></div></div>
+    <div class="section-title"><h1>Professional Cleaning Services Gallery in Bhopal</h1><div class="title-line"></div></div>
+    <p class="text-muted text-center mb-5"
+   style="max-width:900px;margin:auto;line-height:1.9;">
+
+  Explore our real cleaning service work including
+  sofa cleaning, water rank cleaning,
+  kitchen cleaning,
+  bathroom cleaning,
+  carpet cleaning,
+  and deep cleaning projects completed in Bhopal.
+
+</p>
     <div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
       <a href="{% url 'gallery' %}" class="btn btn-sm {% if not request.GET.category %}btn-primary{% else %}btn-outline-secondary{% endif %}" style="border-radius:20px;">All</a>
       {% for cat in categories %}<a href="{% url 'gallery' %}?category={{ cat.slug }}" class="btn btn-sm {% if request.GET.category == cat.slug %}btn-primary{% else %}btn-outline-secondary{% endif %}" style="border-radius:20px;">{{ cat.name }}</a>{% endfor %}
@@ -12,15 +46,138 @@
     <div class="row g-3">
       {% for item in gallery %}
       <div class="col-lg-3 col-md-4 col-6">
-        <div class="rounded overflow-hidden shadow-sm" style="cursor:pointer;" onclick="openImg('{{ item.image.url }}')">
-          <img src="{{ item.image.url }}" class="img-fluid w-100" style="height:200px;object-fit:cover;transition:transform .3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        <div class="rounded overflow-hidden shadow" style="
+cursor:pointer;
+transition:.3s;
+border-radius:16px;" onclick="openImg('{{ item.image.url }}')">
+          <img src="{{ item.image.url }}"
+     loading="lazy"
+     alt="Professional {{ item.category.name }} Cleaning Services in Bhopal" class="img-fluid w-100" style="height:200px;object-fit:cover;transition:transform .3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
         </div>
       </div>
       {% empty %}
-      <div class="col-12 text-center py-5"><i class="fas fa-images fa-5x text-muted mb-3"></i><h5 class="text-muted">Gallery coming soon...</h5></div>
+      <div class="col-12 text-center py-5"><i class="fas fa-images fa-5x text-muted mb-3"></i><h2 class="text-muted"
+    style="font-size:32px;">
+
+Cleaning Work Gallery Coming Soon
+
+</h2>
+<p class="text-muted"
+   style="max-width:700px;margin:auto;line-height:1.9;">
+
+  Explore professional sofa cleaning,
+  bathroom cleaning, water tank cleaning,
+  kitchen cleaning, home cleaning,
+  and deep cleaning projects completed in Bhopal.
+
+</p></div>
       {% endfor %}
     </div>
   </div>
+</section>
+<section class="py-5 bg-light">
+
+  <div class="container">
+
+    <div class="row text-center">
+
+      <div class="col-md-4 mb-4">
+
+        <i class="fas fa-star fa-3x text-warning mb-3"></i>
+
+        <h5>Top Rated Cleaning Company</h5>
+
+        <p class="text-muted">
+          Trusted by customers across Bhopal.
+        </p>
+
+      </div>
+
+      <div class="col-md-4 mb-4">
+
+        <i class="fas fa-shield-alt fa-3x text-success mb-3"></i>
+
+        <h5>Verified Professionals</h5>
+
+        <p class="text-muted">
+          Experienced and trained cleaning staff.
+        </p>
+
+      </div>
+
+      <div class="col-md-4 mb-4">
+
+        <i class="fas fa-spray-can-sparkles fa-3x text-primary mb-3"></i>
+
+        <h5>Advanced Cleaning Equipment</h5>
+
+        <p class="text-muted">
+          Modern machines and eco-friendly chemicals.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+<!-- FAQ SECTION -->
+<section class="py-5">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="title-line"></div>
+
+    </div>
+
+    <div class="mb-4">
+
+      <h5>
+        Do these gallery images show real work?
+      </h5>
+
+      <p class="text-muted">
+        Yes, all gallery images are from real cleaning projects completed in Bhopal.
+      </p>
+
+    </div>
+
+    <div class="mb-4">
+
+      <h5>
+        Which cleaning services do you provide?
+      </h5>
+
+      <p class="text-muted">
+        We provide sofa cleaning,
+        kitchen cleaning,
+        water tank cleaning,
+        bathroom cleaning,
+        carpet cleaning,
+        and deep cleaning services all type cleaning.
+      </p>
+
+    </div>
+
+    <div class="mb-4">
+
+      <h5>
+        How can I book a cleaning service?
+      </h5>
+
+      <p class="text-muted">
+        You can book online or contact us directly via phone or WhatsApp.
+      </p>
+
+    </div>
+
+  </div>
+
 </section>
 <div id="imgModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9999;align-items:center;justify-content:center;" onclick="this.style.display='none'">
   <img id="modalImg" src="" style="max-width:90%;max-height:90%;object-fit:contain;border-radius:8px;">

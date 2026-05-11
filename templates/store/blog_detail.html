@@ -1,21 +1,126 @@
 {% extends 'base.html' %}
-{% block title %}{{ blog.title }} - Utkarsh Cleaning{% endblock %}
+{% block title %}
+{{ blog.title }} | Best Water Tank Cleaning Service Near Me In Bhopal | Kitchen & Sofa
+{% endblock %}
+{% block meta_description %}
+{{ blog.title }} - Read professional cleaning tips, home maintenance guides,
+sofa cleaning advice, and deep cleaning solutions in Bhopal from Utkarsh Cleaning.
+{% endblock %}
 {% block content %}
-<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li><li class="breadcrumb-item"><a href="{% url 'blog_list' %}">Blog</a></li><li class="breadcrumb-item active">{{ blog.title|truncatewords:5 }}</li></ol></div></div>
+<!-- BLOG SEO SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BlogPosting",
+  "headline":"{{ blog.title }}",
+  "author":{
+    "@type":"Person",
+    "name":"{{ blog.author.username }}"
+  },
+  "publisher":{
+    "@type":"Organization",
+    "name":"Utkarsh Cleaning"
+  },
+  "datePublished":"{{ blog.created_at|date:'Y-m-d' }}",
+  "mainEntityOfPage":{
+    "@type":"WebPage",
+    "@id":"{{ request.build_absolute_uri }}"
+  }
+}
+</script>
+<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}"> Home Cleaning Services Bhopal</li><li class="breadcrumb-item"><a href="{% url 'blog_list' %}">Blog</a></li><li class="breadcrumb-item active">{{ blog.title|truncatewords:5 }}</li></ol></div></div>
 <section class="py-5">
   <div class="container">
-    <div class="row g-4">
+    <div class="row g-4"> 
       <div class="col-lg-8">
         <div class="card border-0 shadow-sm p-4">
-          {% if blog.image %}<img src="{{ blog.image.url }}" class="img-fluid rounded mb-4 w-100" style="max-height:400px;object-fit:cover;" alt="{{ blog.title }}">{% endif %}
+          {% if blog.image %}<img src="{{ blog.image.url }}" class="img-fluid rounded mb-4 w-100" style="max-height:400px;object-fit:cover;" alt="{{ blog.title }} - Cleaning Tips in Bhopal">{% endif %}
           <small class="text-muted"><i class="fas fa-calendar me-1"></i>{{ blog.created_at|date:"d M Y" }} | <i class="fas fa-user me-1"></i>{{ blog.author.username }}</small>
           <h1 style="font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;margin:15px 0;">{{ blog.title }}</h1>
-          <div style="line-height:1.8;color:#444;">{{ blog.content|linebreaks }}</div>
+          <p class="text-muted" style="line-height:1.9;font-size:16px;">
+
+  Read this detailed guide from Utkarsh Cleaning to learn professional
+  cleaning tips, home maintenance solutions, and expert advice for keeping
+  your home clean and hygienic in Bhopal.
+
+</p>
+          <div style="line-height:2;color:#444;font-size:17px;">{{ blog.content|linebreaks }}</div>
+          <div class="mt-5 p-4 bg-light rounded">
+
+  <h5 class="fw-bold">
+    About Utkarsh Cleaning
+  </h5>
+
+  <p class="text-muted mb-0" style="line-height:1.8;">
+
+    Utkarsh Cleaning provides professional home cleaning services in Bhopal
+    including sofa cleaning, carpet cleaning, kitchen cleaning,
+    bathroom cleaning, and deep cleaning solutions.
+
+  </p>
+
+</div>
+<!-- BLOG FAQ -->
+<section class="mt-5">
+
+  <h3 class="fw-bold mb-4">
+    Frequently Asked Questions
+  </h3>
+
+  <div class="mb-4">
+
+    <h5>
+      Which is the best cleaning company in Bhopal?
+    </h5>
+
+    <p class="text-muted">
+      Utkarsh Cleaning is one of the trusted home cleaning companies in Bhopal.
+    </p>
+
+  </div>
+
+  <div class="mb-4">
+
+    <h5>
+      Do you provide water tank cleaning services?
+    </h5>
+
+    <p class="text-muted">
+      Yes, we provide professional water tank cleaning services.
+    </p>
+
+  </div>
+
+</section>
+<div class="mt-5">
+
+  <h5 class="fw-bold mb-3">
+    Share This Article
+  </h5>
+
+  <a href="#"
+     class="btn btn-primary btn-sm me-2">
+     Facebook
+  </a>
+
+  <a href="#"
+     class="btn btn-info btn-sm me-2">
+     Twitter
+  </a>
+
+  <a href="#"
+     class="btn btn-success btn-sm">
+     WhatsApp
+  </a>
+
+</div>
         </div>
       </div>
       <div class="col-lg-4">
         <div class="card border-0 shadow-sm p-3">
-          <h6 class="fw-bold mb-3">Recent Posts</h6>
+          <h2 class="fw-bold mb-3" style="font-size:22px;">
+Recent Cleaning Blogs
+</h2>
           {% for r in recent %}
           <div class="d-flex gap-2 mb-3 pb-3 border-bottom">
             {% if r.image %}<img src="{{ r.image.url }}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;flex-shrink:0;">{% endif %}
@@ -27,4 +132,27 @@
     </div>
   </div>
 </section>
+<div class="mt-4">
+
+  <h5 class="fw-bold mb-3">
+    Popular Cleaning Topics
+  </h5>
+
+  <ul class="list-unstyled">
+
+    <li>
+      <a href="/blog">
+        Sofa Cleaning Tips in Bhopal
+      </a>
+    </li>
+
+    <li>
+      <a href="/blog">
+        Deep Cleaning Guide
+      </a>
+    </li>
+
+  </ul>
+
+</div>
 {% endblock %}

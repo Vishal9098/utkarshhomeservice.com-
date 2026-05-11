@@ -1,6 +1,30 @@
 {% extends 'base.html' %}
-{% block title %}My Orders | Utkarsh Cleaning{% endblock %}
+{% block title %}
+Best Cleaning Service Near Me | Utkarsh Cleaning
+{% endblock %}
+{% block meta_description %}
+
+Track your home cleaning service bookings,
+download invoices,
+and manage your sofa cleaning,
+deep cleaning,
+and kitchen cleaning orders in Bhopal.
+
+{% endblock %}
 {% block content %}
+<!-- CUSTOMER DASHBOARD SEO SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"CollectionPage",
+  "name":"Customer Orders Dashboard",
+  "description":"Track cleaning service orders and invoices",
+  "publisher":{
+    "@type":"Organization",
+    "name":"Utkarsh Cleaning"
+  }
+}
+</script>
 {% load static %}
 
 <style>

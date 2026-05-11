@@ -1,6 +1,26 @@
 {% extends 'base.html' %}
-{% block title %}Share Location{% endblock %}
+{% block title %}
+Cleaning service near me in Bhopal | Live Delivery Tracking
+{% endblock %}
+{% block meta_description %}
+
+Track live cleaning service location updates securely with
+Utkarsh Cleaning Bhopal.
+
+{% endblock %}
 {% block content %}
+<!-- LIVE TRACKING SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TrackingAction",
+  "name":"Live Location Tracking",
+  "provider":{
+    "@type":"Organization",
+    "name":"Utkarsh Cleaning"
+  }
+}
+</script>
 <style>
   .loc-wrapper { max-width: 500px; margin: 60px auto; padding: 0 15px; text-align: center; }
   .loc-card { background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); padding: 40px 30px; }
@@ -19,9 +39,29 @@
 <div class="loc-wrapper">
   <div class="loc-card">
     <div class="loc-icon">📍</div>
-    <h2>Location Share Karo</h2>
-    <p>Customer real-time mein aapki location dekh sakta hai</p>
+  <h1>Live Delivery Location Sharing</h1>
+   <p>
 
+Customer can securely track your live location
+during the cleaning service journey.
+
+</p>
+<div class="mb-4">
+
+  <span style="
+    background:#e8f8ef;
+    color:#1a7a45;
+    padding:8px 16px;
+    border-radius:30px;
+    font-size:14px;
+    font-weight:600;
+    display:inline-block;">
+
+    🔒 Secure Live Tracking Enabled
+
+  </span>
+
+</div>
     <div class="order-info">
       <p><strong>Order:</strong> {{ order.order_id }}</p>
       <p><strong>Customer:</strong> {{ order.name }}</p>
@@ -31,6 +71,13 @@
     <button class="btn-start" onclick="startSharing()">📡 Location Sharing Shuru Karo</button>
     <button class="btn-stop" onclick="stopSharing()">⛔ Sharing Band Karo</button>
     <div class="status-box" id="statusBox"></div>
+    <p class="mt-4 text-muted"
+   style="font-size:14px;line-height:1.8;">
+
+  Your live location is securely shared only with the customer
+  for service tracking purposes.
+
+</p>
   </div>
 </div>
 
@@ -45,14 +92,14 @@
     }
     document.querySelector('.btn-start').style.display = 'none';
     document.querySelector('.btn-stop').style.display = 'block';
-    showStatus('📡 Location share ho rahi hai...', 'active');
+    showStatus('📡 Live location sharing started successfully...', 'active');
 
     watchId = navigator.geolocation.watchPosition(
       function(pos) {
         sendLocation(pos.coords.latitude, pos.coords.longitude);
       },
       function(err) {
-        showStatus('❌ Location access denied. Browser settings mein allow karo.', 'error');
+        showStatus('❌ Location permission denied. Please enable GPS access in browser settings.', 'error');
       },
       { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
     );
@@ -74,7 +121,7 @@
     .then(r => r.json())
     .then(data => {
       const now = new Date().toLocaleTimeString('en-IN');
-      showStatus(`✅ Location updated: ${now}`, 'active');
+      showStatus(`✅ Live location updated successfully at ${now}`, 'active');
     })
     .catch(() => showStatus('⚠️ Update fail hua, retry ho raha hai...', 'error'));
   }

@@ -1,7 +1,29 @@
 {% extends 'base.html' %}
-{% block title %}Utkarsh Cleaning Home Services | Home{% endblock %}
+{% block title %}Best Home Cleaning Services in Bhopal | Sofa, Watertank, Kitchen & Bathroom Cleaning{% endblock %}
+{% block meta_description %}
+Professional home cleaning services in Bhopal including sofa cleaning, kitchen cleaning, bathroom cleaning, deep cleaning, carpet cleaning & water tank cleaning at affordable prices. Book trusted cleaners today.
+{% endblock %}
 {% block content %}
-
+<!-- LOCAL BUSINESS SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"LocalBusiness",
+  "name":"Utkarsh Cleaning Services",
+  "image":"https://utkarshhomeservice.com/static/images/m1.jpg",
+  "url":"https://utkarshhomeservice.com/",
+  "telephone":"+917806061048",
+  "address":{
+    "@type":"PostalAddress",
+    "addressLocality":"Bhopal",
+    "addressRegion":"Madhya Pradesh",
+    "addressCountry":"IN"
+  },
+  "areaServed":"Bhopal",
+  "priceRange":"₹₹",
+  "serviceType":"Home Cleaning Services"
+}
+</script>
 {% load static %}
 <style>
 
@@ -209,18 +231,25 @@
   }
 }
 </style>
+<!-- SEO H1 — Google ke liye visible, user ko nahi dikhega -->
+<section class="seo-hero" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
+  <div class="container">
+    <h1>Best Home Cleaning Services in Bhopal</h1>
+    <p>Professional Sofa Cleaning, Kitchen Cleaning, Bathroom Cleaning, Carpet Cleaning, water tank & Deep Cleaning Services in Bhopal.</p>
+  </div>
+</section>
 
 <!-- BANNER SLIDER -->
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="{% static 'images/m1.jpg' %}" class="d-block w-100 banner-img" alt="Cleaning Service 1">
+      <img src="{% static 'images/m1.jpg' %}" class="d-block w-100 banner-img" alt="Professional Home Cleaning Services in Bhopal">
     </div>
     <div class="carousel-item">
-      <img src="{% static 'images/or.jpg' %}" class="d-block w-100 banner-img" alt="Cleaning Service 2">
+      <img src="{% static 'images/or.jpg' %}" class="d-block w-100 banner-img" alt="Sofa Cleaning Services in Bhopal">
     </div>
     <div class="carousel-item">
-      <img src="{% static 'images/nn1.jpg' %}" class="d-block w-100 banner-img" alt="Cleaning Service 3">
+      <img src="{% static 'images/nn1.jpg' %}" class="d-block w-100 banner-img" alt="Deep Cleaning Company in Bhopal">
     </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -285,7 +314,7 @@
           <div class="why-icon"><i class="fas fa-star"></i></div>
           <div>
             <h5 class="fw-bold">4.9 Rated on Google.</h5>
-            <p class="text-muted">Trusted by hundreds of happy customers across Bhopal with genuine Google reviews and proven quality service.</p>
+            <p class="text-muted">Trusted by hundreds of happy customers for home cleaning services in Bhopal. with genuine Google reviews and proven quality service.</p>
           </div>
         </div>
       </div>
@@ -302,7 +331,7 @@
         <div class="why-card">
           <div class="why-icon"><i class="fas fa-user-shield"></i></div>
           <div>
-            <h5 class="fw-bold">Expert & Trained Cleaners.</h5>
+            <h5 class="fw-bold">Expert Sofa & Home Cleaning Experts in Bhopal.</h5>
             <p class="text-muted">Well-trained, polite staff experienced in sofa, home, kitchen, water tank, and office cleaning.</p>
           </div>
         </div>
@@ -342,6 +371,38 @@
 <!-- Elfsight Google Reviews | Untitled Google Reviews -->
 <script src="https://elfsightcdn.com/platform.js" async></script>
 <div class="elfsight-app-d79520b2-6553-4e6d-a65d-aa90ca3dc70f" data-elfsight-app-lazy></div>
+
+<!-- <div class="elfsight-app-d79520b2-6553-4e6d-a65d-aa90ca3dc70f" data-elfsight-app-lazy></div> -->
+
+<!-- SEO CONTENT SECTION — Google ke liye, user ko nahi dikhega -->
+<section style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
+  <div class="container">
+
+    <h2>Professional Cleaning Services in Bhopal</h2>
+    <p>
+
+      Utkarsh Cleaning provides professional home cleaning services in Bhopal
+      for homes, apartments, offices, villas, and commercial spaces.
+
+      We offer sofa cleaning, carpet cleaning, bathroom cleaning,
+      kitchen cleaning, deep cleaning, office cleaning,
+      water tank cleaning, mattress cleaning, and floor scrubbing services.
+
+      Our trained cleaning experts use advanced machines and eco-friendly
+      chemicals to deliver safe, hygienic, and affordable cleaning solutions
+      across Bhopal.
+
+      If you are looking for trusted and affordable cleaning services in Bhopal,
+      Utkarsh Cleaning is your reliable local cleaning company.
+
+    </p>
+    <div>
+      <a href="/services/?category=sofa-cleaning">Sofa Cleaning Bhopal</a>
+      <a href="/services/?category=kitchen-deep-cleaning">Kitchen Cleaning Bhopal</a>
+      <a href="/services/?category=Bathroom-deep-cleaning">Bathroom Cleaning Bhopal</a>
+    </div>
+  </div>
+</section>
 
 <!-- TESTIMONIALS -->
 {% if testimonials %}
@@ -406,5 +467,25 @@
   </div>
 </section>
 {% endif %}
+<!-- FAQ SECTION — Google ke liye, user ko nahi dikhega -->
+<section style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
+  <div class="container">
 
+    <h2>Frequently Asked Questions</h2>
+
+    <div>
+      <h5>What is the best home cleaning service in Bhopal?</h5>
+      <p>Utkarsh Cleaning provides professional and affordable home cleaning services across Bhopal.</p>
+    </div>
+    <div>
+      <h5>Do you provide sofa cleaning in Bhopal?</h5>
+      <p>Yes, we provide deep sofa shampooing and vacuum cleaning services in Bhopal.</p>
+    </div>
+    <div>
+      <h5>How much does deep cleaning cost in Bhopal?</h5>
+      <p>Pricing depends on property size and cleaning requirements.</p>
+    </div>
+
+  </div>
+</section>
 {% endblock %}

@@ -1,10 +1,40 @@
 {% extends 'base.html' %}
-{% block title %}Blog - Utkarsh Cleaning{% endblock %}
+{% block title %}
+Kitchen Cleaning in Bhopal | Utkarsh Cleaning 
+{% endblock %}
+{% block meta_description %}  
+
+Read the latest cleaning tips, sofa cleaning guides,
+deep cleaning advice, kitchen cleaning hacks,
+and home maintenance blogs in Bhopal.
+
+{% endblock %}
 {% block content %}
-<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li><li class="breadcrumb-item active">Blog</li></ol></div></div>
+<!-- BLOG LIST SEO SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Blog",
+  "name":"Utkarsh Cleaning Blog",
+  "description":"Cleaning tips and home cleaning guides in Bhopal",
+  "publisher":{
+    "@type":"Organization",
+    "name":"Utkarsh Cleaning"
+  }
+}
+</script>
+<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home Cleaning Services Bhopal</a></li><li class="breadcrumb-item active">Blog</li></ol></div></div>
 <section class="py-5">
   <div class="container">
-    <div class="section-title"><h2>Latest Blog Posts</h2><div class="title-line"></div></div>
+    <div class="section-title"><h1>Cleaning Tips & Home Cleaning Blogs in Bhopal</h1><div class="title-line"></div></div>
+    <p class="text-muted text-center mb-5"
+   style="max-width:900px;margin:auto;line-height:1.9;">
+
+  Read professional cleaning tips, sofa cleaning guides,
+  bathroom cleaning solutions, deep cleaning advice,
+  and home maintenance blogs from Utkarsh Cleaning in Bhopal.
+
+</p>
     <div class="row g-4">
       {% for blog in blogs %}
       <div class="col-md-4">
@@ -20,9 +50,79 @@
         </div>
       </div>
       {% empty %}
-      <div class="col-12 text-center py-5"><i class="fas fa-blog fa-5x text-muted mb-3"></i><h5 class="text-muted">Abhi koi blog post nahi hai.</h5></div>
+      <div class="col-12 text-center py-5"><i class="fas fa-blog fa-5x text-muted mb-3"></i><h5 class="text-muted">No Cleaning Blogs Available Right Now</h5></div>
       {% endfor %}
     </div>
   </div>
+</section>
+<!-- FAQ SECTION -->
+<section class="py-5">5
+  <div class="container">
+
+    <div class="section-title">
+      <h2>Frequently Asked Questions</h2>
+      <div class="title-line"></div>
+    </div>
+
+    <div class="mb-4">
+
+      <h5>
+        Which is the best cleaning company in Bhopal?
+      </h5>
+
+      <p class="text-muted">
+        Utkarsh Cleaning provides trusted home cleaning services in Bhopal.
+      </p>
+
+    </div>
+
+    <div class="mb-4">
+
+      <h5>
+        Do you provide sofa cleaning services?
+      </h5>
+
+      <p class="text-muted">
+        Yes, we provide professional sofa cleaning services in Bhopal.
+      </p>
+
+    </div>
+
+    <div class="mb-4">
+
+      <h5>
+        What cleaning services do you provide?
+      </h5>
+
+      <p class="text-muted">
+        We provide sofa cleaning, kitchen cleaning,
+        bathroom cleaning, carpet cleaning,
+        and deep cleaning services.
+      </p>
+
+    </div>
+
+  </div>
+</section>
+<section class="py-5 bg-light">
+
+  <div class="container text-center">
+
+    <h2 class="mb-4">
+      Trusted Home Cleaning Experts in Bhopal
+    </h2>
+
+    <p class="text-muted"
+       style="line-height:1.9;max-width:900px;margin:auto;">
+
+      Utkarsh Cleaning is trusted by hundreds of customers
+      in Bhopal for professional sofa cleaning,
+      bathroom cleaning, kitchen cleaning,
+      and deep cleaning services.
+
+    </p>
+
+  </div>
+
 </section>
 {% endblock %}

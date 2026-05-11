@@ -135,8 +135,8 @@ def cart_view(request):
         except:
             pass
     taxable_amount = subtotal - discount
-    gst_amount = round(taxable_amount * 18 / 100, 2)
-    total = taxable_amount + gst_amount
+    gst_amount = 0  # GST service pe nahi lagta — sirf invoice mein dikhta hai
+    total = taxable_amount
     return render(request, 'store/cart.html', {
         'items': items, 'subtotal': subtotal, 'discount': discount,
         'gst_amount': gst_amount, 'total': total
@@ -178,8 +178,8 @@ def checkout(request):
             pass
 
     taxable = subtotal - discount
-    gst_amount = round(taxable * 18 / 100, 2)
-    total = taxable + gst_amount
+    gst_amount = 0  # GST service pe nahi lagta — sirf invoice mein dikhta hai
+    total = taxable
     profile = getattr(request.user, 'profile', None)
 
     # Minimum booking date = kal
@@ -313,6 +313,7 @@ def book_now(request, service_id):
     
     messages.success(request, f'"{service.name}" added to cart!')
     return redirect('checkout')
+
 @login_required
 def order_success(request, order_id):
     order = get_object_or_404(Order, order_id=order_id, user=request.user)
@@ -436,6 +437,7 @@ def download_invoice(request, order_id):
         except:
             return ""
 
+    # ✅ Invoice mein GST calculate hoga (GST invoice ke liye zaroori hai)
     subtotal   = float(order.subtotal)
     discount   = float(order.discount)
     taxable    = subtotal - discount
@@ -699,12 +701,7 @@ def dashboard_order_detail(request, order_id):
     return render(request, 'dashboard/order_detail.html', {'order': order})
 
 
-@login_required
-def dashboard(request):
-    orders = Order.objects.all().order_by('-created_at')[:10]
-    return render(request, 'dashboard/index.html', {
-        'orders': orders
-    })
+
 
 
 def track_order_public(request):

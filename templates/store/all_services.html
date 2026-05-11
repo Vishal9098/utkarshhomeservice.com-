@@ -1,8 +1,20 @@
 {% extends 'base.html' %}
 {% block title %}
-  {% if selected_category %}{{ selected_category.name }}{% else %}All Services{% endif %} - Utkarsh Cleaning
+{% if selected_category %}
+{{ selected_category.name }} Best water tank Cleaning Services in Bhopal | Sofa, Kitchen & Deep Cleaning
+{% else %}
+Best water tank Cleaning Services in Bhopal | Sofa, Kitchen & Deep Cleaning
+{% endif %}
 {% endblock %}
+{% block meta_description %}
 
+{% if selected_category %}
+Professional {{ selected_category.name }} services in Bhopal with affordable pricing, trained cleaners, advanced equipment, and same-day booking.
+{% else %}
+Book professional home cleaning services in Bhopal including sofa cleaning, kitchen cleaning, bathroom cleaning, carpet cleaning, water tank, and deep cleaning.
+{% endif %}
+
+{% endblock %}
 {% block extra_css %}
 <style>
 @media (max-width: 991.98px) {
@@ -19,11 +31,28 @@
 {% endblock %}
 
 {% block content %}
+<!-- SERVICE PAGE LOCAL SEO SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Service",
+  "serviceType":"Home Cleaning Services",
+  "provider":{
+    "@type":"LocalBusiness",
+    "name":"Utkarsh Cleaning Services",
+    "areaServed":"Bhopal"
+  },
+  "areaServed":{
+    "@type":"City",
+    "name":"Bhopal"
+  }
+}
+</script>
 <!-- BREADCRUMB - desktop only -->
 <div class="breadcrumb-section d-none d-lg-block">
   <div class="container">
     <ol class="breadcrumb mb-0">
-      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home Cleaning Services Bhopal</a></li>
       <li class="breadcrumb-item"><a href="{% url 'all_services' %}">All Services</a></li>
       {% if selected_category %}
       <li class="breadcrumb-item active">{{ selected_category.name }}</li>
@@ -42,13 +71,34 @@
         <!-- Page title - desktop only -->
         <div class="page-title-row d-none d-lg-flex justify-content-between align-items-center mb-4">
           <div>
-            <h4 class="fw-bold mb-0">
+            <h1 class="fw-bold mb-0" style="font-size:32px;">
               {% if selected_category %}{{ selected_category.name }}{% else %}All Services{% endif %}
-            </h4>
+            </h1>
             <small class="text-muted">{{ services.count }} service{{ services.count|pluralize }} mili</small>
           </div>
         </div>
+<!-- SEO INTRO -->
+<div class="mb-4">
 
+  <p class="text-muted" style="line-height:1.9;">
+
+    {% if selected_category %}
+
+    Book professional {{ selected_category.name }} services in Bhopal
+    with trained cleaners, advanced machines, affordable pricing,
+    and same-day service availability.
+
+    {% else %}
+
+    Utkarsh Cleaning provides trusted home cleaning services in Bhopal
+    including sofa cleaning, kitchen cleaning, bathroom cleaning,
+    carpet cleaning, deep cleaning, office cleaning, and water tank cleaning.
+
+    {% endif %}
+
+  </p>
+
+</div>
         <!-- Cards -->
         <div class="row g-2">
           {% for service in services %}
@@ -57,7 +107,7 @@
             <div class="card border-0 shadow-sm h-100" style="border-radius:15px;overflow:hidden;transition:all .3s;">
               <a href="{% url 'service_detail' service.slug %}" class="text-decoration-none">
                 {% if service.image %}
-                  <img src="{{ service.image.url }}" class="card-img-top" style="height:200px;object-fit:cover;" alt="{{ service.name }}">
+                  <img src="{{ service.image.url }}" loading="lazy" class="card-img-top" style="height:200px;object-fit:cover;" alt="{{ service.name }} Services in Bhopal">
                 {% else %}
                   <div style="height:200px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);display:flex;align-items:center;justify-content:center;">
                     <i class="fas fa-spray-can-sparkles fa-3x" style="color:var(--primary);opacity:.5;"></i>
@@ -89,6 +139,14 @@
                 </div>
               </a>
               <div class="card-footer bg-transparent border-0 p-3 pt-0 d-flex gap-2">
+                <!-- <a href="https://wa.me/917806061048"
+   class="btn btn-success btn-sm w-100 mt-2"
+   style="border-radius:20px;">
+ 
+    <i class="fab fa-whatsapp me-1"></i>
+   WhatsApp Booking 
+
+</a> -->
                 <a href="{% url 'service_detail' service.slug %}" class="btn btn-outline-primary btn-sm flex-grow-1" style="border-radius:20px;font-size:12px;">Details</a>
                 <a href="{% url 'add_to_cart' service.id %}" class="btn btn-primary btn-sm flex-grow-1" style="border-radius:20px;font-size:12px;"><i class="fas fa-cart-plus me-1"></i>Cart</a>
               </div>
@@ -106,6 +164,86 @@
       </div>
 
     </div>
+    <!-- INTERNAL SEO LINKS -->
+<section class="py-4 bg-light">
+  <div class="container text-center">
+
+    <a href="/services/?category=sofa-cleaning"
+       class="btn btn-outline-primary btn-sm m-1">
+       Sofa Cleaning Bhopal
+    </a>
+
+    <a href="/services/?category=kitchen-deep-cleaning"
+       class="btn btn-outline-primary btn-sm m-1">
+       Kitchen Cleaning Bhopal
+    </a>
+
+    <a href="/services/?category=Bathroom-deep-cleaning"
+       class="btn btn-outline-primary btn-sm m-1">
+       Bathroom Cleaning Bhopal
+    </a>
+
+    <a href="/services/?category=water-tank-cleaning"
+       class="btn btn-outline-primary btn-sm m-1">
+       Water tank Cleaning Bhopal
+    </a>
+
+  </div>
+</section>
+  </div>
+</section>
+<!-- FAQ SECTION -->
+<section class="py-5">
+  <div class="container">
+
+    <div class="section-title">
+      <h2>Frequently Asked Questions</h2>
+      <div class="title-line"></div>
+    </div>
+
+    <div class="mb-4">
+      <h5>Which is the best cleaning company in Bhopal?</h5>
+
+      <p class="text-muted">
+        Utkarsh Cleaning provides trusted and affordable home cleaning
+        services in Bhopal with trained professionals.
+      </p>
+    </div>
+
+    <div class="mb-4">
+      <h5>Do you provide same-day cleaning service?</h5>
+
+      <p class="text-muted">
+        Yes, same-day cleaning service is available in selected areas of Bhopal.
+      </p>
+    </div>
+
+    <div class="mb-4">
+      <h5>What services do you provide?</h5>
+
+      <p class="text-muted">
+        We provide sofa cleaning, kitchen cleaning, bathroom cleaning,
+        carpet cleaning, deep cleaning, water tank deep cleaning, and office cleaning services.
+      </p>
+    </div>
+
+  </div>
+</section>
+<section class="py-5 bg-light">
+  <div class="container text-center">
+
+    <h2 class="mb-4">
+      Trusted Cleaning Agency in Bhopal
+    </h2>
+
+    <p class="text-muted" style="line-height:1.9;">
+
+      Utkarsh Cleaning is trusted by hundreds of customers in Bhopal
+      for professional home cleaning, water tank cleaning, sofa cleaning, bathroom cleaning,
+      and deep cleaning services.
+
+    </p>
+
   </div>
 </section>
 {% endblock %}

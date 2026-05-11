@@ -1,6 +1,28 @@
 {% extends 'base.html' %}
-{% block title %}Order {{ order.order_id }} - Utkarsh Cleaning{% endblock %}
+{% block title %}
+Order Details {{ order.order_id }} | Utkarsh Cleaning Bhopal
+{% endblock %}
+{% block meta_description %}
+
+View your cleaning service order details,
+payment information,
+invoice status,
+and booking summary with Utkarsh Cleaning Bhopal.
+
+{% endblock %}
 {% block content %}
+<!-- ORDER DETAIL SEO SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Order",
+  "orderNumber":"{{ order.order_id }}",
+  "seller":{
+    "@type":"Organization",
+    "name":"Utkarsh Cleaning"
+  }
+}
+</script>
 <div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li><li class="breadcrumb-item"><a href="{% url 'my_orders' %}">My Orders</a></li><li class="breadcrumb-item active">{{ order.order_id }}</li></ol></div></div>
 <section class="py-5">
   <div class="container">

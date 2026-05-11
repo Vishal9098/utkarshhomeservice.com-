@@ -117,6 +117,17 @@ html, body { font-family: "Libre Baskerville", serif; }
 .cart-badge { position: relative; }
 .cart-badge .badge { position: absolute; top: -8px; right: -8px; background: #e74c3c; font-size: 10px; padding: 3px 6px; }
 
+/* ✅ FIX: User dropdown button — pointer cursor & proper styling */
+.user-dropdown-btn {
+  cursor: pointer !important;
+  position: relative;
+  z-index: 10;
+}
+.user-dropdown-btn:focus {
+  box-shadow: 0 0 0 3px rgba(26,95,168,0.25) !important;
+  outline: none;
+}
+
 /* ═══════════════════════════════
    COMMON
 ═══════════════════════════════ */
@@ -126,7 +137,6 @@ html, body { font-family: "Libre Baskerville", serif; }
   padding: 80px 0;
   position: relative;
   overflow: hidden;
-  /* FIX: Ensure no margin-bottom causing gap */
   margin-bottom: 0;
 }
 .hero-section::before {
@@ -144,7 +154,6 @@ html, body { font-family: "Libre Baskerville", serif; }
   transition: all .3s;
   cursor: pointer;
   background: #fff;
-  /* FIX: Remove any default margin causing gap */
   margin-bottom: 0;
 }
 .service-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(26,95,168,.15); border-color: var(--primary); }
@@ -478,17 +487,13 @@ html, body { font-family: "Libre Baskerville", serif; }
 }
 
 /* ═══════════════════════════════════════════════
-   ✅ MOBILE FIXES — ALL ISSUES RESOLVED
+   MOBILE FIXES
 ═══════════════════════════════════════════════ */
-
-/* --- Fix 1: Hero section mobile padding --- */
 @media(max-width: 768px) {
   .hero-section {
     padding: 36px 0 32px;
-    /* Remove any bottom margin that causes white gap */
     margin-bottom: 0 !important;
   }
-  /* Fix: Any section right after hero should have no extra top padding/margin */
   .hero-section + section,
   .hero-section + div {
     margin-top: 0 !important;
@@ -496,7 +501,6 @@ html, body { font-family: "Libre Baskerville", serif; }
   }
 }
 
-/* --- Fix 2: Section title on mobile --- */
 @media(max-width: 768px) {
   .section-title {
     margin-bottom: 28px;
@@ -510,9 +514,7 @@ html, body { font-family: "Libre Baskerville", serif; }
   }
 }
 
-/* --- Fix 3: Service cards — proper 2-column grid on mobile --- */
 @media(max-width: 576px) {
-  /* Make sure Bootstrap cols work tightly */
   .service-card {
     border-radius: 12px;
     margin-bottom: 0;
@@ -536,7 +538,6 @@ html, body { font-family: "Libre Baskerville", serif; }
   }
 }
 
-/* --- Fix 4: Why section on mobile --- */
 @media(max-width: 768px) {
   .why-section {
     padding: 40px 0;
@@ -551,12 +552,10 @@ html, body { font-family: "Libre Baskerville", serif; }
   .why-icon i { font-size: 22px; }
 }
 
-/* --- Fix 5: Footer upper — NO extra blank gap between columns --- */
 @media(max-width: 992px) {
   .footer-upper {
     padding: 36px 0 24px;
   }
-  /* Remove the large g-5 gap Bootstrap adds on mobile */
   .footer-upper .row {
     --bs-gutter-y: 0;
   }
@@ -570,7 +569,6 @@ html, body { font-family: "Libre Baskerville", serif; }
 }
 
 @media(max-width: 768px) {
-  /* Footer brand compact on mobile */
   .footer-brand p {
     font-size: 12px;
     max-width: 100%;
@@ -580,8 +578,6 @@ html, body { font-family: "Libre Baskerville", serif; }
     font-size: 9px;
     padding: 3px 8px;
   }
-
-  /* Footer quick links — 2 columns on mobile */
   .footer-links-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -591,8 +587,6 @@ html, body { font-family: "Libre Baskerville", serif; }
     font-size: 12px;
     margin-bottom: 8px;
   }
-
-  /* Footer contact compact */
   .footer-contact-item {
     font-size: 12px;
     gap: 10px;
@@ -604,20 +598,14 @@ html, body { font-family: "Libre Baskerville", serif; }
   .footer-contact-item .fci-icon i {
     font-size: 11px;
   }
-
-  /* Footer col title smaller on mobile */
   .footer-col-title {
     font-size: 10px;
     margin-bottom: 14px;
   }
-
-  /* App box on mobile */
   .footer-app-box {
     margin-top: 12px;
     padding: 12px;
   }
-
-  /* Services strip on mobile */
   .footer-services-strip {
     padding: 24px 0 20px;
   }
@@ -625,8 +613,6 @@ html, body { font-family: "Libre Baskerville", serif; }
     font-size: 10.5px;
     padding: 5px 10px;
   }
-
-  /* Footer bottom stacked */
   .footer-bottom .container {
     flex-direction: column;
     text-align: center;
@@ -643,10 +629,9 @@ html, body { font-family: "Libre Baskerville", serif; }
   }
 }
 
-/* --- Fix 6: Floating buttons — above mobile nav bar --- */
 @media(max-width: 992px) {
   .floating-buttons {
-    bottom: 74px; /* Above 62px mobile nav + margin */
+    bottom: 74px;
     left: 12px;
     gap: 8px;
   }
@@ -665,7 +650,6 @@ html, body { font-family: "Libre Baskerville", serif; }
   }
 }
 
-/* --- Fix 7: Messages container on mobile --- */
 @media(max-width: 576px) {
   .messages-container {
     width: calc(100% - 30px);
@@ -675,7 +659,6 @@ html, body { font-family: "Libre Baskerville", serif; }
   }
 }
 
-/* --- Fix 8: Navbar on mobile --- */
 @media(max-width: 992px) {
   .navbar {
     padding: 8px 0;
@@ -683,7 +666,6 @@ html, body { font-family: "Libre Baskerville", serif; }
   .navbar-brand img {
     height: 44px;
   }
-  /* Collapsed menu — proper padding */
   .navbar-collapse {
     padding: 12px 0 8px;
     border-top: 1px solid #f0f4fb;
@@ -709,7 +691,6 @@ html, body { font-family: "Libre Baskerville", serif; }
 
 {% block extra_css %}{% endblock %}
 </style>
-
 
 <script type="application/ld+json">
 {
@@ -740,7 +721,7 @@ html, body { font-family: "Libre Baskerville", serif; }
   <div class="container d-flex justify-content-between align-items-center">
     <div class="top-bar-left">
       <span><i class="fas fa-phone"></i><a href="tel:+917806061048">+91-7806061048</a></span>
-      <span><i class="fas fa-envelope"></i><a href="mailto:support@utkarshcleaninghomeservices.com">support@utkarshcleaninghomeservices.com</a></span>
+      <span><i class="fas fa-envelope"></i><a href="mailto:support@utkarshcleaninghomeservices.com">utkarshcleaninghomeservices@gmail.com</a></span>
     </div>
     <div style="font-size:12px;color:#c8d8f0;">
       <i class="fas fa-map-marker-alt me-1" style="color:#f0a500;"></i>Bhopal, Madhya Pradesh
@@ -762,15 +743,17 @@ html, body { font-family: "Libre Baskerville", serif; }
     <a class="navbar-brand" href="{% url 'home' %}">
       <img src="{% static 'images/logo.png' %}" alt="Utkarsh Cleaning">
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a></li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="{% url 'all_services' %}" data-bs-toggle="dropdown">All Services</a>
-          <ul class="dropdown-menu">
+          <a class="nav-link dropdown-toggle" href="{% url 'all_services' %}" id="servicesDropdown"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">All Services</a>
+          <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
             <li><a class="dropdown-item" href="{% url 'all_services' %}">All Services</a></li>
             {% for cat in categories_global %}
             <li><a class="dropdown-item" href="{% url 'all_services' %}?category={{ cat.slug }}">{{ cat.name }}</a></li>
@@ -793,11 +776,18 @@ html, body { font-family: "Libre Baskerville", serif; }
           {% if cart_count > 0 %}<span class="badge rounded-pill">{{ cart_count }}</span>{% endif %}
         </a>
         {% if user.is_authenticated %}
-        <div class="dropdown">
-          <button class="btn btn-outline-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown">
+        <!-- ✅ FIX: dropdown div pe position:relative aur button pe sahi attributes -->
+        <div class="dropdown" style="position:relative;">
+          <button type="button"
+                  class="btn btn-outline-primary btn-sm dropdown-toggle user-dropdown-btn"
+                  id="userDropdownBtn"
+                  data-bs-toggle="dropdown"
+                  data-bs-auto-close="true"
+                  aria-expanded="false"
+                  style="cursor:pointer;">
             <i class="fas fa-user me-1"></i>{{ user.username }}
           </button>
-          <ul class="dropdown-menu dropdown-menu-end">
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownBtn">
             <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
             <li><a class="dropdown-item" href="{% url 'my_orders' %}"><i class="fas fa-box me-2"></i>My Orders</a></li>
             <li><hr class="dropdown-divider"></li>
@@ -815,24 +805,19 @@ html, body { font-family: "Libre Baskerville", serif; }
 
 {% block content %}{% endblock %}
 
-<!-- ═══════════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════════ -->
+<!-- FOOTER -->
 <footer class="footer-main">
 
-  <!-- Wave divider -->
   <div class="footer-wave">
     <svg viewBox="0 0 1440 40" preserveAspectRatio="none" style="height:40px;">
       <path d="M0,40 C360,0 1080,0 1440,40 L1440,40 L0,40 Z" fill="#0d1526"/>
     </svg>
   </div>
 
-  <!-- Upper section -->
   <div class="footer-upper">
     <div class="container">
       <div class="row g-4">
 
-        <!-- Brand -->
         <div class="col-lg-4 col-md-6 col-12">
           <div class="footer-brand">
             <img src="{% static 'images/logo.png' %}" alt="Utkarsh Cleaning">
@@ -851,10 +836,8 @@ html, body { font-family: "Libre Baskerville", serif; }
           </div>
         </div>
 
-        <!-- Quick Links -->
         <div class="col-lg-2 col-md-6 col-6">
           <div class="footer-col-title">Quick Links</div>
-          <!-- Wrap in div for 2-col grid on mobile -->
           <div class="footer-links-grid">
             <a href="{% url 'home' %}" class="footer-link"><i class="fas fa-chevron-right"></i>Home</a>
             <a href="{% url 'all_services' %}" class="footer-link"><i class="fas fa-chevron-right"></i>All Services</a>
@@ -868,7 +851,6 @@ html, body { font-family: "Libre Baskerville", serif; }
           </div>
         </div>
 
-        <!-- Contact -->
         <div class="col-lg-3 col-md-6 col-12">
           <div class="footer-col-title">Contact Info</div>
           <div class="footer-contact-item">
@@ -885,7 +867,7 @@ html, body { font-family: "Libre Baskerville", serif; }
           <div class="footer-contact-item">
             <div class="fci-icon"><i class="fas fa-envelope"></i></div>
             <div>
-              <a href="mailto:support@utkarshcleaninghomeservices.com" style="font-size:11.5px;">support@utkarshcleaninghomeservices.com</a><br>
+              <a href="mailto:support@utkarshcleaninghomeservices.com" style="font-size:11.5px;">utkarshcleaninghomeservices@gmail.com</a><br>
               <a href="mailto:consumer.complaints@utkarshcleaning.com" style="font-size:11.5px;">consumer.complaints@utkarshcleaning.com</a>
             </div>
           </div>
@@ -895,7 +877,6 @@ html, body { font-family: "Libre Baskerville", serif; }
           </div>
         </div>
 
-        <!-- Hours + App -->
         <div class="col-lg-3 col-md-6 col-12">
           <div class="footer-col-title">Working Hours</div>
           <div class="footer-contact-item">
@@ -909,14 +890,8 @@ html, body { font-family: "Libre Baskerville", serif; }
           <div class="footer-app-box">
             <p>📱 Download our App — Coming Soon</p>
             <div class="footer-app-btns-new">
-              <a href="#">
-                <i class="fab fa-google-play"></i>
-                <span>Android</span>
-              </a>
-              <a href="#">
-                <i class="fab fa-apple"></i>
-                <span>iOS</span>
-              </a>
+              <a href="#"><i class="fab fa-google-play"></i><span>Android</span></a>
+              <a href="#"><i class="fab fa-apple"></i><span>iOS</span></a>
             </div>
           </div>
         </div>
@@ -925,12 +900,9 @@ html, body { font-family: "Libre Baskerville", serif; }
     </div>
   </div>
 
-  <!-- Services strip -->
   <div class="footer-services-strip">
     <div class="container">
-      <div class="strip-title">
-        <h6>Our Services</h6>
-      </div>
+      <div class="strip-title"><h6>Our Services</h6></div>
       <div class="footer-services-grid-new">
         <a href="{% url 'all_services' %}?category=villa-cleaning"><i class="fas fa-home"></i>Villa Cleaning</a>
         <a href="{% url 'all_services' %}?category=furnished-apartment-cleaning"><i class="fas fa-couch"></i>Furnished Apartment</a>
@@ -954,7 +926,6 @@ html, body { font-family: "Libre Baskerville", serif; }
     </div>
   </div>
 
-  <!-- Bottom bar -->
   <div class="footer-bottom">
     <div class="container">
       <div class="copy">
@@ -1005,6 +976,9 @@ html, body { font-family: "Libre Baskerville", serif; }
   </a>
   {% endif %}
 </nav>
+
+<!-- Bootstrap JS — Body ke end mein (correct position) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

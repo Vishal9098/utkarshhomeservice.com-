@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Cart - Utkarsh Cleaning{% endblock %}
-
+{% block title %}
+Your Cleaning Service Cart | Utkarsh Cleaning Bhopal
+{% endblock %}
+{% block meta_description %}
+Review your selected cleaning services, apply discount coupons,
+and securely proceed to checkout with Utkarsh Cleaning Bhopal.
+{% endblock %}
 {% block extra_css %}
 <style>
 @media (max-width: 991.98px) {
@@ -11,10 +16,32 @@
 {% endblock %}
 
 {% block content %}
-<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li><li class="breadcrumb-item active">Cart</li></ol></div></div>
+<!-- CART SEO SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebPage",
+  "name":"Cart Page",
+  "description":"Cleaning service booking cart page",
+  "publisher":{
+    "@type":"Organization",
+    "name":"Utkarsh Cleaning"
+  }
+}
+</script>
+<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home Cleaning Services Bhopal</a></li><li class="breadcrumb-item active">Cart</li></ol></div></div>
 <section class="py-5">
   <div class="container">
-    <h3 class="fw-bold mb-4"><i class="fas fa-shopping-cart me-2" style="color:var(--primary);"></i>Your Cart</h3>
+    <h1 class="fw-bold mb-4"
+    style="font-size:34px;"><i class="fas fa-shopping-cart me-2" style="color:var(--primary);"></i>Your Cart</h1>
+    <p class="text-muted mb-4"
+   style="line-height:1.9;max-width:850px;">
+
+  Review your selected home cleaning services in Bhopal,
+  update service quantities, apply discount coupons,
+  and proceed securely to checkout with Utkarsh Cleaning.
+
+</p>
     {% if items %}
     <div class="row g-4">
       <div class="col-lg-8">
@@ -85,16 +112,120 @@
           <a href="{% url 'all_services' %}" class="btn btn-outline-secondary w-100 mt-2" style="border-radius:30px;">
             Continue Shopping
           </a>
+          <div class="mt-4">
+
+  <div class="d-flex align-items-center mb-2">
+    <i class="fas fa-shield-alt text-success me-2"></i>
+    <small>100% Secure Checkout</small>
+  </div>
+
+  <div class="d-flex align-items-center mb-2">
+    <i class="fas fa-check-circle text-success me-2"></i>
+    <small>Verified Cleaning Professionals</small>
+  </div>
+
+  <div class="d-flex align-items-center">
+    <i class="fas fa-star text-warning me-2"></i>
+    <small>Trusted by Customers Across Bhopal</small>
+  </div>
+
+</div>
         </div>
       </div>
     </div>
     {% else %}
     <div class="text-center py-5">
       <i class="fas fa-shopping-cart fa-5x text-muted mb-4"></i>
-      <h4 class="text-muted">Your cart is empty</h4>
+      <h2 class="text-muted"
+    style="font-size:32px;">
+
+Your Cleaning Service Cart is Empty
+
+</h2>
+<p class="text-muted"
+   style="max-width:700px;margin:auto;line-height:1.9;">
+
+  Browse professional sofa cleaning, bathroom cleaning,
+  kitchen cleaning, carpet cleaning, water tank cleaning
+  and deep cleaning services in Bhopal.
+
+</p>
       <a href="{% url 'all_services' %}" class="btn btn-primary mt-3 px-5" style="border-radius:30px;">View Services</a>
     </div>
     {% endif %}
   </div>
+  
+</section>
+<!-- FAQ SECTION -->
+<section class="py-5">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="title-line"></div>
+
+    </div>
+
+    <div class="mb-4">
+
+      <h5>
+        Is checkout secure?
+      </h5>
+
+      <p class="text-muted">
+        Yes, all bookings and payments are processed securely.
+      </p>
+
+    </div>
+
+    <div class="mb-4">
+
+      <h5>
+        Can I update service quantity?
+      </h5>
+
+      <p class="text-muted">
+        Yes, you can easily update quantities directly from the cart page.
+      </p>
+
+    </div>
+
+    <div class="mb-4">
+
+      <h5>
+        Do you provide same-day cleaning service in Bhopal?
+      </h5>
+
+      <p class="text-muted">
+        Yes, same-day bookings are available in selected areas.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+<section class="py-5 bg-light">
+
+  <div class="container text-center">
+
+    <h2 class="mb-4">
+      Trusted Cleaning Partner in Bhopal
+    </h2>
+
+    <p class="text-muted"
+       style="max-width:900px;margin:auto;line-height:1.9;">
+
+      Utkarsh Cleaning provides trusted home cleaning services in Bhopal
+      including sofa cleaning, bathroom cleaning,
+      kitchen cleaning, and deep cleaning solutions.
+
+    </p>
+
+  </div>
+
 </section>
 {% endblock %}

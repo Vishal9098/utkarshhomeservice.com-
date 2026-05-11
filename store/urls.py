@@ -24,7 +24,7 @@ urlpatterns = [
     path('order/<str:order_id>/invoice/', views.download_invoice, name='download_invoice'),
     # path('invoice/<int:order_id>/', views.download_invoice, name='download_invoice'),
     path('invoice/<str:order_id>/', views.download_invoice, name='download_invoice'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    # path('dashboard/', views.dashboard, name='dashboard'),
     # existing urlpatterns mein add karo
     path('track/', views.track_order_public, name='track_order'),
     path('order/<str:order_id>/tracking/', views.my_order_tracking, name='order_tracking'),

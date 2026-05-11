@@ -1,6 +1,31 @@
 {% extends 'base.html' %}
-{% block title %}Search - Utkarsh Cleaning{% endblock %}
+{% block title %}
+{{ query }} Services in Bhopal | Utkarsh Cleaning
+{% endblock %}
+{% block meta_description %}
+
+Search professional home cleaning services in Bhopal including
+sofa cleaning,
+bathroom cleaning,
+kitchen cleaning,
+carpet cleaning,
+and deep cleaning services.
+
+{% endblock %}
 {% block content %}
+<!-- SEARCH PAGE SEO SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"SearchResultsPage",
+  "name":"Service Search Results",
+  "description":"Cleaning service search results in Bhopal",
+  "publisher":{
+    "@type":"Organization",
+    "name":"Utkarsh Cleaning"
+  }
+}
+</script>
 <section class="py-5">
   <div class="container">
     <h4 class="fw-bold mb-4">Search Results for "{{ query }}"</h4>

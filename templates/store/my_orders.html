@@ -1,14 +1,50 @@
 {% extends 'base.html' %}
-{% block title %}My Orders - Utkarsh Cleaning{% endblock %}
+{% block title %}
+Cleaning Service Near Me in Bhopal | Sofa, Water Tank & Kitchen
+{% endblock %}
+{% block meta_description %}
+
+View and track your home cleaning service bookings,
+payment status,
+and order details with Utkarsh Cleaning Bhopal.
+
+{% endblock %}
 {% block content %}
-<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li><li class="breadcrumb-item active">My Orders</li></ol></div></div>
+<!-- MY ORDERS SEO SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"CollectionPage",
+  "name":"My Orders",
+  "description":"Customer cleaning service order history",
+  "publisher":{
+    "@type":"Organization",
+    "name":"Utkarsh Cleaning"
+  }
+}
+</script>
+<div class="breadcrumb-section"><div class="container"><ol class="breadcrumb mb-0"><li class="breadcrumb-item"><a href="{% url 'home' %}">Home Cleaning service in Bhopal</a></li><li class="breadcrumb-item active">My Orders</li></ol></div></div>
 <section class="py-5">
   <div class="container">
-    <h3 class="fw-bold mb-4">My Orders</h3>
+    <h1 class="fw-bold mb-4"
+    style="font-size:36px;">
+
+My Cleaning Service Orders
+
+</h1>
+<p class="text-muted mb-4"
+   style="max-width:900px;line-height:1.9;">
+
+  Track your cleaning service bookings,
+  payment details,
+  service status,
+  and order history with Utkarsh Cleaning Bhopal.
+
+</p>
     {% if orders %}
     <div class="table-responsive">
       <table class="table table-hover align-middle">
-        <thead class="table-light"><tr><th>Order ID</th><th>Date</th><th>Amount</th><th>Payment</th><th>Status</th><th>Action</th></tr></thead>
+        <thead class="table-light" style="font-size:15px;"></thead>><tr><th>Order ID</th><th>Date</th><th>Amount</th><th>Payment</th><th>Status</th><th>Action</th></tr></thead>
         <tbody>
           {% for order in orders %}
           <tr>
@@ -17,7 +53,7 @@
             <td><strong>₹{{ order.total }}</strong></td>
             <td>{{ order.get_payment_method_display }}</td>
             <td>
-              <span class="badge {% if order.status == 'completed' %}bg-success{% elif order.status == 'cancelled' %}bg-danger{% elif order.status == 'in_progress' %}bg-info{% else %}bg-warning text-dark{% endif %}">
+              <span class="badge {% if order.status == 'completed' %}bg-success{% elif order.status == 'cancelled' %}bg-danger{% elif order.status == 'in_progress' %}bg-primary{% else %}bg-warning text-dark{% endif %}">
                 {{ order.get_status_display }}
               </span>
             </td>
@@ -26,11 +62,118 @@
           {% endfor %}
         </tbody>
       </table>
+      <div class="row text-center mt-5">
+
+  <div class="col-md-4 mb-4">
+
+    <i class="fas fa-shield-alt fa-3x text-success mb-3"></i>
+
+    <h5>Secure Booking</h5>
+
+    <p class="text-muted">
+      Your order details are securely protected.
+    </p>
+
+  </div>
+
+  <div class="col-md-4 mb-4">
+
+    <i class="fas fa-clock fa-3x text-primary mb-3"></i>
+
+    <h5>Real-Time Updates</h5>
+
+    <p class="text-muted">
+      Track cleaning service progress easily.
+    </p>
+
+  </div>
+
+  <div class="col-md-4 mb-4">
+
+    <i class="fas fa-star fa-3x text-warning mb-3"></i>
+
+    <h5>Trusted Services</h5>
+
+    <p class="text-muted">
+      Professional cleaning experts in Bhopal.
+    </p>
+
+  </div>
+
+</div>
+<!-- FAQ SECTION -->
+<section class="py-5 bg-light">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="title-line"></div>
+
+    </div>
+
+    <div class="mb-4">
+
+      <h5>
+        How can I track my cleaning service order?
+      </h5>
+
+      <p class="text-muted">
+        You can track your order directly from the My Orders page.
+      </p>
+
+    </div>
+
+    <div class="mb-4">
+
+      <h5>
+        Can I view payment details?
+      </h5>
+
+      <p class="text-muted">
+        Yes, all payment details and order information are available here.
+      </p>
+
+    </div>
+
+    <div class="mb-4">
+
+      <h5>
+        Do you provide real-time service updates?
+      </h5>
+
+      <p class="text-muted">
+        Yes, order status updates are available during service processing.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
     </div>
     {% else %}
     <div class="text-center py-5">
       <i class="fas fa-box-open fa-5x text-muted mb-3"></i>
-      <h5 class="text-muted">No orders yet</h5>
+      <h2 class="text-muted"
+    style="font-size:32px;">
+
+No Cleaning Service Orders Yet
+
+</h2>
+<p class="text-muted"
+   style="max-width:700px;margin:auto;line-height:1.9;">
+
+  Book professional sofa cleaning,
+  bathroom cleaning,
+  water tank cleaning,
+  kitchen cleaning,
+  carpet cleaning,
+  and deep cleaning services in Bhopal.
+
+</p>
       <a href="{% url 'all_services' %}" class="btn btn-primary mt-3" style="border-radius:25px;">Book Services</a>
     </div>
     {% endif %}
