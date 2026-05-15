@@ -26,6 +26,17 @@ Book professional home cleaning services in Bhopal including sofa cleaning, kitc
   .card-body h6 { font-size: 12px !important; }
 }
 
+/* SEO text — Google index kare, user ko na dikhe */
+.seo-hidden-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 /* ───────── FLOOR MODAL CSS ───────── */
 .floor-modal-overlay {
   display: none;
@@ -163,9 +174,9 @@ Book professional home cleaning services in Bhopal including sofa cleaning, kitc
           </div>
         </div>
 
-        <!-- SEO INTRO -->
-        <div class="mb-4">
-          <p class="text-muted" style="line-height:1.9;">
+        <!-- SEO INTRO — user ko nahi dikhega, Google index karega -->
+        <div class="seo-hidden-text">
+          <p>
             {% if selected_category %}
             Book professional {{ selected_category.name }} services in Bhopal
             with trained cleaners, advanced machines, affordable pricing,
@@ -239,50 +250,39 @@ Book professional home cleaning services in Bhopal including sofa cleaning, kitc
       </div>
     </div>
 
-    <!-- INTERNAL SEO LINKS -->
-    <section class="py-4 bg-light">
-      <div class="container text-center">
-        <a href="/services/?category=sofa-cleaning" class="btn btn-outline-primary btn-sm m-1">Sofa Cleaning Bhopal</a>
-        <a href="/services/?category=kitchen-deep-cleaning" class="btn btn-outline-primary btn-sm m-1">Kitchen Cleaning Bhopal</a>
-        <a href="/services/?category=Bathroom-deep-cleaning" class="btn btn-outline-primary btn-sm m-1">Bathroom Cleaning Bhopal</a>
-        <a href="/services/?category=water-tank-cleaning" class="btn btn-outline-primary btn-sm m-1">Water tank Cleaning Bhopal</a>
-      </div>
-    </section>
-  </div>
-</section>
-
-<!-- FAQ SECTION -->
-<section class="py-5">
-  <div class="container">
-    <div class="section-title">
-      <h2>Frequently Asked Questions</h2>
-      <div class="title-line"></div>
-    </div>
-    <div class="mb-4">
-      <h5>Which is the best cleaning company in Bhopal?</h5>
-      <p class="text-muted">Utkarsh Cleaning provides trusted and affordable home cleaning services in Bhopal with trained professionals.</p>
-    </div>
-    <div class="mb-4">
-      <h5>Do you provide same-day cleaning service?</h5>
-      <p class="text-muted">Yes, same-day cleaning service is available in selected areas of Bhopal.</p>
-    </div>
-    <div class="mb-4">
-      <h5>What services do you provide?</h5>
-      <p class="text-muted">We provide sofa cleaning, kitchen cleaning, bathroom cleaning, carpet cleaning, deep cleaning, water tank deep cleaning, and office cleaning services.</p>
+    <!-- INTERNAL SEO LINKS — hidden from user, indexed by Google -->
+    <div class="seo-hidden-text">
+      <a href="/services/?category=sofa-cleaning">Sofa Cleaning Bhopal</a>
+      <a href="/services/?category=kitchen-deep-cleaning">Kitchen Cleaning Bhopal</a>
+      <a href="/services/?category=Bathroom-deep-cleaning">Bathroom Cleaning Bhopal</a>
+      <a href="/services/?category=water-tank-cleaning">Water tank Cleaning Bhopal</a>
     </div>
   </div>
 </section>
 
-<section class="py-5 bg-light">
-  <div class="container text-center">
-    <h2 class="mb-4">Trusted Cleaning Agency in Bhopal</h2>
-    <p class="text-muted" style="line-height:1.9;">
-      Utkarsh Cleaning is trusted by hundreds of customers in Bhopal
+<!-- FAQ SECTION — hidden from user, indexed by Google -->
+<div class="seo-hidden-text">
+  <div>
+    <h2>Frequently Asked Questions</h2>
+    <h5>Which is the best cleaning company in Bhopal?</h5>
+    <p>Utkarsh Cleaning provides trusted and affordable home cleaning services in Bhopal with trained professionals.</p>
+    <h5>Do you provide same-day cleaning service?</h5>
+    <p>Yes, same-day cleaning service is available in selected areas of Bhopal.</p>
+    <h5>What services do you provide?</h5>
+    <p>We provide sofa cleaning, kitchen cleaning, bathroom cleaning, carpet cleaning, deep cleaning, water tank deep cleaning, and office cleaning services.</p>
+  </div>
+</div>
+
+<!-- Trusted Agency — hidden from user, indexed by Google -->
+<div class="seo-hidden-text">
+  <div>
+    <h2>Trusted Cleaning Agency in Bhopal</h2>
+    <p>Utkarsh Cleaning is trusted by hundreds of customers in Bhopal
       for professional home cleaning, water tank cleaning, sofa cleaning, bathroom cleaning,
       and deep cleaning services.
     </p>
   </div>
-</section>
+</div>
 
 
 <!-- ═══════════════════════════════════════════
