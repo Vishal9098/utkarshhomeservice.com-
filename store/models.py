@@ -88,9 +88,12 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    custom_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def get_total(self):
+        if self.custom_price is not None:
+            return self.custom_price * self.quantity
         return (self.service.get_final_price() or 0) * self.quantity
 
 class Order(models.Model):
@@ -208,9 +211,6 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
-    
-
-# models.py ke end mein add karo (Order class ke neeche)
 
 class OrderTracking(models.Model):
     STATUS_CHOICES = [
@@ -220,10 +220,9 @@ class OrderTracking(models.Model):
         ('completed', '🎉 Completed'),
         ('cancelled', '❌ Cancelled'),
     ]
-    
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='tracking_history')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    message = models.CharField(max_length=300, blank=True, 
+    message = models.CharField(max_length=300, blank=True,
                                 help_text="e.g. Team raste mein hai")
     updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -233,11 +232,6 @@ class OrderTracking(models.Model):
 
     def __str__(self):
         return f"{self.order.order_id} → {self.status}"
-    
-
-
-
-
 
 class DeliveryLocation(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='delivery_location')
@@ -248,7 +242,6 @@ class DeliveryLocation(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     dest_latitude = models.FloatField(null=True, blank=True)
     dest_longitude = models.FloatField(null=True, blank=True)
-
 
     def save(self, *args, **kwargs):
         if not self.share_token:

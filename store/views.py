@@ -9,20 +9,10 @@ import json
 import json as pyjson
 from datetime import date, timedelta
 
-# ============================================================
-# Slot helpers - SIMPLE VERSION (no BookingSlot)
-# ============================================================
-
 def get_next_available_date(from_date=None):
-    """Simple version - next date return karo (no slot check)"""
     if from_date is None:
         from_date = date.today() + timedelta(days=1)
     return from_date
-
-
-# ============================================================
-# Main views
-# ============================================================
 
 def home(request):
     categories = Category.objects.filter(is_active=True)
@@ -74,6 +64,12 @@ def service_detail(request, slug):
         'reviews': reviews, 'avg_rating': round(avg_rating, 1)
     })
 
+# ✅ Water tank custom prices
+TANK_PRICES = {
+    'water-tank-cleaning-service': {1: 500, 2: 900, 3: 1350, 4: 1700},
+    '1000-Liter':                  {1: 700, 2: 1200, 3: 1700},
+}
+
 def add_to_cart(request, service_id):
     if not request.session.session_key:
         request.session.create()
@@ -90,14 +86,23 @@ def add_to_cart(request, service_id):
     except:
         quantity = 1
 
-    item, created = CartItem.objects.get_or_create(cart=cart, service=service)
-    if not created:
-        item.quantity += quantity
+    tank_prices = TANK_PRICES.get(service.slug)
+    if tank_prices:
+        custom_price = tank_prices.get(quantity, list(tank_prices.values())[-1])
+        item, created = CartItem.objects.get_or_create(cart=cart, service=service)
+        item.quantity = 1
+        item.custom_price = custom_price
+        item.save()
     else:
-        item.quantity = quantity
-    item.save()
+        item, created = CartItem.objects.get_or_create(cart=cart, service=service)
+        item.custom_price = None
+        if not created:
+            item.quantity += quantity
+        else:
+            item.quantity = quantity
+        item.save()
 
-    messages.success(request, f'"{service.name}" Added to cart! (x{item.quantity})')
+    messages.success(request, f'"{service.name}" Added to cart! (x{quantity})')
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def remove_from_cart(request, item_id):
@@ -135,7 +140,7 @@ def cart_view(request):
         except:
             pass
     taxable_amount = subtotal - discount
-    gst_amount = 0  # GST service pe nahi lagta — sirf invoice mein dikhta hai
+    gst_amount = 0
     total = taxable_amount
     return render(request, 'store/cart.html', {
         'items': items, 'subtotal': subtotal, 'discount': discount,
@@ -152,10 +157,6 @@ def apply_coupon(request):
         messages.error(request, 'Invalid ya expired coupon code.')
     return redirect('cart')
 
-
-# ============================================================
-# CHECKOUT VIEW — Simple version (no slot lock)
-# ============================================================
 @login_required
 def checkout(request):
     cart = Cart.objects.filter(user=request.user).first()
@@ -178,19 +179,14 @@ def checkout(request):
             pass
 
     taxable = subtotal - discount
-    gst_amount = 0  # GST service pe nahi lagta — sirf invoice mein dikhta hai
+    gst_amount = 0
     total = taxable
     profile = getattr(request.user, 'profile', None)
 
-    # Minimum booking date = kal
     min_date = date.today() + timedelta(days=1)
-    # Maximum booking date = 30 din aage
     max_date = date.today() + timedelta(days=30)
-
-    # Next available date
     next_available = get_next_available_date(min_date)
 
-    # All time slots
     all_time_slots = [
         "08:00 AM - 10:00 AM",
         "10:00 AM - 12:00 PM",
@@ -213,12 +209,10 @@ def checkout(request):
         'today': date.today(),
     }
 
-    # POST: Order place karo
     if request.method == 'POST':
         service_date_str = request.POST.get('service_date') or None
         service_time = request.POST.get('service_time', '').strip()
 
-        # Validation
         if not service_date_str or not service_time:
             messages.error(request, '❌ Selecting both date and time is required!')
             return render(request, 'store/checkout.html', ctx)
@@ -237,7 +231,6 @@ def checkout(request):
             messages.error(request, '❌ Invalid time slot!')
             return render(request, 'store/checkout.html', ctx)
 
-        # Create order (no slot check)
         with transaction.atomic():
             order = Order.objects.create(
                 user=request.user,
@@ -257,16 +250,15 @@ def checkout(request):
                 coupon=coupon_obj,
             )
 
-            # OrderItems save karo
+            # ✅ custom_price se sahi price save hogi
             for item in items:
                 OrderItem.objects.create(
                     order=order,
                     service=item.service,
                     quantity=item.quantity,
-                    price=item.service.get_final_price()
+                    price=item.custom_price if item.custom_price is not None else item.service.get_final_price()
                 )
 
-        # ✅ FIX: GPS mile ya na mile — DeliveryLocation record HAMESHA banega
         dest_lat = request.POST.get('dest_latitude')
         dest_lng = request.POST.get('dest_longitude')
         try:
@@ -281,7 +273,6 @@ def checkout(request):
         except:
             pass
 
-        # Cart clear karo
         cart.items.all().delete()
         if 'coupon' in request.session:
             del request.session['coupon']
@@ -290,7 +281,6 @@ def checkout(request):
         return redirect('order_success', order_id=order.order_id)
 
     return render(request, 'store/checkout.html', ctx)
-
 
 @login_required
 def book_now(request, service_id):
@@ -302,15 +292,23 @@ def book_now(request, service_id):
     except:
         quantity = 1
     cart, _ = Cart.objects.get_or_create(user=request.user)
-    
-    # ✅ Cart clear NAHI karo — sirf is service ka item add/update karo
-    item, created = CartItem.objects.get_or_create(cart=cart, service=service)
-    if not created:
-        item.quantity += quantity  # Already hai toh quantity add karo
+
+    tank_prices = TANK_PRICES.get(service.slug)
+    if tank_prices:
+        custom_price = tank_prices.get(quantity, list(tank_prices.values())[-1])
+        item, created = CartItem.objects.get_or_create(cart=cart, service=service)
+        item.quantity = 1
+        item.custom_price = custom_price
+        item.save()
     else:
-        item.quantity = quantity   # Naya item toh quantity set karo
-    item.save()
-    
+        item, created = CartItem.objects.get_or_create(cart=cart, service=service)
+        item.custom_price = None
+        if not created:
+            item.quantity += quantity
+        else:
+            item.quantity = quantity
+        item.save()
+
     messages.success(request, f'"{service.name}" added to cart!')
     return redirect('checkout')
 
@@ -379,10 +377,6 @@ def search(request):
     ) if q else []
     return render(request, 'store/search.html', {'services': services, 'query': q})
 
-
-# ============================================================
-# Invoice Downloads
-# ============================================================
 import io
 from django.http import FileResponse, HttpResponseForbidden
 from reportlab.lib.pagesizes import A4
@@ -394,7 +388,6 @@ from reportlab.platypus import (
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_RIGHT, TA_CENTER, TA_LEFT
 from reportlab.platypus import KeepTogether
-
 
 @login_required
 def download_invoice(request, order_id):
@@ -437,7 +430,6 @@ def download_invoice(request, order_id):
         except:
             return ""
 
-    # ✅ Invoice mein GST calculate hoga (GST invoice ke liye zaroori hai)
     subtotal   = float(order.subtotal)
     discount   = float(order.discount)
     taxable    = subtotal - discount
@@ -480,7 +472,6 @@ def download_invoice(request, order_id):
         c.restoreState()
 
     y = margin_t
-
     text(W / 2, y - 6*mm, "Invoice", "Helvetica-Bold", 12, align="center")
     y -= 12 * mm
 
@@ -677,10 +668,6 @@ def download_invoice(request, order_id):
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename=f"Invoice_{inv_number}.pdf")
 
-
-# ============================================================
-# Dashboard Order Detail
-# ============================================================
 def dashboard_order_detail(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
     if request.method == 'POST':
@@ -700,27 +687,19 @@ def dashboard_order_detail(request, order_id):
         return redirect('dashboard_order_detail', order_id=order.order_id)
     return render(request, 'dashboard/order_detail.html', {'order': order})
 
-
-
-
-
 def track_order_public(request):
-    """Bina login ke order track karo — sirf order_id se"""
     order = None
     tracking_history = []
     error = None
-
     if request.method == 'POST':
         order_id = request.POST.get('order_id', '').strip().upper()
         if not order_id.startswith('#'):
             order_id = '#' + order_id
-
         try:
             order = Order.objects.get(order_id=order_id)
             tracking_history = order.tracking_history.all()
         except Order.DoesNotExist:
             error = "❌ Invalid Order ID. Please check and try again."
-
     return render(request, 'store/track_order.html', {
         'order': order,
         'tracking_history': tracking_history,
@@ -729,7 +708,6 @@ def track_order_public(request):
 
 @login_required
 def my_order_tracking(request, order_id):
-    """Logged-in user apna order track kare"""
     if not order_id.startswith('#'):
         order_id = '#' + order_id
     order = get_object_or_404(Order, order_id=order_id, user=request.user)
@@ -739,12 +717,10 @@ def my_order_tracking(request, order_id):
         'tracking_history': tracking_history,
     })
 
-
 import secrets
 from django.views.decorators.csrf import csrf_exempt
 
 def delivery_share_link(request, order_id):
-    """Admin ya staff delivery boy ko link bhejega"""
     if not order_id.startswith('#'):
         order_id = '#' + order_id
     order = get_object_or_404(Order, order_id=order_id)
@@ -755,13 +731,11 @@ def delivery_share_link(request, order_id):
     return JsonResponse({'share_url': share_url, 'token': loc.share_token})
 
 def delivery_boy_page(request, token):
-    """Delivery boy yahan apni location share karega"""
     loc = get_object_or_404(DeliveryLocation, share_token=token, is_active=True)
     return render(request, 'store/delivery_boy.html', {'token': token, 'order': loc.order})
 
 @csrf_exempt
 def update_location_api(request, token):
-    """Delivery boy ka GPS yahan aayega"""
     if request.method == 'POST':
         loc = get_object_or_404(DeliveryLocation, share_token=token, is_active=True)
         data = json.loads(request.body)
