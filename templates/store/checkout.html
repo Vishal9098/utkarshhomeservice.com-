@@ -36,13 +36,13 @@ bathroom cleaning, and deep cleaning services in Bhopal.
 <section class="py-5">
   <div class="container">
     <h1 class="fw-bold mb-4"
-    style="font-size:36px;">
+    style="font-size:36px; display:none;">
 
 Secure Cleaning Service Checkout
 
 </h1>
 <p class="text-muted mb-4"
-   style="max-width:900px;line-height:1.9;">
+   style="max-width:900px;line-height:1.9; display:none;">
 
   Complete your home cleaning service booking in Bhopal securely.
   Select your preferred service date,
@@ -81,8 +81,9 @@ Secure Cleaning Service Checkout
               <input type="text" name="name" class="form-control" value="{{ user.get_full_name }}" required>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Email *</label>
-              <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+              <label class="form-label fw-semibold">Email</label>
+              <input type="email" name="email" class="form-control" value="{{ user.email }}">
+              
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">Phone *</label>
@@ -99,9 +100,9 @@ Secure Cleaning Service Checkout
               <textarea name="address" class="form-control" rows="2" required>{% if profile %}{{ profile.address }}{% endif %}</textarea>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Pincode *</label>
+              <label class="form-label fw-semibold">Pincode</label>
               <input type="text" name="pincode" class="form-control"
-                     value="{% if profile %}{{ profile.pincode }}{% endif %}" required>
+              value="{% if profile %}{{ profile.pincode }}{% endif %}">
             </div>
           </div>
         </div>
@@ -322,8 +323,9 @@ if (navigator.geolocation) {
   document.getElementById('gps-text').textContent = '⚠️Your browser does not support location services';
 }
 </script>
+
 <!-- FAQ SECTION -->
-<section class="py-5 bg-light">
+<section class="py-5 bg-light" style="display:none;">
 
   <div class="container">
 
@@ -376,7 +378,8 @@ if (navigator.geolocation) {
   </div>
 
 </section>
-<section class="py-5 bg-light">
+
+<section class="py-5 bg-light" style="display:none;">
 
   <div class="container text-center">
 

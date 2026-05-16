@@ -133,7 +133,9 @@ class Order(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.order_id:
-            self.order_id = '#' + uuid.uuid4().hex[:8].upper()
+            last = Order.objects.order_by('-id').first()
+            next_num = (last.id + 1) if last else 1
+            self.order_id = f'UTKARSH{next_num:03d}'
         super().save(*args, **kwargs)
 
     def __str__(self):

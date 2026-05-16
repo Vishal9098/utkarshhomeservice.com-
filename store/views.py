@@ -437,8 +437,7 @@ def download_invoice(request, order_id):
     total      = taxable + gst_amount
     received   = total if order.payment_status else 0.0
     balance    = total - received
-    inv_number = order.order_id.replace('#', '')
-
+    inv_number = order.order_id
     buffer = io.BytesIO()
     W, H   = A4
     c = rl_canvas.Canvas(buffer, pagesize=A4)
@@ -589,18 +588,19 @@ def download_invoice(request, order_id):
 
     rx2 = margin_l + summary_left_w
     rw2 = summary_right_w
-    for offset in [8, 14, 20, 25]:
+    for offset in [9, 15, 21]:
         c.setLineWidth(0.3)
         c.line(rx2, y - offset*mm, rx2 + rw2, y - offset*mm)
+   
     lx = rx2 + 2*mm
     vx = rx2 + rw2 - 2*mm
     rows_amounts = [
         ("Amounts",    "",                      3),
         ("Sub Total",  f"Rs. {taxable:,.2f}",   7),
-        ("Tax (18%)",  f"Rs. {gst_amount:,.2f}", 11),
-        ("Total",      f"Rs. {total:,.2f}",     16),
-        ("Received",   f"Rs. {received:,.2f}",  21),
-        ("Balance",    f"Rs. {balance:,.2f}",   26),
+        ("Tax (18%)",  f"Rs. {gst_amount:,.2f}", 12),
+        ("Total",      f"Rs. {total:,.2f}",     17),
+        ("Received",   f"Rs. {received:,.2f}",  22),
+        ("Balance",    f"Rs. {balance:,.2f}",   27),
     ]
     for label, value, offset in rows_amounts:
         fn = "Helvetica-Bold" if label in ("Amounts", "Total") else "Helvetica"
@@ -644,23 +644,15 @@ def download_invoice(request, order_id):
     y -= gst_row_h
 
     footer_h = 35 * mm
-    foot_col  = col_w / 3
-    draw_cell_border(margin_l,              y - footer_h, foot_col, footer_h)
-    draw_cell_border(margin_l + foot_col,   y - footer_h, foot_col, footer_h)
-    draw_cell_border(margin_l + foot_col*2, y - footer_h, foot_col, footer_h)
+    foot_col  = col_w / 2
+    draw_cell_border(margin_l,            y - footer_h, foot_col, footer_h)
+    draw_cell_border(margin_l + foot_col, y - footer_h, foot_col, footer_h)
 
-    bx = margin_l + 2*mm
-    text(bx, y - 4*mm,  "Bank Details", "Helvetica-Bold", 8)
-    text(bx, y - 9*mm,  f"Name: {BANK_NAME}", "Helvetica", 7)
-    text(bx, y - 13*mm, f"Account No.: {BANK_ACCOUNT}", "Helvetica", 7)
-    text(bx, y - 17*mm, f"IFSC code: {BANK_IFSC}", "Helvetica", 7)
-    text(bx, y - 21*mm, f"Account holder: {BANK_HOLDER}", "Helvetica", 7)
-
-    tx2 = margin_l + foot_col + 2*mm
+    tx2 = margin_l + 2*mm
     text(tx2, y - 4*mm, "Terms and conditions", "Helvetica-Bold", 8)
     text(tx2, y - 9*mm, TERMS, "Helvetica", 7.5)
 
-    sx = margin_l + foot_col*2 + 2*mm
+    sx = margin_l + foot_col + 2*mm
     text(sx, y - 4*mm,  f"For: {COMPANY_NAME[:25]}", "Helvetica-Bold", 7)
     text(sx, y - 25*mm, "Authorized Signatory", "Helvetica-Bold", 7.5)
 
