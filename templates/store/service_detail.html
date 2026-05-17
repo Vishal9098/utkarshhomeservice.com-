@@ -191,6 +191,19 @@
 {% endblock %}
 
 {% block content %}
+
+<!-- ✅ Meta Pixel: ViewContent Event -->
+<script>
+fbq('track', 'ViewContent', {
+  content_name: '{{ service.name }}',
+  content_category: '{{ service.category.name }}',
+  content_ids: ['{{ service.id }}'],
+  content_type: 'service',
+  value: {{ service.get_final_price }},
+  currency: 'INR'
+});
+</script>
+
 <div class="breadcrumb-section">
   <div class="container">
     <ol class="breadcrumb mb-0">
@@ -279,7 +292,6 @@
         <span class="text-muted">({{ reviews.count }} reviews)</span>
       </div>
 
-      <!-- ✅ WATER TANK 500L — Price Table Mobile -->
       {% if service.slug == 'water-tank-cleaning-service' %}
       <div class="mb-3">
         <span class="tank-price-label">Starting from</span>
@@ -333,7 +345,6 @@
         <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-phone text-success"></i><small>24/7 Support</small></div></div>
       </div>
 
-      <!-- ✅ WATER TANK 1000L — Price Table Mobile -->
       {% elif service.slug == '1000-Liter' %}
       <div class="mb-3">
         <span class="tank-price-label">Starting from</span>
@@ -381,7 +392,6 @@
         <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-phone text-success"></i><small>24/7 Support</small></div></div>
       </div>
 
-      <!-- ✅ NORMAL SERVICE -->
       {% else %}
       <div class="mb-3">
         <span style="font-size:32px;font-weight:800;color:var(--primary);">₹{{ service.get_final_price }}</span>
@@ -397,7 +407,6 @@
 
       <div class="my-3">
 
-        <!-- +/- sirf Sofa, Chair, Cushion ke liye -->
         {% if service.category.slug == 'sofa-cleaning' or service.slug == 'chair-cleaning' or service.slug == 'Cushions-Cleaning' %}
         <div class="d-flex align-items-center gap-2 mb-3">
           {% if service.category.slug == 'sofa-cleaning' %}
@@ -415,7 +424,6 @@
           </div>
         </div>
         {% else %}
-        <!-- Baaki services ke liye quantity=1 fixed, hidden -->
         <input type="hidden" id="qty-input" value="1">
         {% endif %}
 
@@ -436,8 +444,10 @@
           </div>
         </div>
 
+        <!-- ✅ Meta Pixel: AddToCart — Add to Cart button pe -->
         <div class="d-flex gap-3 mb-4">
-          <form method="GET" action="{% url 'add_to_cart' service.id %}" id="cart-form">
+          <form method="GET" action="{% url 'add_to_cart' service.id %}" id="cart-form"
+                onsubmit="fbq('track','AddToCart',{content_name:'{{ service.name }}',content_ids:['{{ service.id }}'],value:{{ service.get_final_price }},currency:'INR'});">
             <input type="hidden" name="quantity" id="cart-qty" value="1">
             <button type="submit" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
               <i class="fas fa-cart-plus me-2"></i>Add to Cart
@@ -496,7 +506,6 @@
             <span class="text-muted">({{ reviews.count }} reviews)</span>
           </div>
 
-          <!-- ✅ WATER TANK 500L — Desktop Price Table -->
           {% if service.slug == 'water-tank-cleaning-service' %}
           <div class="mb-3">
             <span class="tank-price-label">Starting from</span>
@@ -550,7 +559,6 @@
             <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-phone text-success"></i><small>24/7 Support</small></div></div>
           </div>
 
-          <!-- ✅ WATER TANK 1000L — Desktop Price Table -->
           {% elif service.slug == '1000-Liter' %}
           <div class="mb-3">
             <span class="tank-price-label">Starting from</span>
@@ -598,7 +606,6 @@
             <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-phone text-success"></i><small>24/7 Support</small></div></div>
           </div>
 
-          <!-- ✅ NORMAL SERVICE — Desktop -->
           {% else %}
           <div class="mb-3">
             <span style="font-size:36px;font-weight:800;color:var(--primary);">₹{{ service.get_final_price }}</span>
@@ -614,7 +621,6 @@
 
           <div class="my-4">
 
-            <!-- +/- sirf Sofa, Chair, Cushion ke liye — Desktop -->
             {% if service.category.slug == 'sofa-cleaning' or service.slug == 'chair-cleaning' or service.slug == 'Cushions-Cleaning' %}
             <div class="d-flex align-items-center gap-2 mb-3">
               {% if service.category.slug == 'sofa-cleaning' %}
@@ -632,7 +638,6 @@
               </div>
             </div>
             {% else %}
-            <!-- Baaki services ke liye quantity=1 fixed, hidden -->
             <input type="hidden" id="qty-input-d" value="1">
             {% endif %}
 
@@ -653,8 +658,10 @@
               </div>
             </div>
 
+            <!-- ✅ Meta Pixel: AddToCart — Desktop Add to Cart button pe -->
             <div class="d-flex gap-3 mb-4">
-              <form method="GET" action="{% url 'add_to_cart' service.id %}" id="cart-form-d">
+              <form method="GET" action="{% url 'add_to_cart' service.id %}" id="cart-form-d"
+                    onsubmit="fbq('track','AddToCart',{content_name:'{{ service.name }}',content_ids:['{{ service.id }}'],value:{{ service.get_final_price }},currency:'INR'});">
                 <input type="hidden" name="quantity" id="cart-qty-d" value="1">
                 <button type="submit" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
                   <i class="fas fa-cart-plus me-2"></i>Add to Cart

@@ -72,8 +72,16 @@ def user_logout(request):
 def forgot_password(request):
     if request.method == 'POST':
         email = request.POST.get('email', '').strip()
+
+        # FIX: .get() ki jagah .filter().first() use kiya
+        # Taaki duplicate users hone par bhi error na aaye
+        user = User.objects.filter(email=email).first()
+
+        if not user:
+            messages.error(request, 'No account found with this email address.')
+            return render(request, 'accounts/forgot_password.html')
+
         try:
-            user = User.objects.get(email=email)
             # Generate random token
             token = get_random_string(32)
             # Token profile mein save karo
@@ -93,8 +101,8 @@ def forgot_password(request):
             messages.success(request, 'Password reset link has been sent to your email.')
             return redirect('login')
 
-        except User.DoesNotExist:
-            messages.error(request, 'No account found with this email address.')
+        except Exception as e:
+            messages.error(request, 'Something went wrong. Please try again.')
 
     return render(request, 'accounts/forgot_password.html')
 

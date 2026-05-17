@@ -32,8 +32,6 @@ and deep cleaning services in Bhopal.
         <div class="card border-0 shadow-sm p-4 h-100">
           <h5 class="fw-bold mb-4">Contect Info</h5>
           <div class="d-flex gap-3 mb-4"><div style="width:50px;height:50px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-phone" style="color:var(--primary);"></i></div><div><strong>Phone</strong><br><a href="tel:+917806061048" class="text-decoration-none text-muted">+91-7806061048</a></div></div>
-          <!-- <div class="d-flex gap-3 mb-4"><div style="width:50px;height:50px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-phone" style="color:var(--primary);"></i></div><div><strong>Phone</strong><br><a href="tel:+916267731191" class="text-decoration-none text-muted">+91-6267731191</a></div></div> -->
-
           <div class="d-flex gap-3 mb-4"><div style="width:50px;height:50px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-envelope" style="color:var(--primary);"></i></div><div><strong>Email</strong><br><small class="text-muted">support@utkarshcleaninghomeservices@gmail.com</small></div></div>
           <div class="d-flex gap-3 mb-4"><div style="width:50px;height:50px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-map-marker-alt" style="color:var(--primary);"></i></div><div><strong>Address</strong><br><span class="text-muted">Shop No 3/2 Sanskaar Bhawan
 Narela Sankri, Bhopal, Madhya Pradesh</span></div></div>
@@ -43,7 +41,8 @@ Narela Sankri, Bhopal, Madhya Pradesh</span></div></div>
       <div class="col-lg-8">
         <div class="card border-0 shadow-sm p-4">
           <h5 class="fw-bold mb-4">Send us a Message</h5>
-          <form method="POST">{% csrf_token %}
+          <!-- ✅ Meta Pixel: Lead Event — form submit hone par fire hoga -->
+          <form method="POST" onsubmit="trackLead()">{% csrf_token %}
             <div class="row g-3">
               <div class="col-md-6"><label class="form-label fw-semibold">Your Name *</label><input type="text" name="name" class="form-control" required></div>
               <div class="col-md-6"><label class="form-label fw-semibold">Email *</label><input type="email" name="email" class="form-control" required></div>
@@ -57,10 +56,6 @@ Narela Sankri, Bhopal, Madhya Pradesh</span></div></div>
     </div>
   </div>
 </section>
-
-
-
-
 
 <section class="py-5">
   <div class="container">
@@ -69,9 +64,7 @@ Narela Sankri, Bhopal, Madhya Pradesh</span></div></div>
       <div class="col-lg-4">
         <div class="card border-0 shadow-sm p-4 h-100">
           <h5 class="fw-bold mb-4">Contact Information</h5>
-          <!-- <div class="d-flex gap-3 mb-4"><div style="width:50px;height:50px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-phone" style="color:var(--primary);"></i></div><div><strong>Phone</strong><br><a href="tel:+917806061048" class="text-decoration-none text-muted">+91-7806061048</a></div></div> -->
           <div class="d-flex gap-3 mb-4"><div style="width:50px;height:50px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-phone" style="color:var(--primary);"></i></div><div><strong>Phone</strong><br><a href="tel:+916267731191" class="text-decoration-none text-muted">+91-6267731191</a></div></div>
-
           <div class="d-flex gap-3 mb-4"><div style="width:50px;height:50px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-envelope" style="color:var(--primary);"></i></div><div><strong>Email</strong><br><small class="text-muted">utkarshcleaninghomeservices@gmail.com</small></div></div>
           <div class="d-flex gap-3 mb-4"><div style="width:50px;height:50px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-map-marker-alt" style="color:var(--primary);"></i></div><div><strong>Address</strong><br><span class="text-muted">MX 101, Namrata Nagar, Rajharsh Colony, Kolar Rd, Bhopal, Madhya Pradesh 462042, Madhya Pradesh</span></div></div>
           <div class="d-flex gap-3"><div style="width:50px;height:50px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-clock" style="color:var(--primary);"></i></div><div><strong>Working Hours</strong><br><span class="text-muted">Mon-Sun: 8AM - 8PM</span></div></div>
@@ -80,7 +73,8 @@ Narela Sankri, Bhopal, Madhya Pradesh</span></div></div>
       <div class="col-lg-8">
         <div class="card border-0 shadow-sm p-4">
           <h5 class="fw-bold mb-4">Send us a Message</h5>
-          <form method="POST">{% csrf_token %}
+          <!-- ✅ Meta Pixel: Lead Event — dono forms pe lagaya -->
+          <form method="POST" onsubmit="trackLead()">{% csrf_token %}
             <div class="row g-3">
               <div class="col-md-6"><label class="form-label fw-semibold">Your Name *</label><input type="text" name="name" class="form-control" required></div>
               <div class="col-md-6"><label class="form-label fw-semibold">Email *</label><input type="email" name="email" class="form-control" required></div>
@@ -94,13 +88,11 @@ Narela Sankri, Bhopal, Madhya Pradesh</span></div></div>
     </div>
   </div>
 </section>
+
 <!-- GOOGLE MAP -->
 <section class="pb-5">
-
   <div class="container">
-
     <div class="card border-0 shadow-sm overflow-hidden">
-
       <iframe
         src="https://www.google.com/maps/dir/23.5123742,77.0286475/Utkarsh+Cleaning+%26+Home+Services+-+home+cleaning+sofa+water+tank+kitchen+deep+cleaning+In+Bhopal,+MX+101,+Namrata+Nagar,+Rajharsh+Colony,+Kolar+Rd,+Bhopal,+Madhya+Pradesh+462042/@23.3401245,76.8953646,10z/data=!3m1!4b1!4m9!4m8!1m1!4e1!1m5!1m1!1s0x397c43a45b0412af:0x46293e4a1cfa7e90!2m2!1d77.4226143!2d23.1631138?entry=ttu&g_ep=EgoyMDI2MDUwNi4wIKXMDSoASAFQAw%3D%3D"
         width="100%"
@@ -109,115 +101,62 @@ Narela Sankri, Bhopal, Madhya Pradesh</span></div></div>
         allowfullscreen=""
         loading="lazy">
       </iframe>
-
     </div>
-
   </div>
-
 </section>
+
 <section class="py-5 bg-light">
-
   <div class="container">
-
     <div class="row text-center">
-
       <div class="col-md-4 mb-4">
-
         <i class="fas fa-shield-alt fa-3x text-success mb-3"></i>
-
         <h5>Trusted Professionals</h5>
-
-        <p class="text-muted">
-          Verified and experienced cleaning experts.
-        </p>
-
+        <p class="text-muted">Verified and experienced cleaning experts.</p>
       </div>
-
       <div class="col-md-4 mb-4">
-
         <i class="fas fa-clock fa-3x text-primary mb-3"></i>
-
         <h5>On-Time Service</h5>
-
-        <p class="text-muted">
-          Fast and reliable cleaning service in Bhopal.
-        </p>
-
+        <p class="text-muted">Fast and reliable cleaning service in Bhopal.</p>
       </div>
-
       <div class="col-md-4 mb-4">
-
         <i class="fas fa-star fa-3x text-warning mb-3"></i>
-
         <h5>Top Rated Company</h5>
-
-        <p class="text-muted">
-          Trusted by customers across Bhopal.
-        </p>
-
+        <p class="text-muted">Trusted by customers across Bhopal.</p>
       </div>
-
     </div>
-
   </div>
-
 </section>
+
 <!-- FAQ SECTION -->
 <section class="py-5">
-
   <div class="container">
-
     <div class="section-title">
-
       <h2>Frequently Asked Questions</h2>
-
       <div class="title-line"></div>
-
     </div>
-
     <div class="mb-4">
-
-      <h5>
-        Do you provide same-day cleaning service?
-      </h5>
-
-      <p class="text-muted">
-        Yes, same-day service is available in selected areas of Bhopal.
-      </p>
-
+      <h5>Do you provide same-day cleaning service?</h5>
+      <p class="text-muted">Yes, same-day service is available in selected areas of Bhopal.</p>
     </div>
-
     <div class="mb-4">
-
-      <h5>
-        Which cleaning services do you provide?
-      </h5>
-
-      <p class="text-muted">
-        We provide sofa cleaning,
-        bathroom cleaning,
-        kitchen cleaning,
-        carpet cleaning,
-        and deep cleaning services.
-      </p>
-
+      <h5>Which cleaning services do you provide?</h5>
+      <p class="text-muted">We provide sofa cleaning, bathroom cleaning, kitchen cleaning, carpet cleaning, and deep cleaning services.</p>
     </div>
-
     <div class="mb-4">
-
-      <h5>
-        How can I contact Utkarsh Cleaning?
-      </h5>
-
-      <p class="text-muted">
-        You can contact us via phone,
-        WhatsApp,
-        or the contact form.
-      </p>
-
+      <h5>How can I contact Utkarsh Cleaning?</h5>
+      <p class="text-muted">You can contact us via phone, WhatsApp, or the contact form.</p>
     </div>
-
   </div>
-
 </section>
+
+<!-- ✅ Meta Pixel: Lead Tracking Function -->
+<script>
+function trackLead() {
+  fbq('track', 'Lead', {
+    content_name: 'Contact Form',
+    content_category: 'Cleaning Service Inquiry'
+  });
+}
+</script>
+
 {% endblock %}

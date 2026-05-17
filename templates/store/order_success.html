@@ -3,6 +3,17 @@
 {% block content %}
 {% load static %}
 
+<!-- ✅ Meta Pixel: Purchase Event -->
+<script>
+fbq('track', 'Purchase', {
+  value: {{ order.total }},
+  currency: 'INR',
+  content_name: 'Order #{{ order.order_id }}',
+  content_type: 'service',
+  content_ids: ['{{ order.order_id }}']
+});
+</script>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
 
@@ -206,7 +217,6 @@
         </div>
       {% endif %}
 
-      <!-- ✅ TRACK ORDER BUTTON ADDED HERE -->
       <div class="btn-row">
         <a href="{% url 'order_tracking' order.order_id %}" class="btn-my-orders"
            style="background:#1a7a45;">

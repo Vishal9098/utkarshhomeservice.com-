@@ -16,6 +16,19 @@ and securely proceed to checkout with Utkarsh Cleaning Bhopal.
 {% endblock %}
 
 {% block content %}
+
+<!-- ✅ Meta Pixel: AddToCart Event -->
+{% if items %}
+<script>
+fbq('track', 'AddToCart', {
+  value: {{ total }},
+  currency: 'INR',
+  num_items: {{ items|length }},
+  content_type: 'service'
+});
+</script>
+{% endif %}
+
 <!-- CART SEO SCHEMA -->
 <script type="application/ld+json">
 {

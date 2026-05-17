@@ -10,6 +10,17 @@ bathroom cleaning, and deep cleaning services in Bhopal.
 
 {% endblock %}
 {% block content %}
+
+<!-- ✅ Meta Pixel: InitiateCheckout Event -->
+<script>
+fbq('track', 'InitiateCheckout', {
+  value: {{ total }},
+  currency: 'INR',
+  num_items: {{ items|length }},
+  content_type: 'service'
+});
+</script>
+
 <!-- CHECKOUT SEO SCHEMA -->
 <script type="application/ld+json">
 {
