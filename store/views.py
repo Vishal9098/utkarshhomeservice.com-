@@ -412,7 +412,7 @@ def download_invoice(request, order_id):
     COMPANY_GSTIN = "23BPEPN6081G1ZX"
     COMPANY_STATE = "23-Madhya Pradesh"
     TERMS         = "Thank you for doing business with us."
-    HSN_SAC       = "998531"
+    HSN_SAC       = "998533"
 
     def amount_in_words(amount):
         try:

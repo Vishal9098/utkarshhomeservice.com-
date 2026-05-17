@@ -1,228 +1,457 @@
 {% extends 'base.html' %}
-{% block title %}{{ service.name }} - Utkarsh Cleaning{% endblock %}
+{% block title %}
+{% if selected_category %}
+{{ selected_category.name }} Best water tank Cleaning Services in Bhopal | Sofa, Kitchen & Deep Cleaning
+{% else %}
+Best water tank Cleaning Services in Bhopal | Sofa, Kitchen & Deep Cleaning
+{% endif %}
+{% endblock %}
+{% block meta_description %}
+{% if selected_category %}
+Professional {{ selected_category.name }} services in Bhopal with affordable pricing, trained cleaners, advanced equipment, and same-day booking.
+{% else %}
+Book professional home cleaning services in Bhopal including sofa cleaning, kitchen cleaning, bathroom cleaning, carpet cleaning, water tank, and deep cleaning.
+{% endif %}
+{% endblock %}
+{% block extra_css %}
+<style>
+@media (max-width: 991.98px) {
+  .breadcrumb-section { display: none !important; }
+  .page-title-row { display: none !important; }
+  .col-12.col-lg-12 { width: 100% !important; padding-top: 8px !important; }
+  section.py-5 { padding-top: 8px !important; padding-bottom: 8px !important; }
+  .col-6 { flex: 0 0 auto; width: 50% !important; }
+  .card-img-top { height: 130px !important; }
+  .card-body p.text-muted { display: none; }
+  .card-body h6 { font-size: 12px !important; }
+}
+
+.seo-hidden-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ───────── FLOOR MODAL CSS ───────── */
+.floor-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+  animation: overlayFadeIn 0.2s ease;
+}
+.floor-modal-overlay.active { display: flex; }
+@keyframes overlayFadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+.floor-modal-box {
+  background: #fff;
+  border-radius: 20px;
+  width: 92%;
+  max-width: 440px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: modalSlideUp 0.3s cubic-bezier(.34,1.56,.64,1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+@keyframes modalSlideUp {
+  from { transform: translateY(60px) scale(0.95); opacity: 0; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+.floor-modal-header {
+  background: linear-gradient(135deg, #1a3a7c 0%, #2563eb 100%);
+  color: #fff;
+  padding: 20px 24px 16px;
+  text-align: center;
+  position: relative;
+}
+.floor-modal-header .modal-icon { font-size: 32px; margin-bottom: 6px; }
+.floor-modal-header h5 { font-size: 17px; font-weight: 700; margin: 0 0 4px; }
+.floor-modal-header p  { font-size: 13px; opacity: 0.85; margin: 0; }
+.floor-modal-close {
+  position: absolute; top: 12px; right: 14px;
+  background: rgba(255,255,255,0.2); border: none; color: #fff;
+  width: 28px; height: 28px; border-radius: 50%; font-size: 16px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.floor-modal-close:hover { background: rgba(255,255,255,0.35); }
+.floor-modal-body { padding: 16px; }
+.floor-option {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; border: 2px solid #e8edf5;
+  border-radius: 14px; margin-bottom: 10px; cursor: pointer;
+  text-decoration: none; color: inherit;
+  transition: all 0.2s; background: #fafbff;
+}
+.floor-option:hover {
+  border-color: #2563eb; background: #f0f5ff;
+  transform: translateX(3px);
+  box-shadow: 0 4px 16px rgba(37,99,235,0.12);
+  color: inherit; text-decoration: none;
+}
+.floor-option-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: #e8edf5; display: flex; align-items: center;
+  justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+.floor-option:hover .floor-option-icon { background: #dbeafe; }
+.floor-option-info { flex: 1; }
+.floor-option-name  { font-weight: 700; font-size: 14px; color: #1a1a2e; margin: 0 0 2px; }
+.floor-option-desc  { font-size: 11px; color: #888; margin: 0 0 4px; }
+.floor-option-price { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.floor-option-price .final    { font-size: 17px; font-weight: 800; color: #1a3a7c; }
+.floor-option-price .original { font-size: 12px; color: #aaa; text-decoration: line-through; }
+.floor-option-price .badge-off {
+  background: #f0a500; color: #fff; font-size: 10px;
+  font-weight: 700; padding: 2px 7px; border-radius: 4px;
+}
+.floor-option-arrow { color: #cbd5e1; font-size: 20px; flex-shrink: 0; }
+.floor-option:hover .floor-option-arrow { color: #2563eb; }
+.floor-modal-footer { text-align: center; padding: 0 16px 16px; }
+.floor-modal-footer button {
+  background: none; border: none; color: #888;
+  font-size: 13px; cursor: pointer;
+}
+.floor-modal-footer button:hover { color: #333; }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="breadcrumb-section">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Service",
+  "serviceType":"Home Cleaning Services",
+  "provider":{
+    "@type":"LocalBusiness",
+    "name":"Utkarsh Cleaning Services",
+    "areaServed":"Bhopal"
+  },
+  "areaServed":{
+    "@type":"City",
+    "name":"Bhopal"
+  }
+}
+</script>
+
+<div class="breadcrumb-section d-none d-lg-block">
   <div class="container">
     <ol class="breadcrumb mb-0">
-      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-      <li class="breadcrumb-item"><a href="{% url 'all_services' %}">Services</a></li>
-      <li class="breadcrumb-item active">{{ service.name }}</li>
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home Cleaning Services Bhopal</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'all_services' %}">All Services</a></li>
+      {% if selected_category %}
+      <li class="breadcrumb-item active">{{ selected_category.name }}</li>
+      {% endif %}
     </ol>
   </div>
 </div>
+
 <section class="py-5">
   <div class="container">
-    <div class="row g-5">
-      <div class="col-lg-6">
-        {% if service.image %}
-        <img src="{{ service.image.url }}" class="img-fluid rounded-3 shadow" alt="{{ service.name }}" style="width:100%;">
-        {% else %}
-        <div style="height:400px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);display:flex;align-items:center;justify-content:center;border-radius:15px;">
-          <i class="fas fa-spray-can-sparkles fa-5x" style="color:var(--primary);opacity:.5;"></i>
-        </div>
-        {% endif %}
-        {% if service.images.all %}
-        <div class="row g-2 mt-2">
-          {% for img in service.images.all %}
-          <div class="col-3"><img src="{{ img.image.url }}" class="img-fluid rounded" style="height:80px;object-fit:cover;cursor:pointer;"></div>
-          {% endfor %}
-        </div>
-        {% endif %}
-      </div>
-      <div class="col-lg-6">
-        <span class="badge bg-primary mb-2">{{ service.category.name }}</span>
-        <h1 style="font-family:'Libre Baskerville',serif;font-size:32px;font-weight:700;">{{ service.name }}</h1>
-        <div class="d-flex align-items-center gap-3 my-3">
-          <div class="stars fs-5">{% for i in "12345" %}{% if forloop.counter <= service.rating|floatformat:0|add:"0" %}★{% else %}☆{% endif %}{% endfor %}</div>
-          <span style="font-size:18px;font-weight:700;color:var(--primary);">{{ service.rating }}/5</span>
-          <span class="text-muted">({{ reviews.count }} reviews)</span>
-        </div>
-        <div class="mb-3">
-          <span style="font-size:36px;font-weight:800;color:var(--primary);">₹{{ service.get_final_price }}</span>
-          {% if service.discount_price %}
-          <span style="text-decoration:line-through;color:#999;font-size:20px;margin-left:10px;">₹{{ service.price }}</span>
-          <span class="badge bg-warning text-dark ms-2 fs-6">{{ service.get_discount_percent }}% OFF</span>
-          {% endif %}
-        </div>
-        {% if service.duration %}
-        <p class="text-muted"><i class="fas fa-clock me-2" style="color:var(--primary);"></i>Duration: {{ service.duration }}</p>
-        {% endif %}
-        <p>{{ service.short_description }}</p>
+    <div class="row g-4">
+      <div class="col-12">
 
-        {% with slug=service.category.slug %}
-        <div class="my-4">
-          <div class="d-flex align-items-center gap-2 mb-3">
-            {% if slug == 'sofa-cleaning' %}
-              <span class="fw-bold" style="color:var(--primary);">(Per seat)</span>
-            {% elif service.slug == 'Cushions-Cleaning' %}
-              <span class="fw-bold" style="color:var(--primary);">(Per cushion)</span>
+        <div class="page-title-row d-none d-lg-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h1 class="fw-bold mb-0" style="font-size:32px;">
+              {% if selected_category %}{{ selected_category.name }}{% else %}All Services{% endif %}
+            </h1>
+            <small class="text-muted">{{ services.count }} service{{ services.count|pluralize }} mili</small>
+          </div>
+        </div>
+
+        <div class="seo-hidden-text">
+          <p>
+            {% if selected_category %}
+            Book professional {{ selected_category.name }} services in Bhopal
+            with trained cleaners, advanced machines, affordable pricing,
+            and same-day service availability.
             {% else %}
-              <span class="fw-bold" style="color:var(--primary);">Quantity:</span>
+            Utkarsh Cleaning provides trusted home cleaning services in Bhopal
+            including sofa cleaning, kitchen cleaning, bathroom cleaning,
+            carpet cleaning, deep cleaning, office cleaning, and water tank cleaning.
             {% endif %}
-            <div class="d-flex align-items-center border rounded-pill overflow-hidden" style="width:130px;">
-              <button type="button" id="qty-minus" class="btn btn-light border-0 px-3 py-2" style="font-size:18px;font-weight:700;">−</button>
-              <input type="number" id="qty-input" value="1" min="1" max="10" readonly
-                class="form-control border-0 text-center fw-bold p-0" style="width:40px;font-size:16px;box-shadow:none;">
-              <button type="button" id="qty-plus" class="btn btn-light border-0 px-3 py-2" style="font-size:18px;font-weight:700;">+</button>
-            </div>
-          </div>
-
-          <!-- Live Total Amount Box -->
-          <div class="mb-3 p-3 rounded-3" style="background:#f0f7ff;border:1.5px solid #c7d7f5;">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <span class="text-muted" style="font-size:14px;">Unit Price</span>
-              <span style="font-size:14px;">₹{{ service.get_final_price }}</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <span class="text-muted" style="font-size:14px;">Quantity</span>
-              <span id="summary-qty" style="font-size:14px;">1</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <span class="text-muted" style="font-size:14px;">GST (18%)</span>
-              <span id="summary-gst" style="font-size:14px; color:#6c757d;">₹0.00</span>
-            </div>
-            <hr class="my-2">
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="fw-bold" style="font-size:16px;">Total Amount</span>
-              <span id="summary-total" class="fw-bold" style="font-size:20px;color:var(--primary);">₹0.00</span>
-            </div>
-          </div>
-
-          <div class="d-flex gap-3">
-            {% if slug %}
-            <form method="GET" action="{% url 'add_to_cart' service.id %}" id="cart-form">
-              <input type="hidden" name="quantity" id="cart-qty" value="1">
-              <button type="submit" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
-                <i class="fas fa-cart-plus me-2"></i>Add to Cart
-              </button>
-            </form>
-            <form method="GET" action="{% url 'book_now' service.id %}" id="booknow-form">
-              <input type="hidden" name="quantity" id="booknow-qty" value="1">
-              <button type="submit" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">
-                <i class="fas fa-bolt me-2"></i>Book Now
-              </button>
-            </form>
-            {% else %}
-            <a href="{% url 'add_to_cart' service.id %}" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
-              <i class="fas fa-cart-plus me-2"></i>Add to Cart
-            </a>
-            <a href="{% url 'book_now' service.id %}" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">
-              <i class="fas fa-bolt me-2"></i>Book Now
-            </a>
-            {% endif %}
-          </div>
+          </p>
         </div>
 
-        <script>
-          const unitPrice = {{ service.get_final_price }};
-          const GST_RATE  = 0.18;
-
-          const minusBtn   = document.getElementById('qty-minus');
-          const plusBtn    = document.getElementById('qty-plus');
-          const qtyInput   = document.getElementById('qty-input');
-          const cartQty    = document.getElementById('cart-qty');
-          const booknowQty = document.getElementById('booknow-qty');
-          const summaryQty = document.getElementById('summary-qty');
-          const summaryGst = document.getElementById('summary-gst');
-          const summaryTot = document.getElementById('summary-total');
-
-          function updateSummary() {
-            const qty      = parseInt(qtyInput.value);
-            const subtotal = unitPrice * qty;
-            const gst      = subtotal * GST_RATE;
-            const total    = subtotal + gst;
-
-            summaryQty.textContent = qty;
-            summaryGst.textContent = '₹' + gst.toFixed(2);
-            summaryTot.textContent = '₹' + total.toFixed(2);
-            cartQty.value    = qty;
-            booknowQty.value = qty;
-          }
-
-          updateSummary();
-
-          minusBtn.addEventListener('click', () => {
-            let val = parseInt(qtyInput.value);
-            if (val > 1) { qtyInput.value = val - 1; updateSummary(); }
-          });
-          plusBtn.addEventListener('click', () => {
-            let val = parseInt(qtyInput.value);
-            if (val < 10) { qtyInput.value = val + 1; updateSummary(); }
-          });
-        </script>
-        {% endwith %}
-
-        <div class="row g-3 mt-2">
-          <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-shield-check text-success"></i><small>100% Guaranteed</small></div></div>
-          <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-leaf text-success"></i><small>Eco-friendly Products</small></div></div>
-          <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-user-check text-success"></i><small>Trained Professionals</small></div></div>
-          <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-phone text-success"></i><small>24/7 Support</small></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DESCRIPTION TABS -->
-    <div class="mt-5">
-      <ul class="nav nav-tabs" id="myTab">
-        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#desc">Description</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews-tab">Reviews ({{ reviews.count }})</button></li>
-      </ul>
-      <div class="tab-content border border-top-0 p-4 rounded-bottom">
-        <div class="tab-pane active" id="desc">{{ service.description|linebreaks }}</div>
-        <div class="tab-pane" id="reviews-tab">
-          {% if user.is_authenticated %}
-          <div class="card p-3 mb-4 bg-light border-0">
-            <h6 class="fw-bold">Write a Review</h6>
-            <form method="POST" action="{% url 'add_review' service.id %}">{% csrf_token %}
-              <div class="mb-2">
-                <label>Rating:</label>
-                <select name="rating" class="form-select form-select-sm w-auto d-inline-block ms-2">
-                  <option value="5">★★★★★ (5)</option>
-                  <option value="4">★★★★☆ (4)</option>
-                  <option value="3">★★★☆☆ (3)</option>
-                  <option value="2">★★☆☆☆ (2)</option>
-                  <option value="1">★☆☆☆☆ (1)</option>
-                </select>
+        <!-- Cards -->
+        <div class="row g-2">
+          {% for service in services %}
+          {% if service.slug == "second-floor-cleaning" or service.slug == "third-floor-cleaning" or service.slug == "ground-floor-cleaning" or service.slug == "Single-Floor-900-1200" or service.slug == "Double-Floor-900-1200" or service.slug == "3-Floor-900-1200" or service.slug == "Single-Floor-1200-1500" or service.slug == "Double-Floor-1200-1500" or service.slug == "3-Floor-1200-1500" or service.slug == "Single-Floor-1500-2000" or service.slug == "Double-Floor-1500-2000" or service.slug == "3-Floor-1500-2000" or service.slug == "Single-Floor-700" or service.slug == "Double-Floor-700" or service.slug == "3-Floor-700" or service.slug == "Singlee-Floor-900-1200" or service.slug == "Doublee-Floor-900-1200" or service.slug == "3-Floore-900-1200" or service.slug == "Singlee-Floor-1200-1500" or service.slug == "Doublee-Floor-1200-1500" or service.slug == "3-Floore-1200-1500" or service.slug == "Singlee-Floor-1500-2000" or service.slug == "Doublee-Floor-1500-2000" or service.slug == "3-Floore-1500-2000" %}{% else %}
+          {% if not selected_category or selected_category.slug not in 'furnished-apartment-cleaning,unfurnished-apartment-cleaning,kitchen-deep-cleaning,bathroom-deep-cleanings' or service.name != selected_category.name %}
+          <div class="col-6 col-md-4">
+            <div class="card border-0 shadow-sm h-100"
+                 style="border-radius:15px;overflow:hidden;transition:all .3s;"
+                 data-service-slug="{{ service.slug }}">
+              <a href="{% url 'service_detail' service.slug %}" class="text-decoration-none service-card-link">
+                {% if service.image %}
+                  <img src="{{ service.image.url }}" loading="lazy" class="card-img-top" style="height:200px;object-fit:cover;" alt="{{ service.name }} Services in Bhopal">
+                {% else %}
+                  <div style="height:200px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-spray-can-sparkles fa-3x" style="color:var(--primary);opacity:.5;"></i>
+                  </div>
+                {% endif %}
+                <div class="card-body p-3">
+                  <h6 class="fw-bold mb-1" style="color:#1a1a2e;font-size:14px;">{{ service.name }}</h6>
+                  <p class="text-muted mb-2" style="font-size:12px;line-height:1.4;">{{ service.short_description|truncatewords:10 }}</p>
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span style="color:#f0a500;font-size:12px;">
+                      {% for i in "12345" %}{% if forloop.counter <= service.rating|floatformat:0|add:"0" %}★{% else %}☆{% endif %}{% endfor %}
+                      <small class="text-muted">({{ service.reviews.count }})</small>
+                    </span>
+                    {% if service.duration %}
+                    <small class="text-muted"><i class="fas fa-clock me-1"></i>{{ service.duration }}</small>
+                    {% endif %}
+                  </div>
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <span style="color:var(--primary);font-weight:700;font-size:18px;">₹{{ service.get_final_price }}</span>
+                      {% if service.discount_price %}
+                        <span style="text-decoration:line-through;color:#999;font-size:13px;margin-left:4px;">₹{{ service.price }}</span>
+                      {% endif %}
+                    </div>
+                    {% if service.get_discount_percent > 0 %}
+                      <span style="background:#f0a500;color:#fff;font-size:11px;border-radius:4px;padding:2px 6px;font-weight:700;">{{ service.get_discount_percent }}% OFF</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+              <div class="card-footer bg-transparent border-0 p-3 pt-0 d-flex gap-2">
+                <a href="{% url 'service_detail' service.slug %}" class="btn btn-outline-primary btn-sm flex-grow-1 service-card-link" style="border-radius:20px;font-size:12px;">Details</a>
+                <a href="{% url 'add_to_cart' service.id %}" class="btn btn-primary btn-sm flex-grow-1 service-card-link" style="border-radius:20px;font-size:12px;"><i class="fas fa-cart-plus me-1"></i>Cart</a>
               </div>
-              <textarea name="comment" class="form-control mb-2" rows="3" placeholder="Apna experience share karein..." required></textarea>
-              <button type="submit" class="btn btn-primary btn-sm">Submit Review</button>
-            </form>
+            </div>
           </div>
           {% endif %}
-          {% for review in reviews %}
-          <div class="border-bottom pb-3 mb-3">
-            <div class="d-flex justify-content-between">
-              <strong>{{ review.user.username }}</strong>
-              <small class="text-muted">{{ review.created_at|date:"d M Y" }}</small>
-            </div>
-            <div class="stars">{% for i in "12345" %}{% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}{% endfor %}</div>
-            <p class="mt-1 mb-0">{{ review.comment }}</p>
+          {% endif %}
+          {% empty %}
+          <div class="col-12 text-center py-5">
+            <i class="fas fa-search fa-4x text-muted mb-3 d-block"></i>
+            <h5 class="text-muted">Koi service nahi mili</h5>
+            <a href="{% url 'all_services' %}" class="btn btn-primary mt-3" style="border-radius:25px;">All Services Dekhein</a>
           </div>
-          {% empty %}<p class="text-muted">Abhi koi review nahi hai.</p>
           {% endfor %}
         </div>
       </div>
     </div>
 
-    <!-- RELATED SERVICES -->
-    {% if related %}
-    <div class="mt-5">
-      <h4 class="fw-bold mb-4">Related Services</h4>
-      <div class="row g-3">
-        {% for s in related %}
-        <div class="col-lg-3 col-md-6 col-6">
-          <a href="{% url 'service_detail' s.slug %}" class="text-decoration-none">
-            <div class="service-card">
-              {% if s.image %}<img src="{{ s.image.url }}" alt="{{ s.name }}">
-              {% else %}<div style="height:150px;background:linear-gradient(135deg,#e8f0fe,#c7d7f5);display:flex;align-items:center;justify-content:center;"><i class="fas fa-spray-can-sparkles fa-2x" style="color:var(--primary);opacity:.5;"></i></div>{% endif %}
-              <div class="card-body"><p class="card-title mb-1">{{ s.name }}</p><span class="price">₹{{ s.get_final_price }}</span></div>
-            </div>
-          </a>
-        </div>
-        {% endfor %}
-      </div>
+    <div class="seo-hidden-text">
+      <a href="/services/?category=sofa-cleaning">Sofa Cleaning Bhopal</a>
+      <a href="/services/?category=kitchen-deep-cleaning">Kitchen Cleaning Bhopal</a>
+      <a href="/services/?category=Bathroom-deep-cleaning">Bathroom Cleaning Bhopal</a>
+      <a href="/services/?category=water-tank-cleaning">Water tank Cleaning Bhopal</a>
     </div>
-    {% endif %}
   </div>
 </section>
+
+<div class="seo-hidden-text">
+  <div>
+    <h2>Frequently Asked Questions</h2>
+    <h5>Which is the best cleaning company in Bhopal?</h5>
+    <p>Utkarsh Cleaning provides trusted and affordable home cleaning services in Bhopal with trained professionals.</p>
+    <h5>Do you provide same-day cleaning service?</h5>
+    <p>Yes, same-day cleaning service is available in selected areas of Bhopal.</p>
+    <h5>What services do you provide?</h5>
+    <p>We provide sofa cleaning, kitchen cleaning, bathroom cleaning, carpet cleaning, deep cleaning, water tank deep cleaning, and office cleaning services.</p>
+  </div>
+</div>
+
+<div class="seo-hidden-text">
+  <div>
+    <h2>Trusted Cleaning Agency in Bhopal</h2>
+    <p>Utkarsh Cleaning is trusted by hundreds of customers in Bhopal
+      for professional home cleaning, water tank cleaning, sofa cleaning, bathroom cleaning,
+      and deep cleaning services.
+    </p>
+  </div>
+</div>
+
+<!-- FLOOR SELECTION MODAL -->
+<div class="floor-modal-overlay" id="floorModalOverlay">
+  <div class="floor-modal-box">
+    <div class="floor-modal-header">
+      <div class="modal-icon">🏠</div>
+      <button class="floor-modal-close" onclick="closeFloorModal()">✕</button>
+      <h5 id="floorModalTitle">Floor Select Karein</h5>
+      <p id="floorModalSubtitle">Apna floor choose karein</p>
+    </div>
+    <div class="floor-modal-body" id="floorModalBody"></div>
+    <div class="floor-modal-footer">
+      <button onclick="closeFloorModal()">✕ Band Karo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const FLOOR_MODAL_DATA = {
+
+  "up-to-700-sqft": {
+    title: "Up To 700 SQFT — Floor Select Karein",
+    subtitle: "Apna floor choose karein",
+    floors: [
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 4500, original: 4900, slug: "second-floor-cleaning" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 7000, original: 9800, slug: "third-floor-cleaning" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 11500, original: 14700, slug: "ground-floor-cleaning" }
+    ]
+  },
+
+  "900-1200-sqft": {
+    title: "900 - 1200 SQFT — Floor Select Karein",
+    subtitle: "Apna floor choose karein",
+    floors: [
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 7000, original: 8400, slug: "Single-Floor-900-1200" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 13500, original: 16800, slug: "Double-Floor-900-1200" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 21500, original: 25200, slug: "3-Floor-900-1200" }
+    ]
+  },
+
+  "1200-1500-sqft": {
+    title: "1200 - 1500 SQFT — Floor Select Karein",
+    subtitle: "Apna floor choose karein",
+    floors: [
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 9500, original: 10500, slug: "Single-Floor-1200-1500" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 16000, original: 21000, slug: "Double-Floor-1200-1500" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 25500, original: 31500, slug: "3-Floor-1200-1500" }
+    ]
+  },
+
+  "1500-2000-sqft": {
+    title: "1500 - 2000 SQFT — Floor Select Karein",
+    subtitle: "Apna floor choose karein",
+    floors: [
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 12000, original: 14000, slug: "Single-Floor-1500-2000" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 23000, original: 28000, slug: "Double-Floor-1500-2000" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 34000, original: 42000, slug: "3-Floor-1500-2000" }
+    ]
+  },
+
+  "up-to-700-sqfta": {
+    title: "Up To 700 SQFT — Floor Select Karein",
+    subtitle: "Apna floor choose karein",
+    floors: [
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 4500, original: 4900, slug: "Single-Floor-700" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 7000, original: 9800, slug: "Double-Floor-700" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 11500, original: 14700, slug: "3-Floor-700" }
+    ]
+  },
+
+  "900-1200-sqftaa": {
+    title: "900 - 1200 SQFT — Floor Select Karein",
+    subtitle: "Apna floor choose karein",
+    floors: [
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 7000, original: 8400, slug: "Singlee-Floor-900-1200" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 13500, original: 16800, slug: "Doublee-Floor-900-1200" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 21500, original: 25200, slug: "3-Floore-900-1200" }
+    ]
+  },
+
+  "1200-1500-sqftaa": {
+    title: "1200 - 1500 SQFT — Floor Select Karein",
+    subtitle: "Apna floor choose karein",
+    floors: [
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 9500, original: 10500, slug: "Singlee-Floor-1200-1500" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 16000, original: 21000, slug: "Doublee-Floor-1200-1500" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 25500, original: 31500, slug: "3-Floore-1200-1500" }
+    ]
+  },
+
+  "1500-2000-sqftaaa": {
+    title: "1500 - 2000 SQFT — Floor Select Karein",
+    subtitle: "Apna floor choose karein",
+    floors: [
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 12000, original: 14000, slug: "Singlee-Floor-1500-2000" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 23000, original: 28000, slug: "Doublee-Floor-1500-2000" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 34000, original: 42000, slug: "3-Floore-1500-2000" }
+    ]
+  },
+
+  // ════ UNFURNISHED BUNGALOW — 1200-1500 SQFT ═══════════════
+  "1200-1500-sqftaaa": {
+    title: "1200 - 1500 SQFT — Floor Select Karein",
+    subtitle: "Apna floor choose karein",
+    floors: [
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 9500, original: 10500, slug: "Singlee-Floor-1200-1500" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 16000, original: 21000, slug: "Doublee-Floor-1200-1500" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 25500, original: 31500, slug: "3-Floore-1200-1500" }
+    ]
+  }
+
+};
+
+const MODAL_TRIGGER_SLUGS = Object.keys(FLOOR_MODAL_DATA);
+
+function calcDiscount(price, original) {
+  return Math.round((1 - price / original) * 100);
+}
+
+function openFloorModal(slug) {
+  var data = FLOOR_MODAL_DATA[slug];
+  if (!data) return false;
+
+  document.getElementById('floorModalTitle').textContent    = data.title;
+  document.getElementById('floorModalSubtitle').textContent = data.subtitle;
+
+  var html = '';
+  data.floors.forEach(function(f) {
+    var disc = calcDiscount(f.price, f.original);
+    html +=
+      '<a href="/service/' + f.slug + '/" class="floor-option">' +
+        '<div class="floor-option-icon">' + f.icon + '</div>' +
+        '<div class="floor-option-info">' +
+          '<div class="floor-option-name">' + f.name + '</div>' +
+          '<div class="floor-option-desc">' + f.desc + '</div>' +
+          '<div class="floor-option-price">' +
+            '<span class="final">₹' + f.price.toLocaleString('en-IN') + '</span>' +
+            '<span class="original">₹' + f.original.toLocaleString('en-IN') + '</span>' +
+            '<span class="badge-off">' + disc + '% OFF</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="floor-option-arrow">›</div>' +
+      '</a>';
+  });
+
+  document.getElementById('floorModalBody').innerHTML = html;
+  document.getElementById('floorModalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  return true;
+}
+
+function closeFloorModal() {
+  document.getElementById('floorModalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('floorModalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeFloorModal();
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeFloorModal();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.card[data-service-slug]').forEach(function(card) {
+    var slug = card.getAttribute('data-service-slug');
+    if (!MODAL_TRIGGER_SLUGS.includes(slug)) return;
+
+    card.querySelectorAll('.service-card-link').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        openFloorModal(slug);
+      });
+    });
+  });
+});
+</script>
+
 {% endblock %}

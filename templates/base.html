@@ -955,7 +955,7 @@ html, body { font-family: "Libre Baskerville", serif; }
   <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
     <i class="fas fa-home"></i><span>Home</span>
   </a>
-  <a href="{% url 'all_services' %}" class="{% if request.resolver_match.url_name == 'all_services' %}active{% endif %}">
+  <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'all_services' %}active{% endif %}">
     <i class="fas fa-spray-can-sparkles"></i><span>Services</span>
   </a>
   <a href="{% url 'search' %}" class="{% if request.resolver_match.url_name == 'search' %}active{% endif %}">

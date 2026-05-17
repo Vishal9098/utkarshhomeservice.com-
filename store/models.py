@@ -210,6 +210,7 @@ class UserProfile(models.Model):
     pincode = models.CharField(max_length=10, blank=True)
     profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    reset_token = models.CharField(max_length=64, blank=True, default='')
 
     def __str__(self):
         return self.user.username

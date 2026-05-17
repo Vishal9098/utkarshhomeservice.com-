@@ -73,3 +73,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
+
+
+
+
+
+
+
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'vishalsilawat6@gmail.com'
+EMAIL_HOST_PASSWORD = 'ewviprMyermewmya'  # Gmail App Password
+DEFAULT_FROM_EMAIL = 'Utkarsh Cleaning <vishalsilawat6@gmail.com>'

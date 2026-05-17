@@ -25,44 +25,24 @@ Book professional home cleaning services in Bhopal including sofa cleaning, kitc
   .card-body p.text-muted { display: none; }
   .card-body h6 { font-size: 12px !important; }
 }
-
-/* SEO text — Google index kare, user ko na dikhe */
 .seo-hidden-text {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  pointer-events: none;
+  position: absolute; width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; pointer-events: none;
 }
-
-/* ───────── FLOOR MODAL CSS ───────── */
 .floor-modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  z-index: 9999;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(3px);
-  animation: overlayFadeIn 0.2s ease;
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55); z-index: 9999;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(3px); animation: overlayFadeIn 0.2s ease;
 }
 .floor-modal-overlay.active { display: flex; }
-@keyframes overlayFadeIn {
-  from { opacity: 0; } to { opacity: 1; }
-}
+@keyframes overlayFadeIn { from { opacity: 0; } to { opacity: 1; } }
 .floor-modal-box {
-  background: #fff;
-  border-radius: 20px;
-  width: 92%;
-  max-width: 440px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  background: #fff; border-radius: 20px; width: 92%; max-width: 440px;
+  overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   animation: modalSlideUp 0.3s cubic-bezier(.34,1.56,.64,1);
-  max-height: 90vh;
-  overflow-y: auto;
+  max-height: 90vh; overflow-y: auto;
 }
 @keyframes modalSlideUp {
   from { transform: translateY(60px) scale(0.95); opacity: 0; }
@@ -70,10 +50,7 @@ Book professional home cleaning services in Bhopal including sofa cleaning, kitc
 }
 .floor-modal-header {
   background: linear-gradient(135deg, #1a3a7c 0%, #2563eb 100%);
-  color: #fff;
-  padding: 20px 24px 16px;
-  text-align: center;
-  position: relative;
+  color: #fff; padding: 20px 24px 16px; text-align: center; position: relative;
 }
 .floor-modal-header .modal-icon { font-size: 32px; margin-bottom: 6px; }
 .floor-modal-header h5 { font-size: 17px; font-weight: 700; margin: 0 0 4px; }
@@ -91,19 +68,16 @@ Book professional home cleaning services in Bhopal including sofa cleaning, kitc
   display: flex; align-items: center; gap: 14px;
   padding: 14px 16px; border: 2px solid #e8edf5;
   border-radius: 14px; margin-bottom: 10px; cursor: pointer;
-  text-decoration: none; color: inherit;
-  transition: all 0.2s; background: #fafbff;
+  text-decoration: none; color: inherit; transition: all 0.2s; background: #fafbff;
 }
 .floor-option:hover {
-  border-color: #2563eb; background: #f0f5ff;
-  transform: translateX(3px);
-  box-shadow: 0 4px 16px rgba(37,99,235,0.12);
-  color: inherit; text-decoration: none;
+  border-color: #2563eb; background: #f0f5ff; transform: translateX(3px);
+  box-shadow: 0 4px 16px rgba(37,99,235,0.12); color: inherit; text-decoration: none;
 }
 .floor-option-icon {
-  width: 44px; height: 44px; border-radius: 12px;
-  background: #e8edf5; display: flex; align-items: center;
-  justify-content: center; font-size: 20px; flex-shrink: 0;
+  width: 44px; height: 44px; border-radius: 12px; background: #e8edf5;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
 }
 .floor-option:hover .floor-option-icon { background: #dbeafe; }
 .floor-option-info { flex: 1; }
@@ -120,41 +94,29 @@ Book professional home cleaning services in Bhopal including sofa cleaning, kitc
 .floor-option:hover .floor-option-arrow { color: #2563eb; }
 .floor-modal-footer { text-align: center; padding: 0 16px 16px; }
 .floor-modal-footer button {
-  background: none; border: none; color: #888;
-  font-size: 13px; cursor: pointer;
+  background: none; border: none; color: #888; font-size: 13px; cursor: pointer;
 }
 .floor-modal-footer button:hover { color: #333; }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- SERVICE PAGE LOCAL SEO SCHEMA -->
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
   "@type":"Service",
   "serviceType":"Home Cleaning Services",
-  "provider":{
-    "@type":"LocalBusiness",
-    "name":"Utkarsh Cleaning Services",
-    "areaServed":"Bhopal"
-  },
-  "areaServed":{
-    "@type":"City",
-    "name":"Bhopal"
-  }
+  "provider":{"@type":"LocalBusiness","name":"Utkarsh Cleaning Services","areaServed":"Bhopal"},
+  "areaServed":{"@type":"City","name":"Bhopal"}
 }
 </script>
 
-<!-- BREADCRUMB - desktop only -->
 <div class="breadcrumb-section d-none d-lg-block">
   <div class="container">
     <ol class="breadcrumb mb-0">
       <li class="breadcrumb-item"><a href="{% url 'home' %}">Home Cleaning Services Bhopal</a></li>
       <li class="breadcrumb-item"><a href="{% url 'all_services' %}">All Services</a></li>
-      {% if selected_category %}
-      <li class="breadcrumb-item active">{{ selected_category.name }}</li>
-      {% endif %}
+      {% if selected_category %}<li class="breadcrumb-item active">{{ selected_category.name }}</li>{% endif %}
     </ol>
   </div>
 </div>
@@ -164,23 +126,20 @@ Book professional home cleaning services in Bhopal including sofa cleaning, kitc
     <div class="row g-4">
       <div class="col-12">
 
-        <!-- Page title - desktop only -->
         <div class="page-title-row d-none d-lg-flex justify-content-between align-items-center mb-4">
           <div>
             <h1 class="fw-bold mb-0" style="font-size:32px;">
               {% if selected_category %}{{ selected_category.name }}{% else %}All Services{% endif %}
             </h1>
-            <small class="text-muted">{{ services.count }} service{{ services.count|pluralize }} mili</small>
+            <small class="text-muted">{{ services.count }} service{{ services.count|pluralize }} found</small>
           </div>
         </div>
 
-        <!-- SEO INTRO — user ko nahi dikhega, Google index karega -->
         <div class="seo-hidden-text">
           <p>
             {% if selected_category %}
             Book professional {{ selected_category.name }} services in Bhopal
-            with trained cleaners, advanced machines, affordable pricing,
-            and same-day service availability.
+            with trained cleaners, advanced machines, affordable pricing, and same-day service availability.
             {% else %}
             Utkarsh Cleaning provides trusted home cleaning services in Bhopal
             including sofa cleaning, kitchen cleaning, bathroom cleaning,
@@ -189,7 +148,6 @@ Book professional home cleaning services in Bhopal including sofa cleaning, kitc
           </p>
         </div>
 
-        <!-- Cards -->
         <div class="row g-2">
           {% for service in services %}
           {% if service.slug == "second-floor-cleaning" or service.slug == "third-floor-cleaning" or service.slug == "ground-floor-cleaning" or service.slug == "Single-Floor-900-1200" or service.slug == "Double-Floor-900-1200" or service.slug == "3-Floor-900-1200" or service.slug == "Single-Floor-1200-1500" or service.slug == "Double-Floor-1200-1500" or service.slug == "3-Floor-1200-1500" or service.slug == "Single-Floor-1500-2000" or service.slug == "Double-Floor-1500-2000" or service.slug == "3-Floor-1500-2000" or service.slug == "Single-Floor-700" or service.slug == "Double-Floor-700" or service.slug == "3-Floor-700" or service.slug == "Singlee-Floor-900-1200" or service.slug == "Doublee-Floor-900-1200" or service.slug == "3-Floore-900-1200" or service.slug == "Singlee-Floor-1200-1500" or service.slug == "Doublee-Floor-1200-1500" or service.slug == "3-Floore-1200-1500" or service.slug == "Singlee-Floor-1500-2000" or service.slug == "Doublee-Floor-1500-2000" or service.slug == "3-Floore-1500-2000" %}{% else %}
@@ -242,25 +200,23 @@ Book professional home cleaning services in Bhopal including sofa cleaning, kitc
           {% empty %}
           <div class="col-12 text-center py-5">
             <i class="fas fa-search fa-4x text-muted mb-3 d-block"></i>
-            <h5 class="text-muted">Koi service nahi mili</h5>
-            <a href="{% url 'all_services' %}" class="btn btn-primary mt-3" style="border-radius:25px;">All Services Dekhein</a>
+            <h5 class="text-muted">No services found</h5>
+            <a href="{% url 'all_services' %}" class="btn btn-primary mt-3" style="border-radius:25px;">View All Services</a>
           </div>
           {% endfor %}
         </div>
       </div>
     </div>
 
-    <!-- INTERNAL SEO LINKS — hidden from user, indexed by Google -->
     <div class="seo-hidden-text">
       <a href="/services/?category=sofa-cleaning">Sofa Cleaning Bhopal</a>
       <a href="/services/?category=kitchen-deep-cleaning">Kitchen Cleaning Bhopal</a>
       <a href="/services/?category=Bathroom-deep-cleaning">Bathroom Cleaning Bhopal</a>
-      <a href="/services/?category=water-tank-cleaning">Water tank Cleaning Bhopal</a>
+      <a href="/services/?category=water-tank-cleaning">Water Tank Cleaning Bhopal</a>
     </div>
   </div>
 </section>
 
-<!-- FAQ SECTION — hidden from user, indexed by Google -->
 <div class="seo-hidden-text">
   <div>
     <h2>Frequently Asked Questions</h2>
@@ -273,220 +229,124 @@ Book professional home cleaning services in Bhopal including sofa cleaning, kitc
   </div>
 </div>
 
-<!-- Trusted Agency — hidden from user, indexed by Google -->
 <div class="seo-hidden-text">
   <div>
     <h2>Trusted Cleaning Agency in Bhopal</h2>
-    <p>Utkarsh Cleaning is trusted by hundreds of customers in Bhopal
-      for professional home cleaning, water tank cleaning, sofa cleaning, bathroom cleaning,
-      and deep cleaning services.
-    </p>
+    <p>Utkarsh Cleaning is trusted by hundreds of customers in Bhopal for professional home cleaning, water tank cleaning, sofa cleaning, bathroom cleaning, and deep cleaning services.</p>
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════
-     FLOOR SELECTION MODAL
-════════════════════════════════════════════ -->
+<!-- FLOOR SELECTION MODAL -->
 <div class="floor-modal-overlay" id="floorModalOverlay">
   <div class="floor-modal-box">
     <div class="floor-modal-header">
       <div class="modal-icon">🏠</div>
       <button class="floor-modal-close" onclick="closeFloorModal()">✕</button>
-      <h5 id="floorModalTitle">Floor Select Karein</h5>
-      <p id="floorModalSubtitle">Apna floor choose karein</p>
+      <h5 id="floorModalTitle">Select Floor</h5>
+      <p id="floorModalSubtitle">Choose your floor option</p>
     </div>
     <div class="floor-modal-body" id="floorModalBody"></div>
     <div class="floor-modal-footer">
-      <button onclick="closeFloorModal()">✕ Band Karo</button>
+      <button onclick="closeFloorModal()">✕ Close</button>
     </div>
   </div>
 </div>
 
-
 <script>
-// ════════════════════════════════════════════════════════════
-// FLOOR MODAL DATA — ALL SLUGS CONFIRMED ✅
-// ════════════════════════════════════════════════════════════
 const FLOOR_MODAL_DATA = {
 
-  // ── UP TO 700 SQFT ──────────────────────────────────────
   "up-to-700-sqft": {
-    title: "Up To 700 SQFT — Floor Select Karein",
-    subtitle: "Apna floor choose karein",
+    title: "Up To 700 SQFT — Select Floor",
+    subtitle: "Choose your floor option",
     floors: [
-      {
-        icon: "🏠",
-        name: "Single Floor Cleaning",
-        desc: "Ek floor ki complete cleaning",
-        price: 4500,
-        original: 4900,
-        slug: "second-floor-cleaning"
-      },
-      {
-        icon: "🏢",
-        name: "Double Floor Cleaning",
-        desc: "Do floor ki complete cleaning",
-        price: 7000,
-        original: 9800,
-        slug: "third-floor-cleaning"
-      },
-      {
-        icon: "🏙️",
-        name: "3 Floor Cleaning",
-        desc: "Teen floor ki complete cleaning",
-        price: 11500,
-        original: 14700,
-        slug: "ground-floor-cleaning"
-      }
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Complete cleaning of one floor", price: 4500, original: 4900, slug: "second-floor-cleaning" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Complete cleaning of two floors", price: 7000, original: 9800, slug: "third-floor-cleaning" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Complete cleaning of three floors", price: 11500, original: 14700, slug: "ground-floor-cleaning" }
     ]
   },
 
-  // ── 900 - 1200 SQFT ─────────────────────────────────────
   "900-1200-sqft": {
-    title: "900 - 1200 SQFT — Floor Select Karein",
-    subtitle: "Apna floor choose karein",
+    title: "900 - 1200 SQFT — Select Floor",
+    subtitle: "Choose your floor option",
     floors: [
-      {
-        icon: "🏠",
-        name: "Single Floor Cleaning",
-        desc: "Ek floor ki complete cleaning",
-        price: 7000,
-        original: 8400,
-        slug: "Single-Floor-900-1200"
-      },
-      {
-        icon: "🏢",
-        name: "Double Floor Cleaning",
-        desc: "Do floor ki complete cleaning",
-        price: 13500,
-        original: 16800,
-        slug: "Double-Floor-900-1200"
-      },
-      {
-        icon: "🏙️",
-        name: "3 Floor Cleaning",
-        desc: "Teen floor ki complete cleaning",
-        price: 21500,
-        original: 25200,
-        slug: "3-Floor-900-1200"
-      }
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Complete cleaning of one floor", price: 7000, original: 8400, slug: "Single-Floor-900-1200" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Complete cleaning of two floors", price: 13500, original: 16800, slug: "Double-Floor-900-1200" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Complete cleaning of three floors", price: 21500, original: 25200, slug: "3-Floor-900-1200" }
     ]
   },
 
-  // ── 1200 - 1500 SQFT ────────────────────────────────────
   "1200-1500-sqft": {
-    title: "1200 - 1500 SQFT — Floor Select Karein",
-    subtitle: "Apna floor choose karein",
+    title: "1200 - 1500 SQFT — Select Floor",
+    subtitle: "Choose your floor option",
     floors: [
-      {
-        icon: "🏠",
-        name: "Single Floor Cleaning",
-        desc: "Ek floor ki complete cleaning",
-        price: 9500,
-        original: 10500,
-        slug: "Single-Floor-1200-1500"
-      },
-      {
-        icon: "🏢",
-        name: "Double Floor Cleaning",
-        desc: "Do floor ki complete cleaning",
-        price: 16000,
-        original: 21000,
-        slug: "Double-Floor-1200-1500"
-      },
-      {
-        icon: "🏙️",
-        name: "3 Floor Cleaning",
-        desc: "Teen floor ki complete cleaning",
-        price: 25500,
-        original: 31500,
-        slug: "3-Floor-1200-1500"
-      }
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Complete cleaning of one floor", price: 9500, original: 10500, slug: "Single-Floor-1200-1500" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Complete cleaning of two floors", price: 16000, original: 21000, slug: "Double-Floor-1200-1500" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Complete cleaning of three floors", price: 25500, original: 31500, slug: "3-Floor-1200-1500" }
     ]
   },
 
-  // ── 1500 - 2000 SQFT ────────────────────────────────────
   "1500-2000-sqft": {
-    title: "1500 - 2000 SQFT — Floor Select Karein",
-    subtitle: "Apna floor choose karein",
+    title: "1500 - 2000 SQFT — Select Floor",
+    subtitle: "Choose your floor option",
     floors: [
-      {
-        icon: "🏠",
-        name: "Single Floor Cleaning",
-        desc: "Ek floor ki complete cleaning",
-        price: 12000,
-        original: 14000,
-        slug: "Single-Floor-1500-2000"
-      },
-      {
-        icon: "🏢",
-        name: "Double Floor Cleaning",
-        desc: "Do floor ki complete cleaning",
-        price: 23000,
-        original: 28000,
-        slug: "Double-Floor-1500-2000"
-      },
-      {
-        icon: "🏙️",
-        name: "3 Floor Cleaning",
-        desc: "Teen floor ki complete cleaning",
-        price: 34000,
-        original: 42000,
-        slug: "3-Floor-1500-2000"
-      }
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Complete cleaning of one floor", price: 12000, original: 14000, slug: "Single-Floor-1500-2000" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Complete cleaning of two floors", price: 23000, original: 28000, slug: "Double-Floor-1500-2000" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Complete cleaning of three floors", price: 34000, original: 42000, slug: "3-Floor-1500-2000" }
     ]
   },
 
-  // ════ UNFURNISHED BUNGALOW — UP TO 700 SQFT ════════════
   "up-to-700-sqfta": {
-    title: "Up To 700 SQFT — Floor Select Karein",
-    subtitle: "Apna floor choose karein",
+    title: "Up To 700 SQFT — Select Floor",
+    subtitle: "Choose your floor option",
     floors: [
-      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 4500, original: 4900, slug: "Single-Floor-700" },
-      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 7000, original: 9800, slug: "Double-Floor-700" },
-      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 11500, original: 14700, slug: "3-Floor-700" }
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Complete cleaning of one floor", price: 4500, original: 4900, slug: "Single-Floor-700" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Complete cleaning of two floors", price: 7000, original: 9800, slug: "Double-Floor-700" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Complete cleaning of three floors", price: 11500, original: 14700, slug: "3-Floor-700" }
     ]
   },
 
-  // ════ UNFURNISHED — 900-1200 SQFT ══════════════════════
   "900-1200-sqftaa": {
-    title: "900 - 1200 SQFT — Floor Select Karein",
-    subtitle: "Apna floor choose karein",
+    title: "900 - 1200 SQFT — Select Floor",
+    subtitle: "Choose your floor option",
     floors: [
-      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 7000, original: 8400, slug: "Singlee-Floor-900-1200" },
-      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 13500, original: 16800, slug: "Doublee-Floor-900-1200" },
-      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 21500, original: 25200, slug: "3-Floore-900-1200" }
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Complete cleaning of one floor", price: 7000, original: 8400, slug: "Singlee-Floor-900-1200" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Complete cleaning of two floors", price: 13500, original: 16800, slug: "Doublee-Floor-900-1200" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Complete cleaning of three floors", price: 21500, original: 25200, slug: "3-Floore-900-1200" }
     ]
   },
 
-  // ════ UNFURNISHED — 1200-1500 SQFT ═════════════════════
   "1200-1500-sqftaa": {
-    title: "1200 - 1500 SQFT — Floor Select Karein",
-    subtitle: "Apna floor choose karein",
+    title: "1200 - 1500 SQFT — Select Floor",
+    subtitle: "Choose your floor option",
     floors: [
-      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 9500, original: 10500, slug: "Singlee-Floor-1200-1500" },
-      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 16000, original: 21000, slug: "Doublee-Floor-1200-1500" },
-      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 25500, original: 31500, slug: "3-Floore-1200-1500" }
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Complete cleaning of one floor", price: 9500, original: 10500, slug: "Singlee-Floor-1200-1500" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Complete cleaning of two floors", price: 16000, original: 21000, slug: "Doublee-Floor-1200-1500" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Complete cleaning of three floors", price: 25500, original: 31500, slug: "3-Floore-1200-1500" }
     ]
   },
 
-  // ════ UNFURNISHED — 1500-2000 SQFT ═════════════════════
   "1500-2000-sqftaaa": {
-    title: "1500 - 2000 SQFT — Floor Select Karein",
-    subtitle: "Apna floor choose karein",
+    title: "1500 - 2000 SQFT — Select Floor",
+    subtitle: "Choose your floor option",
     floors: [
-      { icon: "🏠", name: "Single Floor Cleaning", desc: "Ek floor ki complete cleaning", price: 12000, original: 14000, slug: "Singlee-Floor-1500-2000" },
-      { icon: "🏢", name: "Double Floor Cleaning", desc: "Do floor ki complete cleaning", price: 23000, original: 28000, slug: "Doublee-Floor-1500-2000" },
-      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Teen floor ki complete cleaning", price: 34000, original: 42000, slug: "3-Floore-1500-2000" }
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Complete cleaning of one floor", price: 12000, original: 14000, slug: "Singlee-Floor-1500-2000" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Complete cleaning of two floors", price: 23000, original: 28000, slug: "Doublee-Floor-1500-2000" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Complete cleaning of three floors", price: 34000, original: 42000, slug: "3-Floore-1500-2000" }
+    ]
+  },
+
+  "1200-1500-sqftaaa": {
+    title: "1200 - 1500 SQFT — Select Floor",
+    subtitle: "Choose your floor option",
+    floors: [
+      { icon: "🏠", name: "Single Floor Cleaning", desc: "Complete cleaning of one floor", price: 9500, original: 10500, slug: "Singlee-Floor-1200-1500" },
+      { icon: "🏢", name: "Double Floor Cleaning", desc: "Complete cleaning of two floors", price: 16000, original: 21000, slug: "Doublee-Floor-1200-1500" },
+      { icon: "🏙️", name: "3 Floor Cleaning", desc: "Complete cleaning of three floors", price: 25500, original: 31500, slug: "3-Floore-1200-1500" }
     ]
   }
 
 };
 
-// ════════════════════════════════════════════════════════════
-// MODAL LOGIC
-// ════════════════════════════════════════════════════════════
 const MODAL_TRIGGER_SLUGS = Object.keys(FLOOR_MODAL_DATA);
 
 function calcDiscount(price, original) {
@@ -496,10 +356,8 @@ function calcDiscount(price, original) {
 function openFloorModal(slug) {
   var data = FLOOR_MODAL_DATA[slug];
   if (!data) return false;
-
   document.getElementById('floorModalTitle').textContent    = data.title;
   document.getElementById('floorModalSubtitle').textContent = data.subtitle;
-
   var html = '';
   data.floors.forEach(function(f) {
     var disc = calcDiscount(f.price, f.original);
@@ -518,7 +376,6 @@ function openFloorModal(slug) {
         '<div class="floor-option-arrow">›</div>' +
       '</a>';
   });
-
   document.getElementById('floorModalBody').innerHTML = html;
   document.getElementById('floorModalOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -542,7 +399,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.card[data-service-slug]').forEach(function(card) {
     var slug = card.getAttribute('data-service-slug');
     if (!MODAL_TRIGGER_SLUGS.includes(slug)) return;
-
     card.querySelectorAll('.service-card-link').forEach(function(link) {
       link.addEventListener('click', function(e) {
         e.preventDefault();
