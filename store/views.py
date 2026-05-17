@@ -188,7 +188,6 @@ def checkout(request):
     next_available = get_next_available_date(min_date)
 
     all_time_slots = [
-        "08:00 AM - 10:00 AM",
         "10:00 AM - 12:00 PM",
         "12:00 PM - 02:00 PM",
         "02:00 PM - 04:00 PM",
@@ -412,10 +411,6 @@ def download_invoice(request, order_id):
     COMPANY_EMAIL = "utkarshcleaninghomeservices@gmail.com"
     COMPANY_GSTIN = "23BPEPN6081G1ZX"
     COMPANY_STATE = "23-Madhya Pradesh"
-    BANK_NAME     = "CENTRAL BANK OF INDIA, NARELA SHANKARI"
-    BANK_ACCOUNT  = "5924306353"
-    BANK_IFSC     = "CBIN0282171"
-    BANK_HOLDER   = "NARESH"
     TERMS         = "Thank you for doing business with us."
     HSN_SAC       = "998531"
 
@@ -432,11 +427,12 @@ def download_invoice(request, order_id):
 
     subtotal   = float(order.subtotal)
     discount   = float(order.discount)
-    taxable    = subtotal - discount
-    gst_amount = round(taxable * 18 / 100, 2)
-    total      = taxable + gst_amount
+    total      = round(subtotal - discount, 2)
+    taxable    = round(total / 1.18, 2)
+    gst_amount = round(total - taxable, 2)
     received   = total if order.payment_status else 0.0
     balance    = total - received
+
     inv_number = order.order_id
     buffer = io.BytesIO()
     W, H   = A4

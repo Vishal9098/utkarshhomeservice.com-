@@ -381,7 +381,7 @@
         <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-phone text-success"></i><small>24/7 Support</small></div></div>
       </div>
 
-      <!-- ✅ NORMAL SERVICE — Original layout -->
+      <!-- ✅ NORMAL SERVICE -->
       {% else %}
       <div class="mb-3">
         <span style="font-size:32px;font-weight:800;color:var(--primary);">₹{{ service.get_final_price }}</span>
@@ -395,15 +395,17 @@
       {% endif %}
       <p>{{ service.short_description }}</p>
 
-      {% with slug=service.category.slug %}
       <div class="my-3">
+
+        <!-- +/- sirf Sofa, Chair, Cushion ke liye -->
+        {% if service.category.slug == 'sofa-cleaning' or service.slug == 'chair-cleaning' or service.slug == 'Cushions-Cleaning' %}
         <div class="d-flex align-items-center gap-2 mb-3">
-          {% if slug == 'sofa-cleaning' %}
+          {% if service.category.slug == 'sofa-cleaning' %}
             <span class="fw-bold" style="color:var(--primary);">(Per seat)</span>
           {% elif service.slug == 'Cushions-Cleaning' %}
             <span class="fw-bold" style="color:var(--primary);">(Per cushion)</span>
-          {% else %}
-            <span class="fw-bold" style="color:var(--primary);">Quantity:</span>
+          {% elif service.slug == 'chair-cleaning' %}
+            <span class="fw-bold" style="color:var(--primary);">(Per chair)</span>
           {% endif %}
           <div class="qty-wrapper d-flex align-items-center border rounded-pill overflow-hidden" style="width:140px;">
             <button type="button" id="qty-minus" class="btn btn-light border-0 px-3 py-2" style="font-size:18px;font-weight:700;">−</button>
@@ -412,6 +414,11 @@
             <button type="button" id="qty-plus" class="btn btn-light border-0 px-3 py-2" style="font-size:18px;font-weight:700;">+</button>
           </div>
         </div>
+        {% else %}
+        <!-- Baaki services ke liye quantity=1 fixed, hidden -->
+        <input type="hidden" id="qty-input" value="1">
+        {% endif %}
+
         <div class="live-total-box mb-3 p-3 rounded-3" style="background:#f0f7ff;border:1.5px solid #c7d7f5;">
           <div class="d-flex justify-content-between align-items-center mb-1">
             <span class="text-muted" style="font-size:14px;">Unit Price</span>
@@ -428,8 +435,8 @@
             <span id="summary-total" class="fw-bold total-amount" style="font-size:20px;color:var(--primary);">₹0.00</span>
           </div>
         </div>
+
         <div class="d-flex gap-3 mb-4">
-          {% if slug %}
           <form method="GET" action="{% url 'add_to_cart' service.id %}" id="cart-form">
             <input type="hidden" name="quantity" id="cart-qty" value="1">
             <button type="submit" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
@@ -442,15 +449,8 @@
               <i class="fas fa-bolt me-2"></i>Book Now
             </button>
           </form>
-          {% else %}
-          <a href="{% url 'add_to_cart' service.id %}" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
-            <i class="fas fa-cart-plus me-2"></i>Add to Cart
-          </a>
-          <a href="{% url 'book_now' service.id %}" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">
-            <i class="fas fa-bolt me-2"></i>Book Now
-          </a>
-          {% endif %}
         </div>
+
         <div class="row g-3 mt-1">
           <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-shield-check text-success"></i><small>Missed Anything? We'll Fix It Free</small></div></div>
           <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-leaf text-success"></i><small>Verified team</small></div></div>
@@ -458,7 +458,6 @@
           <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-phone text-success"></i><small>24/7 Support</small></div></div>
         </div>
       </div>
-      {% endwith %}
       {% endif %}
     </div>
     <!-- END MOBILE LAYOUT -->
@@ -593,13 +592,13 @@
             </tbody>
           </table>
           <div class="row g-3 mt-1">
-           <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-shield-check text-success"></i><small>Missed Anything? We'll Fix It Free</small></div></div>
+            <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-shield-check text-success"></i><small>Missed Anything? We'll Fix It Free</small></div></div>
             <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-leaf text-success"></i><small>Verified team</small></div></div>
             <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-user-check text-success"></i><small>Trained Professionals</small></div></div>
             <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-phone text-success"></i><small>24/7 Support</small></div></div>
           </div>
 
-          <!-- ✅ NORMAL SERVICE — Original layout -->
+          <!-- ✅ NORMAL SERVICE — Desktop -->
           {% else %}
           <div class="mb-3">
             <span style="font-size:36px;font-weight:800;color:var(--primary);">₹{{ service.get_final_price }}</span>
@@ -613,15 +612,17 @@
           {% endif %}
           <p>{{ service.short_description }}</p>
 
-          {% with slug=service.category.slug %}
           <div class="my-4">
+
+            <!-- +/- sirf Sofa, Chair, Cushion ke liye — Desktop -->
+            {% if service.category.slug == 'sofa-cleaning' or service.slug == 'chair-cleaning' or service.slug == 'Cushions-Cleaning' %}
             <div class="d-flex align-items-center gap-2 mb-3">
-              {% if slug == 'sofa-cleaning' %}
+              {% if service.category.slug == 'sofa-cleaning' %}
                 <span class="fw-bold" style="color:var(--primary);">(Per seat)</span>
               {% elif service.slug == 'Cushions-Cleaning' %}
                 <span class="fw-bold" style="color:var(--primary);">(Per cushion)</span>
-              {% else %}
-                <span class="fw-bold" style="color:var(--primary);">Quantity:</span>
+              {% elif service.slug == 'chair-cleaning' %}
+                <span class="fw-bold" style="color:var(--primary);">(Per chair)</span>
               {% endif %}
               <div class="qty-wrapper d-flex align-items-center border rounded-pill overflow-hidden" style="width:140px;">
                 <button type="button" id="qty-minus-d" class="btn btn-light border-0 px-3 py-2" style="font-size:18px;font-weight:700;">−</button>
@@ -630,6 +631,11 @@
                 <button type="button" id="qty-plus-d" class="btn btn-light border-0 px-3 py-2" style="font-size:18px;font-weight:700;">+</button>
               </div>
             </div>
+            {% else %}
+            <!-- Baaki services ke liye quantity=1 fixed, hidden -->
+            <input type="hidden" id="qty-input-d" value="1">
+            {% endif %}
+
             <div class="live-total-box mb-3 p-3 rounded-3" style="background:#f0f7ff;border:1.5px solid #c7d7f5;">
               <div class="d-flex justify-content-between align-items-center mb-1">
                 <span class="text-muted" style="font-size:14px;">Unit Price</span>
@@ -646,12 +652,12 @@
                 <span id="summary-total-d" class="fw-bold total-amount" style="font-size:20px;color:var(--primary);">₹0.00</span>
               </div>
             </div>
+
             <div class="d-flex gap-3 mb-4">
-              {% if slug %}
               <form method="GET" action="{% url 'add_to_cart' service.id %}" id="cart-form-d">
                 <input type="hidden" name="quantity" id="cart-qty-d" value="1">
                 <button type="submit" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
-                  <i class="fas fa-cart-plus me-2"></i>Add to Cart 
+                  <i class="fas fa-cart-plus me-2"></i>Add to Cart
                 </button>
               </form>
               <form method="GET" action="{% url 'book_now' service.id %}" id="booknow-form-d">
@@ -660,15 +666,8 @@
                   <i class="fas fa-bolt me-2"></i>Book Now
                 </button>
               </form>
-              {% else %}
-              <a href="{% url 'add_to_cart' service.id %}" class="btn btn-primary btn-lg px-4" style="border-radius:30px;">
-                <i class="fas fa-cart-plus me-2"></i>Add to Cart
-              </a>
-              <a href="{% url 'book_now' service.id %}" class="btn btn-warning btn-lg px-4" style="border-radius:30px;color:#000;font-weight:700;">
-                <i class="fas fa-bolt me-2"></i>Book Now
-              </a>
-              {% endif %}
             </div>
+
             <div class="row g-3 mt-1">
               <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-shield-check text-success"></i><small>Missed Anything? We'll Fix It Free</small></div></div>
               <div class="col-6"><div class="d-flex align-items-center gap-2"><i class="fas fa-leaf text-success"></i><small>Verified team</small></div></div>
@@ -679,32 +678,37 @@
 
           <script>
             const unitPriceD = {{ service.get_final_price }};
-            const minusBtnD   = document.getElementById('qty-minus-d');
-            const plusBtnD    = document.getElementById('qty-plus-d');
-            const qtyInputD   = document.getElementById('qty-input-d');
-            const cartQtyD    = document.getElementById('cart-qty-d');
-            const booknowQtyD = document.getElementById('booknow-qty-d');
             const summaryQtyD = document.getElementById('summary-qty-d');
             const summaryTotD = document.getElementById('summary-total-d');
+            const cartQtyD    = document.getElementById('cart-qty-d');
+            const booknowQtyD = document.getElementById('booknow-qty-d');
+            const qtyInputD   = document.getElementById('qty-input-d');
+
             function updateSummaryD() {
-              const qty   = parseInt(qtyInputD.value);
+              const qty   = parseInt(qtyInputD.value) || 1;
               const total = unitPriceD * qty;
-              summaryQtyD.textContent = qty;
-              summaryTotD.textContent = '₹' + total.toFixed(2);
-              cartQtyD.value    = qty;
-              booknowQtyD.value = qty;
+              if (summaryQtyD) summaryQtyD.textContent = qty;
+              if (summaryTotD) summaryTotD.textContent = '₹' + total.toFixed(2);
+              if (cartQtyD)    cartQtyD.value    = qty;
+              if (booknowQtyD) booknowQtyD.value = qty;
             }
             updateSummaryD();
-            minusBtnD.addEventListener('click', () => {
-              let val = parseInt(qtyInputD.value);
-              if (val > 1) { qtyInputD.value = val - 1; updateSummaryD(); }
-            });
-            plusBtnD.addEventListener('click', () => {
-              let val = parseInt(qtyInputD.value);
-              if (val < 10) { qtyInputD.value = val + 1; updateSummaryD(); }
-            });
+
+            const minusBtnD = document.getElementById('qty-minus-d');
+            const plusBtnD  = document.getElementById('qty-plus-d');
+            if (minusBtnD) {
+              minusBtnD.addEventListener('click', () => {
+                let val = parseInt(qtyInputD.value);
+                if (val > 1) { qtyInputD.value = val - 1; updateSummaryD(); }
+              });
+            }
+            if (plusBtnD) {
+              plusBtnD.addEventListener('click', () => {
+                let val = parseInt(qtyInputD.value);
+                if (val < 10) { qtyInputD.value = val + 1; updateSummaryD(); }
+              });
+            }
           </script>
-          {% endwith %}
           {% endif %}
         </div>
       </div>
@@ -778,18 +782,15 @@
   </div>
 </section>
 
-<!-- Mobile JS: Quantity logic — sirf normal services ke liye -->
+<!-- Mobile JS: Quantity logic -->
 <script>
 (function() {
-  // Water tank pages pe ye JS nahi chalega
   {% if service.slug == 'water-tank-cleaning-service' or service.slug == '1000-Liter' %}
   return;
   {% endif %}
   if (window.innerWidth >= 992) return;
 
-  const unitPrice = {{ service.get_final_price }};
-  const minusBtn   = document.getElementById('qty-minus');
-  const plusBtn    = document.getElementById('qty-plus');
+  const unitPrice  = {{ service.get_final_price }};
   const qtyInput   = document.getElementById('qty-input');
   const cartQty    = document.getElementById('cart-qty');
   const booknowQty = document.getElementById('booknow-qty');
@@ -797,23 +798,29 @@
   const summaryTot = document.getElementById('summary-total');
 
   function updateSummary() {
-    const qty   = parseInt(qtyInput.value);
+    const qty   = parseInt(qtyInput.value) || 1;
     const total = unitPrice * qty;
-    summaryQty.textContent = qty;
-    summaryTot.textContent = '₹' + total.toFixed(2);
+    if (summaryQty) summaryQty.textContent = qty;
+    if (summaryTot) summaryTot.textContent = '₹' + total.toFixed(2);
     if (cartQty)    cartQty.value    = qty;
     if (booknowQty) booknowQty.value = qty;
   }
   updateSummary();
 
-  minusBtn.addEventListener('click', () => {
-    let val = parseInt(qtyInput.value);
-    if (val > 1) { qtyInput.value = val - 1; updateSummary(); }
-  });
-  plusBtn.addEventListener('click', () => {
-    let val = parseInt(qtyInput.value);
-    if (val < 10) { qtyInput.value = val + 1; updateSummary(); }
-  });
+  const minusBtn = document.getElementById('qty-minus');
+  const plusBtn  = document.getElementById('qty-plus');
+  if (minusBtn) {
+    minusBtn.addEventListener('click', () => {
+      let val = parseInt(qtyInput.value);
+      if (val > 1) { qtyInput.value = val - 1; updateSummary(); }
+    });
+  }
+  if (plusBtn) {
+    plusBtn.addEventListener('click', () => {
+      let val = parseInt(qtyInput.value);
+      if (val < 10) { qtyInput.value = val + 1; updateSummary(); }
+    });
+  }
 })();
 </script>
 
