@@ -53,10 +53,16 @@ def user_login(request):
         else:
             user = None
 
+        # if user:
+        #     login(request, user)
+        #     next_url = request.GET.get('next', 'home')
+        #     return redirect(next_url)
         if user:
             login(request, user)
-            next_url = request.GET.get('next', 'home')
-            return redirect(next_url)
+            next_url = request.GET.get('next', '')
+            if next_url:
+                return redirect(next_url)
+            return redirect('home')
         else:
             messages.error(request, 'Invalid email or password. Please try again.')
 
