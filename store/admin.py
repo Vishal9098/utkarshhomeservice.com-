@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from django.urls import reverse
 from .models import *
 
 admin.site.register(Category)
@@ -9,7 +8,6 @@ admin.site.register(ServiceImage)
 admin.site.register(Coupon)
 admin.site.register(Cart)
 admin.site.register(CartItem)
-admin.site.register(OrderItem)
 admin.site.register(Review)
 admin.site.register(Blog)
 admin.site.register(Gallery)
@@ -18,48 +16,29 @@ admin.site.register(Testimonial)
 admin.site.register(UserProfile)
 
 
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 0
+    readonly_fields = ['service', 'quantity', 'price', 'get_total']
+    fields = ['service', 'quantity', 'price', 'get_total']
+
+    def get_total(self, obj):
+        try:
+            if obj.price is not None:
+                return f"₹{obj.quantity * obj.price:.2f}"
+            return "₹0.00"
+        except:
+            return "₹0.00"
+    get_total.short_description = "Total"
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['order_id', 'name', 'phone', 'status', 'invoice_approved', 'created_at', 'whatsapp_delivery_button']
+    list_display = ['order_id', 'name', 'phone', 'status', 'invoice_approved', 'created_at']
     list_editable = ['invoice_approved']
     list_filter = ['status', 'invoice_approved']
     search_fields = ['order_id', 'name', 'phone']
-
-    def whatsapp_delivery_button(self, obj):
-        # Delivery boy ka number — apna number yahan daalo
-        DELIVERY_BOY_NUMBER = "919098535060"  # 91 + number (no + sign)
-
-        # Share link banao
-        order_id = obj.order_id.replace('#', '')
-        share_link = f"https://utkarshhomeservice.com/delivery/share/{order_id}/"
-
-        # WhatsApp message
-        message = (
-            f"🚴 *Naya Order Aaya Hai!*\n\n"
-            f"📦 Order ID: {obj.order_id}\n"
-            f"👤 Customer: {obj.name}\n"
-            f"📞 Phone: {obj.phone}\n"
-            f"📍 Address: {obj.address}, {obj.city}\n"
-            f"📅 Date: {obj.service_date}\n"
-            f"🕐 Time: {obj.service_time}\n\n"
-            f"🔗 Tracking link lene ke liye ye kholo:\n"
-            f"{share_link}\n\n"
-            f"Jo link mile use customer track kar sakta hai."
-        )
-
-        import urllib.parse
-        encoded_message = urllib.parse.quote(message)
-        whatsapp_url = f"https://wa.me/{DELIVERY_BOY_NUMBER}?text={encoded_message}"
-
-        return format_html(
-            '<a href="{}" target="_blank" style="'
-            'background-color:#25D366; color:white; padding:5px 10px; '
-            'border-radius:5px; text-decoration:none; font-weight:bold;'
-            '">📱 WhatsApp</a>',
-            whatsapp_url
-        )
-
-    whatsapp_delivery_button.short_description = "Delivery Boy"
+    inlines = [OrderItemInline]
 
 
 class OrderTrackingInline(admin.TabularInline):
