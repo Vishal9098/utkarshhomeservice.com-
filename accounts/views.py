@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
-from store.models import UserProfile, Order
+from store.models import UserProfile, Order, Cart
 
 
 def register(request):
@@ -31,8 +31,36 @@ def register(request):
 
         user = User.objects.create_user(username=username, email=email, password=password)
         UserProfile.objects.create(user=user, phone=phone)
+
+        # ✅ Login se PEHLE session_key save karo
+        session_key = request.session.session_key
+
         login(request, user)
+
+        # ✅ Session cart ko user cart mein merge karo
+        if session_key:
+            try:
+                session_cart = Cart.objects.filter(session_key=session_key).first()
+                if session_cart:
+                    user_cart, _ = Cart.objects.get_or_create(user=user)
+                    for item in session_cart.items.all():
+                        existing = user_cart.items.filter(service=item.service).first()
+                        if existing:
+                            existing.quantity += item.quantity
+                            existing.save()
+                        else:
+                            item.cart = user_cart
+                            item.save()
+                    session_cart.delete()
+            except Exception as e:
+                pass
+
         messages.success(request, f'Welcome {username}! Your account has been created successfully.')
+
+        # ✅ Cart items hain toh checkout bhejo
+        user_cart = Cart.objects.filter(user=user).first()
+        if user_cart and user_cart.items.exists():
+            return redirect('checkout')
         return redirect('home')
 
     return render(request, 'accounts/register.html')
@@ -53,12 +81,14 @@ def user_login(request):
             user = None
 
         if user:
+            # ✅ Login se PEHLE session_key save karo
             session_key = request.session.session_key
+
             login(request, user)
 
+            # ✅ Session cart ko user cart mein merge karo
             if session_key:
                 try:
-                    from store.models import Cart, CartItem
                     session_cart = Cart.objects.filter(session_key=session_key).first()
                     if session_cart:
                         user_cart, _ = Cart.objects.get_or_create(user=user)
@@ -77,16 +107,17 @@ def user_login(request):
             next_url = request.GET.get('next', '')
             if next_url:
                 return redirect(next_url)
-            from store.models import Cart
+
+            # ✅ Cart items hain toh checkout bhejo
             user_cart = Cart.objects.filter(user=user).first()
             if user_cart and user_cart.items.exists():
                 return redirect('checkout')
             return redirect('home')
 
-        else:  # ✅ YEH LINE MISSING THI
+        else:
             messages.error(request, 'Invalid email or password. Please try again.')
 
-    return render(request, 'accounts/login.html')  # ✅ YEH LINE MISSING THI
+    return render(request, 'accounts/login.html')
 
 
 def user_logout(request):
@@ -98,9 +129,6 @@ def user_logout(request):
 def forgot_password(request):
     if request.method == 'POST':
         email = request.POST.get('email', '').strip()
-
-        # FIX: .get() ki jagah .filter().first() use kiya
-        # Taaki duplicate users hone par bhi error na aaye
         user = User.objects.filter(email=email).first()
 
         if not user:
@@ -108,9 +136,7 @@ def forgot_password(request):
             return render(request, 'accounts/forgot_password.html')
 
         try:
-            # Generate random token
             token = get_random_string(32)
-            # Token profile mein save karo
             profile_obj, _ = UserProfile.objects.get_or_create(user=user)
             profile_obj.reset_token = token
             profile_obj.save()
