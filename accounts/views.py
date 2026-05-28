@@ -46,27 +46,47 @@ def user_login(request):
         email = request.POST.get('email', '').strip()
         password = request.POST.get('password', '').strip()
 
-        # Email se user dhundo
         user_obj = User.objects.filter(email=email).first()
         if user_obj:
             user = authenticate(request, username=user_obj.username, password=password)
         else:
             user = None
 
-        # if user:
-        #     login(request, user)
-        #     next_url = request.GET.get('next', 'home')
-        #     return redirect(next_url)
         if user:
+            session_key = request.session.session_key
             login(request, user)
+
+            if session_key:
+                try:
+                    from store.models import Cart, CartItem
+                    session_cart = Cart.objects.filter(session_key=session_key).first()
+                    if session_cart:
+                        user_cart, _ = Cart.objects.get_or_create(user=user)
+                        for item in session_cart.items.all():
+                            existing = user_cart.items.filter(service=item.service).first()
+                            if existing:
+                                existing.quantity += item.quantity
+                                existing.save()
+                            else:
+                                item.cart = user_cart
+                                item.save()
+                        session_cart.delete()
+                except Exception as e:
+                    pass
+
             next_url = request.GET.get('next', '')
             if next_url:
                 return redirect(next_url)
+            from store.models import Cart
+            user_cart = Cart.objects.filter(user=user).first()
+            if user_cart and user_cart.items.exists():
+                return redirect('checkout')
             return redirect('home')
-        else:
+
+        else:  # ✅ YEH LINE MISSING THI
             messages.error(request, 'Invalid email or password. Please try again.')
 
-    return render(request, 'accounts/login.html')
+    return render(request, 'accounts/login.html')  # ✅ YEH LINE MISSING THI
 
 
 def user_logout(request):
