@@ -31,12 +31,11 @@ Professional home cleaning services in Bhopal including sofa cleaning, kitchen c
   font-family: "Libre Baskerville", serif !important;
 }
 
-/* 🔥 ICON FIX (very important) */
+/* 🔥 ICON FIX */
 .fa-solid, .fas {
   font-family: "Font Awesome 6 Free" !important;
   font-weight: 900 !important;
 }
-
 .fab {
   font-family: "Font Awesome 6 Brands" !important;
   font-weight: 400 !important;
@@ -48,10 +47,8 @@ Professional home cleaning services in Bhopal including sofa cleaning, kitchen c
 @media(max-width:480px){ .banner-img{ height:150px; } }
 #carouselExampleControls{ width:100%; overflow:hidden; }
 
-/* ===== BANNER TEXT OVERLAY ===== */
-.carousel-item {
-  position: relative;
-}
+/* BANNER TEXT OVERLAY */
+.carousel-item { position: relative; }
 .banner-overlay-text {
   position: absolute;
   top: 50%;
@@ -79,53 +76,20 @@ Professional home cleaning services in Bhopal including sofa cleaning, kitchen c
   line-height: 1.6;
 }
 @media(max-width:768px){
-  .banner-overlay-text {
-    width: 85%;
-    left: 4%;
-    top: 45%;
-  }
-  .banner-overlay-text h2 {
-    font-size: 16px;
-    margin-bottom: 6px;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
-  }
-  .banner-overlay-text p {
-    font-size: 10px;
-    line-height: 1.5;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.9);
-  }
+  .banner-overlay-text { width: 85%; left: 4%; top: 45%; }
+  .banner-overlay-text h2 { font-size: 16px; margin-bottom: 6px; text-shadow: 2px 2px 6px rgba(0,0,0,0.9); }
+  .banner-overlay-text p { font-size: 10px; line-height: 1.5; text-shadow: 1px 1px 5px rgba(0,0,0,0.9); }
 }
 @media(max-width:480px){
-  .banner-overlay-text {
-    width: 88%;
-    left: 4%;
-    top: 45%;
-  }
-  .banner-overlay-text h2 {
-    font-size: 13px;
-    margin-bottom: 5px;
-  }
-  .banner-overlay-text p {
-    font-size: 9px;
-    line-height: 1.4;
-  }
+  .banner-overlay-text { width: 88%; left: 4%; top: 45%; }
+  .banner-overlay-text h2 { font-size: 13px; margin-bottom: 5px; }
+  .banner-overlay-text p { font-size: 9px; line-height: 1.4; }
 }
 
-/* ===== NAKODA EXACT CARD STYLE - DESKTOP ===== */
-.cat-section {
-  padding: 40px 0;
-  background: #fff;
-}
-.cat-section .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 ;
-}
-.cat-grid-wrap {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 25px;
-}
+/* CATEGORY CARDS */
+.cat-section { padding: 40px 0; background: #fff; }
+.cat-section .container { max-width: 1200px; margin: 0 auto; padding: 0; }
+.cat-grid-wrap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
 .cat-card {
   display: block;
   text-decoration: none;
@@ -137,164 +101,251 @@ Professional home cleaning services in Bhopal including sofa cleaning, kitchen c
   transition: transform .3s, box-shadow .3s;
   cursor: pointer;
 }
-.cat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 28px rgba(26,95,168,.22);
-  border-color: #1a5fa8;
+.cat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(26,95,168,.22); border-color: #1a5fa8; }
+.cat-card .img-wrap { width: 100%; padding-top: 68%; position: relative; overflow: hidden; background: #eef2f7; }
+.cat-card .img-wrap img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block; transition: transform .4s ease; }
+.cat-card:hover .img-wrap img { transform: scale(1.04); }
+.cat-card .img-wrap .no-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1a5fa8, #3a8fd4); display: flex; align-items: center; justify-content: center; }
+.cat-card .cat-label { background: #1a52a8; color: #fff; text-align: center; padding: 13px 10px 14px; font-size: 16px; font-weight: 500; font-family: "Libre Baskerville", serif; line-height: 1.3; letter-spacing: 0.2px; }
+.cat-card .mobile-title { display: none; }
+
+/* MOBILE CATEGORY */
+@media(max-width:768px){
+  .cat-grid-wrap { display: grid !important; grid-template-columns: repeat(3,1fr) !important; gap: 12px !important; padding: 0 10px !important; }
+  .cat-card { border: none !important; border-radius: 22px !important; background: #f2f2f2 !important; padding: 10px !important; box-shadow: 0 8px 18px rgba(0,0,0,.18), 0 3px 8px rgba(0,0,0,.12) !important; overflow: visible !important; }
+  .cat-card:hover { transform: translateY(-4px) !important; }
+  .cat-card .img-wrap { display: none !important; }
+  .cat-card .mobile-img-box { display: flex !important; height: 90px; background: #fff; border-radius: 18px; padding: 6px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,.15); align-items: center; justify-content: center; }
+  .cat-card .mobile-img-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+  .cat-card .cat-label { display: none !important; }
+  .cat-card .mobile-title { display: block !important; font-size: 11px; font-weight: 600; color: #333; text-align: center; padding: 5px 2px 0; line-height: 1.3; }
+
+  /* WHY CHOOSE US - mobile */
+  .why-section .row { --bs-gutter-y: 0px !important; }
+  .why-section { padding: 28px 0 20px !important; }
+  .why-section .section-title { margin-bottom: 18px !important; }
+  .why-card { display: flex !important; flex-direction: row !important; align-items: center !important; gap: 14px !important; padding: 14px 14px !important; margin-bottom: 0 !important; border-radius: 0 !important; box-shadow: none !important; background: #fff !important; border-bottom: 1px solid #f0f0f0 !important; text-align: left !important; }
+  .why-card:last-child { border-bottom: none !important; }
+  .why-icon { width: 46px !important; height: 46px !important; min-width: 46px !important; border-radius: 12px !important; background: linear-gradient(135deg, #1a5fa8, #3a8fd4) !important; display: flex !important; align-items: center !important; justify-content: center !important; box-shadow: 0 4px 12px rgba(26,95,168,.25) !important; }
+  .why-icon i { font-size: 18px !important; color: #fff !important; }
+  .why-card h5 { font-size: 14px !important; font-weight: 700 !important; margin-bottom: 2px !important; color: #1a1a2e !important; line-height: 1.3 !important; }
+  .why-card p { font-size: 12px !important; margin-bottom: 0 !important; line-height: 1.4 !important; color: #777 !important; }
+  .why-cards-mobile-wrap { background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,.08); overflow: hidden; margin: 0 4px; }
 }
-.cat-card .img-wrap {
+
+/* BCS TRIGGER BANNER */
+.bcs-trigger-banner {
+  background: #1a2a4a;
+  color: #fff;
+  text-align: center;
+  padding: 2.5rem 1rem 2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.bcs-trigger-banner:hover { background: #22345e; }
+.bcs-trigger-banner h2 { font-size: 28px; font-weight: 700; margin-bottom: 0.5rem; color: #fff; }
+.bcs-trigger-banner p { font-size: 15px; color: #b0c0d8; margin-bottom: 0.4rem; }
+.bcs-trigger-banner .bcs-price-tag { font-size: 15px; font-weight: 600; color: #7dd3b0; }
+.bcs-trigger-banner .bcs-click-hint {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 10px 28px;
+  background: #1a5fad;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  animation: bcs-pulse 2s infinite;
+}
+@keyframes bcs-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(26,95,173,0.5); }
+  50% { box-shadow: 0 0 0 10px rgba(26,95,173,0); }
+}
+
+/* BCS OVERLAY */
+.bcs-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 9999;
+  overflow-y: auto;
+  padding: 20px 10px 40px;
+}
+.bcs-overlay.active { display: flex; align-items: flex-start; justify-content: center; }
+
+/* BCS POPUP */
+.bcs-popup {
+  background: #f4f6fa;
+  border-radius: 16px;
   width: 100%;
-  padding-top: 68%;
-  position: relative;
+  max-width: 1100px;
   overflow: hidden;
-  background: #eef2f7;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  position: relative;
+  margin: auto;
 }
-.cat-card .img-wrap img {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  display: block;
-  transition: transform .4s ease;
+.bcs-popup-header {
+  background: #1a2a4a;
+  color: #fff;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.cat-card:hover .img-wrap img {
-  transform: scale(1.04);
-}
-.cat-card .img-wrap .no-img {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: linear-gradient(135deg, #1a5fa8, #3a8fd4);
+.bcs-popup-header h2 { font-size: 20px; font-weight: 700; margin: 0; color: #fff; }
+.bcs-close-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: sans-serif;
+  line-height: 1;
 }
-.cat-card .cat-label {
-  background: #1a52a8;
-  color: #fff;
-  text-align: center;
-  padding: 13px 10px 14px;
-  font-size: 16px;
-  font-weight: 500;
+.bcs-close-btn:hover { background: rgba(255,255,255,0.3); }
+
+/* BCS INNER LAYOUT */
+.bcs-wrap { display: flex; gap: 1.5rem; padding: 1.5rem; align-items: flex-start; }
+.bcs-steps-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1rem; }
+.bcs-card { background: #fff; border: 1px solid #dce8f5; border-radius: 12px; padding: 1.25rem; box-shadow: 0 2px 10px rgba(0,0,0,.07); }
+.bcs-card h3 { font-size: 16px; font-weight: 700; color: #1a5fad; margin-bottom: 1rem; }
+
+.bcs-tasks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.bcs-tasks-grid h4 { font-size: 14px; font-weight: 700; color: #222; margin-bottom: 0.75rem; }
+.bcs-task-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #555; margin-bottom: 6px; cursor: pointer; }
+.bcs-task-item input[type=checkbox] { width: 15px; height: 15px; cursor: pointer; accent-color: #1a5fad; }
+
+.bcs-locked-item { padding: 10px 14px; background: #f8f8f8; border: 1px solid #eee; border-radius: 8px; font-size: 13px; color: #999; margin-bottom: 8px; }
+.bcs-locked-title { font-size: 16px; font-weight: 700; color: #c0392b; margin-bottom: 1rem; }
+
+/* BCS SUMMARY */
+.bcs-summary-col { width: 280px; min-width: 260px; flex-shrink: 0; }
+.bcs-summary-card {
+  background: #fff;
+  border: 1px solid #dce8f5;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,.07);
+  position: sticky;
+  top: 20px;
+}
+.bcs-summary-card h3 { font-size: 16px; font-weight: 700; color: #1a5fad; margin-bottom: 1rem; }
+.bcs-summary-row { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #555; margin-bottom: 10px; }
+.bcs-summary-row .bcs-val { color: #222; font-weight: 600; margin-left: auto; }
+.bcs-price-big { font-size: 26px; font-weight: 700; color: #1a2a4a; margin: 1rem 0; }
+.bcs-price-big small { font-size: 13px; color: #888; font-weight: 400; }
+.bcs-overtime-note {
+  font-size: 12px;
+  color: #e67e22;
+  font-weight: 600;
+  background: #fff8f0;
+  border: 1px solid #f5cba7;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.bcs-btn-book {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 10px;
   font-family: "Libre Baskerville", serif;
-  line-height: 1.3;
-  letter-spacing: 0.2px;
+  text-align: center;
+  text-decoration: none;
 }
-.cat-card .mobile-title { display: none; }
+.bcs-btn-green { background: #27ae60; color: #fff; }
+.bcs-btn-blue { background: #1a5fad; color: #fff; }
+.bcs-btn-green:hover { background: #219a52; color: #fff; }
+.bcs-btn-blue:hover { background: #154e91; color: #fff; }
 
-/* ===== MOBILE ===== */
-@media(max-width:768px){
-  .cat-grid-wrap {
-    display: grid !important;
-    grid-template-columns: repeat(3,1fr) !important;
-    gap: 12px !important;
-    padding: 0 10px !important;
-  }
-  .cat-card {
-    border: none !important;
-    border-radius: 22px !important;
-    background: #f2f2f2 !important;
-    padding: 10px !important;
-    box-shadow: 0 8px 18px rgba(0,0,0,.18), 0 3px 8px rgba(0,0,0,.12) !important;
-    overflow: visible !important;
-  }
-  .cat-card:hover { transform: translateY(-4px) !important; }
-  .cat-card .img-wrap { display: none !important; }
-  .cat-card .mobile-img-box {
-    display: flex !important;
-    height: 90px;
-    background: #fff;
-    border-radius: 18px;
-    padding: 6px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,.15);
-    align-items: center;
-    justify-content: center;
-  }
-  .cat-card .mobile-img-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 14px;
-  }
-  .cat-card .cat-label { display: none !important; }
-  .cat-card .mobile-title {
-    display: block !important;
-    font-size: 11px;
-    font-weight: 600;
-    color: #333;
-    text-align: center;
-    padding: 5px 2px 0;
-    line-height: 1.3;
-  }
+/* PROF+DUR ACCORDION */
+.bcs-prof-row { margin-bottom: 8px; }
+.bcs-prof-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: 1.5px solid #d0dce8;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #333;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: "Libre Baskerville", serif;
+  text-align: left;
+}
+.bcs-prof-btn:hover { border-color: #1a5fad; background: #eef4fb; }
+.bcs-prof-btn.bcs-prof-selected { background: #1a5fad; color: #fff; border-color: #1a5fad; }
+.bcs-prof-btn.bcs-prof-selected .bcs-prof-arrow { color: #fff; transform: rotate(180deg); }
+.bcs-prof-arrow { font-size: 12px; color: #888; transition: transform 0.2s; display: inline-block; }
+.bcs-rec-badge { font-size: 12px; font-weight: 600; }
 
-  /* WHY CHOOSE US - mobile gap zero */
-  .why-section .row {
-    --bs-gutter-y: 0px !important;
-  }
+.bcs-dur-panel { display: none; padding: 10px 4px 4px; }
+.bcs-dur-panel.bcs-dur-open { display: block; }
+.bcs-dur-grid { display: flex; flex-wrap: wrap; gap: 8px; }
 
-  /* WHY CARD - premium mobile style */
-  .why-section { padding: 28px 0 20px !important; }
-  .why-section .section-title { margin-bottom: 18px !important; }
+.bcs-dur-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border: 1.5px solid #d0dce8;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: "Libre Baskerville", serif;
+  position: relative;
+  min-width: 72px;
+}
+.bcs-dur-btn:hover { border-color: #1a5fad; background: #eef4fb; }
+.bcs-dur-btn.bcs-dur-selected { background: #e8f5e9; border-color: #27ae60; }
+.bcs-dur-hr { font-size: 13px; font-weight: 700; color: #222; }
+.bcs-dur-btn.bcs-dur-selected .bcs-dur-hr { color: #1a6b35; }
+.bcs-dur-price { font-size: 13px; font-weight: 700; color: #1a5fad; margin-top: 3px; }
+.bcs-dur-btn.bcs-dur-selected .bcs-dur-price { color: #27ae60; }
+.bcs-dur-badge {
+  position: absolute;
+  top: -8px; right: -4px;
+  background: #f0a500;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
 
-  .why-card {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 14px !important;
-    padding: 14px 14px !important;
-    margin-bottom: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    background: #fff !important;
-    border-bottom: 1px solid #f0f0f0 !important;
-    text-align: left !important;
-  }
-  .why-card:last-child { border-bottom: none !important; }
-
-  .why-icon {
-    width: 46px !important;
-    height: 46px !important;
-    min-width: 46px !important;
-    border-radius: 12px !important;
-    background: linear-gradient(135deg, #1a5fa8, #3a8fd4) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    box-shadow: 0 4px 12px rgba(26,95,168,.25) !important;
-  }
-  .why-icon i {
-    font-size: 18px !important;
-    color: #fff !important;
-  }
-
-  .why-card h5 {
-    font-size: 14px !important;
-    font-weight: 700 !important;
-    margin-bottom: 2px !important;
-    color: #1a1a2e !important;
-    line-height: 1.3 !important;
-  }
-  .why-card p {
-    font-size: 12px !important;
-    margin-bottom: 0 !important;
-    line-height: 1.4 !important;
-    color: #777 !important;
-  }
-
-  /* Wrap all why-cards in a card container */
-  .why-cards-mobile-wrap {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.08);
-    overflow: hidden;
-    margin: 0 4px;
-  }
+/* BCS MOBILE */
+@media(max-width: 768px) {
+  .bcs-overlay { padding: 0; align-items: flex-end; }
+  .bcs-popup { border-radius: 20px 20px 0 0; max-height: 92vh; overflow-y: auto; }
+  .bcs-wrap { flex-direction: column; padding: 1rem; }
+  .bcs-summary-col { width: 100%; min-width: unset; }
+  .bcs-tasks-grid { grid-template-columns: 1fr; }
+  .bcs-summary-card { position: static; }
+  .bcs-trigger-banner h2 { font-size: 20px; }
 }
 </style>
-<!-- SEO H1 — Google ke liye visible, user ko nahi dikhega -->
+
+<!-- SEO H1 hidden -->
 <section class="seo-hero" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
   <div class="container">
     <h1>Best Home Cleaning Services in Bhopal</h1>
@@ -367,6 +418,323 @@ Professional home cleaning services in Bhopal including sofa cleaning, kitchen c
   </div>
 </section>
 
+<!-- BUILD YOUR CLEANING SERVICE — POPUP VERSION -->
+<!-- PRICING TABLE:
+     1 Prof: 1hr=399, 2hr=699, 3hr=899, 4hr=1099, 8hr=1799 | Overtime: ₹250/hr
+     2 Prof: 2hr=1199, 3hr=1499, 4hr=1799, 8hr=2999          | Overtime: ₹499/hr
+     3 Prof: 2hr=1699, 3hr=2099, 4hr=2499, 8hr=3999          | Overtime: ₹747/hr
+     4 Prof: 4hr=3299, 8hr=5299                               | Overtime: ₹996/hr
+     + ₹50 per task selected -->
+
+<!-- TRIGGER BANNER -->
+<div class="bcs-trigger-banner" onclick="document.getElementById('bcsOverlay').classList.add('active')">
+  <h2>🧹 Build Your Cleaning Service</h2>
+  <p>Choose Staff &bull; Select Hours &bull; Pick Cleaning Tasks &bull; Get Instant Pricing</p>
+  <div class="bcs-price-tag">Starting From ₹399 Only</div>
+  <div class="bcs-click-hint">👆 Click Here to Build Your Plan</div>
+</div>
+
+<!-- POPUP OVERLAY -->
+<div class="bcs-overlay" id="bcsOverlay" onclick="bcsOverlayClose(event)">
+  <div class="bcs-popup">
+
+    <!-- Header -->
+    <div class="bcs-popup-header">
+      <h2>🧹 Build Your Cleaning Service</h2>
+      <button class="bcs-close-btn" onclick="document.getElementById('bcsOverlay').classList.remove('active')">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div class="bcs-wrap">
+      <div class="bcs-steps-col">
+
+        <!-- STEP 1+2: Select Professional → shows hours+price inline -->
+        <div class="bcs-card">
+          <h3>Step 1: Select Professionals &amp; Duration</h3>
+
+          <!-- PROF 1 -->
+          <div class="bcs-prof-row" id="prof-row-1">
+            <button class="bcs-prof-btn" data-prof="1" onclick="bcsSelectProf(this,1)">
+              <span class="bcs-prof-label">👤 1 Professional</span>
+              <span class="bcs-prof-arrow">▼</span>
+            </button>
+            <div class="bcs-dur-panel" id="dur-panel-1">
+              <div class="bcs-dur-grid">
+                <button class="bcs-dur-btn" data-dur="2" onclick="bcsSelectDur(this,2)">
+                  <span class="bcs-dur-hr">2 Hrs</span>
+                  <span class="bcs-dur-price">₹699</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="3" onclick="bcsSelectDur(this,3)">
+                  <span class="bcs-dur-hr">3 Hrs</span>
+                  <span class="bcs-dur-price">₹899</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="4" onclick="bcsSelectDur(this,4)">
+                  <span class="bcs-dur-hr">4 Hrs</span>
+                  <span class="bcs-dur-price">₹1,099</span>
+                  <span class="bcs-dur-badge">Popular</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="8" onclick="bcsSelectDur(this,8)">
+                  <span class="bcs-dur-hr">8 Hrs</span>
+                  <span class="bcs-dur-price">₹1,799</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROF 2 -->
+          <div class="bcs-prof-row" id="prof-row-2">
+            <button class="bcs-prof-btn bcs-prof-selected" data-prof="2" onclick="bcsSelectProf(this,2)">
+              <span class="bcs-prof-label">👥 2 Professionals <span class="bcs-rec-badge">⭐ Recommended</span></span>
+              <span class="bcs-prof-arrow">▼</span>
+            </button>
+            <div class="bcs-dur-panel bcs-dur-open" id="dur-panel-2">
+              <div class="bcs-dur-grid">
+                <button class="bcs-dur-btn" data-dur="2" onclick="bcsSelectDur(this,2)">
+                  <span class="bcs-dur-hr">2 Hrs</span>
+                  <span class="bcs-dur-price">₹1,199</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="3" onclick="bcsSelectDur(this,3)">
+                  <span class="bcs-dur-hr">3 Hrs</span>
+                  <span class="bcs-dur-price">₹1,499</span>
+                </button>
+                <button class="bcs-dur-btn bcs-dur-selected" data-dur="4" onclick="bcsSelectDur(this,4)">
+                  <span class="bcs-dur-hr">4 Hrs</span>
+                  <span class="bcs-dur-price">₹1,799</span>
+                  <span class="bcs-dur-badge">Popular</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="8" onclick="bcsSelectDur(this,8)">
+                  <span class="bcs-dur-hr">8 Hrs</span>
+                  <span class="bcs-dur-price">₹2,999</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROF 3 -->
+          <div class="bcs-prof-row" id="prof-row-3">
+            <button class="bcs-prof-btn" data-prof="3" onclick="bcsSelectProf(this,3)">
+              <span class="bcs-prof-label">👥👤 3 Professionals</span>
+              <span class="bcs-prof-arrow">▼</span>
+            </button>
+            <div class="bcs-dur-panel" id="dur-panel-3">
+              <div class="bcs-dur-grid">
+                <button class="bcs-dur-btn" data-dur="3" onclick="bcsSelectDur(this,3)">
+                  <span class="bcs-dur-hr">3 Hrs</span>
+                  <span class="bcs-dur-price">₹2,099</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="4" onclick="bcsSelectDur(this,4)">
+                  <span class="bcs-dur-hr">4 Hrs</span>
+                  <span class="bcs-dur-price">₹2,499</span>
+                  <span class="bcs-dur-badge">Popular</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="8" onclick="bcsSelectDur(this,8)">
+                  <span class="bcs-dur-hr">8 Hrs</span>
+                  <span class="bcs-dur-price">₹3,999</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROF 4 -->
+          <div class="bcs-prof-row" id="prof-row-4">
+            <button class="bcs-prof-btn" data-prof="4" onclick="bcsSelectProf(this,4)">
+              <span class="bcs-prof-label">👥👥 4 Professionals</span>
+              <span class="bcs-prof-arrow">▼</span>
+            </button>
+            <div class="bcs-dur-panel" id="dur-panel-4">
+              <div class="bcs-dur-grid">
+                <button class="bcs-dur-btn" data-dur="4" onclick="bcsSelectDur(this,4)">
+                  <span class="bcs-dur-hr">4 Hrs</span>
+                  <span class="bcs-dur-price">₹3,299</span>
+                  <span class="bcs-dur-badge">Popular</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="8" onclick="bcsSelectDur(this,8)">
+                  <span class="bcs-dur-hr">8 Hrs</span>
+                  <span class="bcs-dur-price">₹5,299</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- STEP 2: Tasks -->
+        <div class="bcs-card">
+          <h3>Step 2: Select Cleaning Tasks</h3>
+          <div class="bcs-tasks-grid">
+            <div>
+              <h4>Living Area</h4>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Furniture Dusting</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Dining Table Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> TV Unit Dusting</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Shoe Rack Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Door Wiping</label>
+            </div>
+            <div>
+              <h4>Bedroom</h4>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Bed Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Wardrobe Exterior</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Side Table Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Mirror Cleaning</label>
+            </div>
+            <div>
+              <h4>Kitchen (Basic)</h4>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Kitchen Counter</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Outer Cabinets</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Sink Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Chimney Exterior</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Refrigerator Exterior</label>
+            </div>
+            <div>
+              <h4>Bathroom (Basic)</h4>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Basin Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Mirror Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Floor Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Toilet Seat Cleaning</label>
+            </div>
+            <div style="grid-column: 1 / -1;">
+              <h4>General Cleaning</h4>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 1.5rem;">
+                <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Fan Dusting</label>
+                <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Cobweb Removal</label>
+                <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Window Cleaning</label>
+                <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Balcony Cleaning</label>
+                <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Sweeping</label>
+                <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Mopping</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOCKED Deep Cleaning -->
+        <div class="bcs-card">
+          <div class="bcs-locked-title">❌ Deep Cleaning Services (Locked)</div>
+          <div class="bcs-locked-item">🔒 Sofa Shampooing</div>
+          <div class="bcs-locked-item">🔒 Mattress Cleaning</div>
+          <div class="bcs-locked-item">🔒 Kitchen Deep Cleaning</div>
+          <div class="bcs-locked-item">🔒 Bathroom Deep Cleaning</div>
+          <div class="bcs-locked-item">🔒 Floor Machine Scrubbing</div>
+          <div class="bcs-locked-item">🔒 Marble Polishing</div>
+          <div class="bcs-locked-item">🔒 Water Tank Cleaning</div>
+          <div class="bcs-locked-item">🔒 Pest Control</div>
+        </div>
+
+      </div>
+
+      <!-- SUMMARY CARD -->
+      <div class="bcs-summary-col">
+        <div class="bcs-summary-card">
+          <h3>Your Cleaning Plan</h3>
+          <div class="bcs-summary-row">👷 Professionals: <span class="bcs-val" id="bcs-s-prof">2</span></div>
+          <div class="bcs-summary-row">⏱ Duration: <span class="bcs-val" id="bcs-s-dur">4 Hours</span></div>
+          <div class="bcs-summary-row">📋 Tasks Selected: <span class="bcs-val" id="bcs-s-tasks">0</span></div>
+          <hr>
+          <div class="bcs-summary-row">💰 Estimated Price:</div>
+          <div class="bcs-price-big">₹<span id="bcs-s-price">1,799</span> <small>onwards</small></div>
+          <div class="bcs-overtime-note" id="bcs-overtime-note">
+            ⏰ Overtime: ₹<span id="bcs-ot-rate">499</span>/hr extra if service goes beyond selected duration.
+          </div>
+          <a href="/checkout/" class="bcs-btn-book bcs-btn-green">Book Now</a>
+          <a href="https://wa.me/917806061048?text=Hello%2C%20I%20want%20to%20book%20a%20cleaning%20service"
+             target="_blank" class="bcs-btn-book bcs-btn-blue">📲 WhatsApp Booking</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// EXACT PRICE TABLE
+var bcsPriceTable = {
+  1: { 1:399,  2:699,  3:899,  4:1099, 8:1799 },
+  2: { 1:null, 2:1199, 3:1499, 4:1799, 8:2999 },
+  3: { 1:null, 2:1699, 3:2099, 4:2499, 8:3999 },
+  4: { 1:null, 2:null, 3:null, 4:3299, 8:5299 }
+};
+
+// OVERTIME RATE PER PROFESSIONAL COUNT
+var bcsOvertimeTable = {
+  1: 250,
+  2: 499,
+  3: 747,
+  4: 996
+};
+
+var bcsState = { prof: 2, dur: 4, tasks: 0 };
+
+// Close on outside click
+function bcsOverlayClose(e) {
+  if (e.target === document.getElementById('bcsOverlay')) {
+    document.getElementById('bcsOverlay').classList.remove('active');
+  }
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.getElementById('bcsOverlay').classList.remove('active');
+});
+
+function bcsSelectProf(btn, val) {
+  // Deselect all prof buttons + close all panels
+  document.querySelectorAll('.bcs-prof-btn').forEach(function(b) {
+    b.classList.remove('bcs-prof-selected');
+  });
+  document.querySelectorAll('.bcs-dur-panel').forEach(function(p) {
+    p.classList.remove('bcs-dur-open');
+  });
+
+  // Select clicked prof + open its panel
+  btn.classList.add('bcs-prof-selected');
+  var panel = document.getElementById('dur-panel-' + val);
+  if (panel) panel.classList.add('bcs-dur-open');
+
+  bcsState.prof = val;
+
+  // Auto-select first dur button in this panel
+  var firstDurBtn = panel ? panel.querySelector('.bcs-dur-btn') : null;
+  if (firstDurBtn) {
+    panel.querySelectorAll('.bcs-dur-btn').forEach(function(b){ b.classList.remove('bcs-dur-selected'); });
+    firstDurBtn.classList.add('bcs-dur-selected');
+    bcsState.dur = parseInt(firstDurBtn.getAttribute('data-dur'));
+  }
+
+  bcsUpdate();
+}
+
+function bcsSelectDur(btn, val) {
+  var panel = btn.closest('.bcs-dur-panel');
+  if (panel) {
+    panel.querySelectorAll('.bcs-dur-btn').forEach(function(b){ b.classList.remove('bcs-dur-selected'); });
+  }
+  btn.classList.add('bcs-dur-selected');
+  bcsState.dur = val;
+  bcsUpdate();
+}
+
+function bcsCountTasks() {
+  bcsState.tasks = document.querySelectorAll('.bcs-task-item input[type=checkbox]:checked').length;
+  bcsUpdate();
+}
+
+function bcsUpdate() {
+  var basePrice = (bcsPriceTable[bcsState.prof] && bcsPriceTable[bcsState.prof][bcsState.dur]) || 0;
+  // var total = basePrice + (bcsState.tasks * 50);
+  var total = basePrice;
+  var durLabel = bcsState.dur + ' Hour' + (bcsState.dur > 1 ? 's' : '');
+
+  // Update overtime rate based on selected professionals
+  var otRate = bcsOvertimeTable[bcsState.prof] || 250;
+  document.getElementById('bcs-ot-rate').textContent = otRate.toLocaleString('en-IN');
+
+  document.getElementById('bcs-s-prof').textContent = bcsState.prof;
+  document.getElementById('bcs-s-dur').textContent = durLabel;
+  document.getElementById('bcs-s-tasks').textContent = bcsState.tasks;
+  document.getElementById('bcs-s-price').textContent = total.toLocaleString('en-IN');
+}
+
+// Init
+bcsUpdate();
+</script>
+
 <!-- WHY CHOOSE US -->
 <section class="why-section">
   <div class="container">
@@ -435,31 +803,23 @@ Professional home cleaning services in Bhopal including sofa cleaning, kitchen c
   </div>
 </section>
 
-<!-- Elfsight Google Reviews | Untitled Google Reviews -->
+<!-- Elfsight Google Reviews -->
 <script src="https://elfsightcdn.com/platform.js" async></script>
 <div class="elfsight-app-d79520b2-6553-4e6d-a65d-aa90ca3dc70f" data-elfsight-app-lazy></div>
 
-<!-- SEO CONTENT SECTION — Google ke liye, user ko nahi dikhega -->
+<!-- SEO CONTENT hidden -->
 <section style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
   <div class="container">
-
     <h2>Professional Cleaning Services in Bhopal</h2>
     <p>
-
       Utkarsh Cleaning provides professional home cleaning services in Bhopal
       for homes, apartments, offices, villas, and commercial spaces.
-
       We offer sofa cleaning, carpet cleaning, bathroom cleaning,
       kitchen cleaning, deep cleaning, office cleaning,
       water tank cleaning, mattress cleaning, and floor scrubbing services.
-
       Our trained cleaning experts use advanced machines and eco-friendly
       chemicals to deliver safe, hygienic, and affordable cleaning solutions
       across Bhopal.
-
-      If you are looking for trusted and affordable cleaning services in Bhopal,
-      Utkarsh Cleaning is your reliable local cleaning company.
-
     </p>
     <div>
       <a href="/services/?category=sofa-cleaning">Sofa Cleaning Bhopal</a>
@@ -532,12 +892,11 @@ Professional home cleaning services in Bhopal including sofa cleaning, kitchen c
   </div>
 </section>
 {% endif %}
-<!-- FAQ SECTION — Google ke liye, user ko nahi dikhega -->
+
+<!-- FAQ hidden -->
 <section style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
   <div class="container">
-
     <h2>Frequently Asked Questions</h2>
-
     <div>
       <h5>What is the best home cleaning service in Bhopal?</h5>
       <p>Utkarsh Cleaning provides professional and affordable home cleaning services across Bhopal.</p>
@@ -550,7 +909,8 @@ Professional home cleaning services in Bhopal including sofa cleaning, kitchen c
       <h5>How much does deep cleaning cost in Bhopal?</h5>
       <p>Pricing depends on property size and cleaning requirements.</p>
     </div>
-
   </div>
 </section>
 {% endblock %}
+
+

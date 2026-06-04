@@ -1,27 +1,17 @@
 {% extends 'base.html' %}
-{% block title %}
-Best Watertank Cleaning Service near me in Bhopal | Sofa, Kitchen & Deep Cleaning
-{% endblock %}
+{% block title %}Best Home Cleaning Services in Bhopal | Sofa, Watertank, Kitchen & Bathroom Cleaning{% endblock %}
 {% block meta_description %}
-
-Professional home cleaning services in Bhopal including
-watertank cleaning,
-sofa cleaning,
-kitchen cleaning,
-bathroom cleaning,
-carpet cleaning,
-and deep cleaning all type of cleaning at affordable prices.
-
+Professional home cleaning services in Bhopal including sofa cleaning, kitchen cleaning, bathroom cleaning, deep cleaning, carpet cleaning & water tank cleaning at affordable prices. Book trusted cleaners today.
 {% endblock %}
 {% block content %}
-<!-- LOCAL BUSINESS SEO SCHEMA -->
+<!-- LOCAL BUSINESS SCHEMA -->
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
   "@type":"LocalBusiness",
-  "name":"Utkarsh Cleaning",
+  "name":"Utkarsh Cleaning Services",
   "image":"https://utkarshhomeservice.com/static/images/m1.jpg",
-  "url":"https://utkarshhomeservice.com",
+  "url":"https://utkarshhomeservice.com/",
   "telephone":"+917806061048",
   "address":{
     "@type":"PostalAddress",
@@ -36,13 +26,92 @@ and deep cleaning all type of cleaning at affordable prices.
 </script>
 {% load static %}
 <style>
+
+* {
+  font-family: "Libre Baskerville", serif !important;
+}
+
+/* 🔥 ICON FIX (very important) */
+.fa-solid, .fas {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+}
+
+.fab {
+  font-family: "Font Awesome 6 Brands" !important;
+  font-weight: 400 !important;
+}
+
 /* BANNER */
 .banner-img { width:100%; height:420px; object-fit:cover; display:block; }
 @media(max-width:768px){ .banner-img{ height:200px; } }
 @media(max-width:480px){ .banner-img{ height:150px; } }
 #carouselExampleControls{ width:100%; overflow:hidden; }
 
-/* ===== NAKODA EXACT CARD STYLE - DESKTOP ===== */
+/* ===== BANNER TEXT OVERLAY ===== */
+.carousel-item {
+  position: relative;
+}
+.banner-overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  transform: translateY(-50%);
+  text-align: left;
+  z-index: 10;
+  width: 55%;
+}
+.banner-overlay-text h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+.banner-overlay-text p {
+  font-size: 16px;
+  font-weight: 400;
+  color: #f0f0f0;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
+  max-width: 600px;
+  margin: 0;
+  line-height: 1.6;
+}
+@media(max-width:768px){
+  .banner-overlay-text {
+    width: 85%;
+    left: 4%;
+    top: 45%;
+  }
+  .banner-overlay-text h2 {
+    font-size: 16px;
+    margin-bottom: 6px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+  }
+  .banner-overlay-text p {
+    font-size: 10px;
+    line-height: 1.5;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.9);
+  }
+}
+@media(max-width:480px){
+  .banner-overlay-text {
+    width: 88%;
+    left: 4%;
+    top: 45%;
+  }
+  .banner-overlay-text h2 {
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+  .banner-overlay-text p {
+    font-size: 9px;
+    line-height: 1.4;
+  }
+}
+
+/* ===== CATEGORY CARD STYLE ===== */
 .cat-section {
   padding: 40px 0;
   background: #fff;
@@ -50,7 +119,7 @@ and deep cleaning all type of cleaning at affordable prices.
 .cat-section .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 ;
+  padding: 0;
 }
 .cat-grid-wrap {
   display: grid;
@@ -161,69 +230,309 @@ and deep cleaning all type of cleaning at affordable prices.
     line-height: 1.3;
   }
 
-  /* WHY CHOOSE US - mobile gap kam */
-  .why-section .row {
-    --bs-gutter-y: 8px !important;
+  /* WHY CHOOSE US - mobile */
+  .why-section .row { --bs-gutter-y: 0px !important; }
+  .why-section { padding: 28px 0 20px !important; }
+  .why-section .section-title { margin-bottom: 18px !important; }
+
+  .why-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding: 14px 14px !important;
+    margin-bottom: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    text-align: left !important;
+  }
+  .why-card:last-child { border-bottom: none !important; }
+
+  .why-icon {
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, #1a5fa8, #3a8fd4) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 12px rgba(26,95,168,.25) !important;
+  }
+  .why-icon i { font-size: 18px !important; color: #fff !important; }
+
+  .why-card h5 {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    margin-bottom: 2px !important;
+    color: #1a1a2e !important;
+    line-height: 1.3 !important;
+  }
+  .why-card p {
+    font-size: 12px !important;
+    margin-bottom: 0 !important;
+    line-height: 1.4 !important;
+    color: #777 !important;
+  }
+
+  .why-cards-mobile-wrap {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    overflow: hidden;
+    margin: 0 4px;
   }
 }
+
+/* ===== BCS TRIGGER BANNER ===== */
+.bcs-trigger-banner {
+  background: #1a2a4a;
+  color: #fff;
+  text-align: center;
+  padding: 2.5rem 1rem 2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.bcs-trigger-banner:hover { background: #22345e; }
+.bcs-trigger-banner h2 { font-size: 28px; font-weight: 700; margin-bottom: 0.5rem; color: #fff; }
+.bcs-trigger-banner p { font-size: 15px; color: #b0c0d8; margin-bottom: 0.4rem; }
+.bcs-trigger-banner .bcs-price-tag { font-size: 15px; font-weight: 600; color: #7dd3b0; }
+.bcs-trigger-banner .bcs-click-hint {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 10px 28px;
+  background: #1a5fad;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  animation: bcs-pulse 2s infinite;
+}
+@keyframes bcs-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(26,95,173,0.5); }
+  50% { box-shadow: 0 0 0 10px rgba(26,95,173,0); }
+}
+
+/* ===== BCS OVERLAY ===== */
+.bcs-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 9999;
+  overflow-y: auto;
+  padding: 20px 10px 40px;
+}
+.bcs-overlay.active { display: flex; align-items: flex-start; justify-content: center; }
+
+/* ===== BCS POPUP ===== */
+.bcs-popup {
+  background: #f4f6fa;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 1100px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  position: relative;
+  margin: auto;
+}
+.bcs-popup-header {
+  background: #1a2a4a;
+  color: #fff;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.bcs-popup-header h2 { font-size: 20px; font-weight: 700; margin: 0; color: #fff; }
+.bcs-close-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+  line-height: 1;
+}
+.bcs-close-btn:hover { background: rgba(255,255,255,0.3); }
+
+/* ===== BCS INNER LAYOUT ===== */
+.bcs-wrap {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  align-items: flex-start;
+}
+.bcs-steps-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1rem; }
+.bcs-card { background: #fff; border: 1px solid #dce8f5; border-radius: 12px; padding: 1.25rem; box-shadow: 0 2px 10px rgba(0,0,0,.07); }
+.bcs-card h3 { font-size: 16px; font-weight: 700; color: #1a5fad; margin-bottom: 1rem; }
+.bcs-btn-group { display: flex; flex-wrap: wrap; gap: 10px; }
+.bcs-opt {
+  padding: 8px 16px;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: "Libre Baskerville", serif;
+}
+.bcs-opt:hover:not(:disabled) { border-color: #1a5fad; color: #1a5fad; }
+.bcs-opt.selected { background: #1a5fad; color: #fff; border-color: #1a5fad; }
+.bcs-opt:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.bcs-tasks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.bcs-tasks-grid h4 { font-size: 14px; font-weight: 700; color: #222; margin-bottom: 0.75rem; }
+.bcs-task-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #555; margin-bottom: 6px; cursor: pointer; }
+.bcs-task-item input[type=checkbox] { width: 15px; height: 15px; cursor: pointer; accent-color: #1a5fad; }
+
+.bcs-locked-item { padding: 10px 14px; background: #f8f8f8; border: 1px solid #eee; border-radius: 8px; font-size: 13px; color: #999; margin-bottom: 8px; }
+.bcs-locked-title { font-size: 16px; font-weight: 700; color: #c0392b; margin-bottom: 1rem; }
+
+/* ===== BCS SUMMARY ===== */
+.bcs-summary-col { width: 280px; min-width: 260px; flex-shrink: 0; }
+.bcs-summary-card {
+  background: #fff;
+  border: 1px solid #dce8f5;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,.07);
+  position: sticky;
+  top: 20px;
+}
+.bcs-summary-card h3 { font-size: 16px; font-weight: 700; color: #1a5fad; margin-bottom: 1rem; }
+.bcs-summary-row { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #555; margin-bottom: 10px; }
+.bcs-summary-row .bcs-val { color: #222; font-weight: 600; margin-left: auto; }
+.bcs-price-big { font-size: 26px; font-weight: 700; color: #1a2a4a; margin: 1rem 0; }
+.bcs-price-big small { font-size: 13px; color: #888; font-weight: 400; }
+.bcs-note { font-size: 11px; color: #999; margin-bottom: 12px; line-height: 1.4; }
+.bcs-btn-book {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-family: "Libre Baskerville", serif;
+  text-align: center;
+  text-decoration: none;
+}
+.bcs-btn-green { background: #27ae60; color: #fff; }
+.bcs-btn-blue { background: #1a5fad; color: #fff; }
+.bcs-btn-green:hover { background: #219a52; color: #fff; }
+.bcs-btn-blue:hover { background: #154e91; color: #fff; }
+
+/* ===== PROF+DUR ACCORDION ===== */
+.bcs-prof-row { margin-bottom: 8px; }
+
+.bcs-prof-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: 1.5px solid #d0dce8;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #333;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: "Libre Baskerville", serif;
+  text-align: left;
+}
+.bcs-prof-btn:hover { border-color: #1a5fad; background: #eef4fb; }
+.bcs-prof-btn.bcs-prof-selected { background: #1a5fad; color: #fff; border-color: #1a5fad; }
+.bcs-prof-btn.bcs-prof-selected .bcs-prof-arrow { color: #fff; transform: rotate(180deg); }
+.bcs-prof-arrow { font-size: 12px; color: #888; transition: transform 0.2s; display: inline-block; }
+.bcs-rec-badge { font-size: 12px; font-weight: 600; }
+
+.bcs-dur-panel { display: none; padding: 10px 4px 4px; }
+.bcs-dur-panel.bcs-dur-open { display: block; }
+
+.bcs-dur-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.bcs-dur-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border: 1.5px solid #d0dce8;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: "Libre Baskerville", serif;
+  position: relative;
+  min-width: 72px;
+}
+.bcs-dur-btn:hover { border-color: #1a5fad; background: #eef4fb; }
+.bcs-dur-btn.bcs-dur-selected { background: #e8f5e9; border-color: #27ae60; }
+.bcs-dur-hr { font-size: 13px; font-weight: 700; color: #222; }
+.bcs-dur-btn.bcs-dur-selected .bcs-dur-hr { color: #1a6b35; }
+.bcs-dur-price { font-size: 13px; font-weight: 700; color: #1a5fad; margin-top: 3px; }
+.bcs-dur-btn.bcs-dur-selected .bcs-dur-price { color: #27ae60; }
+.bcs-dur-badge {
+  position: absolute;
+  top: -8px; right: -4px;
+  background: #f0a500;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* ===== BCS MOBILE ===== */
+@media(max-width: 768px) {
+  .bcs-overlay { padding: 0; align-items: flex-end; }
+  .bcs-popup { border-radius: 20px 20px 0 0; max-height: 92vh; overflow-y: auto; }
+  .bcs-wrap { flex-direction: column; padding: 1rem; }
+  .bcs-summary-col { width: 100%; min-width: unset; }
+  .bcs-tasks-grid { grid-template-columns: 1fr; }
+  .bcs-summary-card { position: static; }
+  .bcs-trigger-banner h2 { font-size: 20px; }
+}
 </style>
-<!-- SEO HERO SECTION -->
-<section class="py-5 bg-light text-center">
 
+<!-- SEO H1 — hidden -->
+<section class="seo-hero" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
   <div class="container">
-
-    <h1 class="fw-bold"
-        style="font-size:48px;">
-
-      Profession Home Cleaning Services in Bhopal
-
-    </h1>
-
-    <p class="text-muted mt-3"
-       style="max-width:900px;margin:auto;line-height:1.9;">
-
-      Professional sofa cleaning,
-      kitchen cleaning,
-      bathroom cleaning,
-      carpet cleaning,
-      and deep cleaning services in Bhopal.
-
-    </p>
-
-    <div class="mt-4">
-
-      <a href="tel:+917806061048"
-         class="btn btn-primary btn-lg me-2"
-         style="border-radius:30px;">
-
-         📞 Call Now
-
-      </a>
-
-      <a href="https://wa.me/917806061048"
-         class="btn btn-success btn-lg"
-         style="border-radius:30px;">
-
-         💬 WhatsApp
-
-      </a>
-
-    </div>
-
+    <h1>Best Home Cleaning Services in Bhopal</h1>
+    <p>Professional Sofa Cleaning, Kitchen Cleaning, Bathroom Cleaning, Carpet Cleaning, water tank & Deep Cleaning Services in Bhopal.</p>
   </div>
-
 </section>
+
 <!-- BANNER SLIDER -->
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
       <img src="{% static 'images/m1.jpg' %}" class="d-block w-100 banner-img" alt="Professional Home Cleaning Services in Bhopal">
+      <div class="banner-overlay-text">
+        <h2>Clean Spaces. Healthier Living. Better Impressions.</h2>
+        <p>Experience high-quality deep cleaning services designed for modern homes and professional spaces. Safe chemicals, expert staff & superior cleaning standards.</p>
+      </div>
     </div>
     <div class="carousel-item">
-      <img src="{% static 'images/new4.jpg' %}" class="d-block w-100 banner-img" alt="Sofa Cleaning Services in Bhopal">
+      <img src="{% static 'images/or.jpg' %}" class="d-block w-100 banner-img" alt="Sofa Cleaning Services in Bhopal">
     </div>
     <div class="carousel-item">
-      <img src="{% static 'images/nn1.jpg' %}" class="d-block w-100 banner-img" alt="Water Tank Cleaning Services in Bhopal">
+      <img src="{% static 'images/nn1.jpg' %}" class="d-block w-100 banner-img" alt="Deep Cleaning Company in Bhopal">
     </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -244,9 +553,9 @@ and deep cleaning all type of cleaning at affordable prices.
           <div class="img-wrap">
             {% with category.services.first as first_service %}
               {% if first_service and first_service.image %}
-                <img src="{{ first_service.image.url }}" alt="{{ category.name }} Cleaning Services in Bhopal">
+                <img src="{{ first_service.image.url }}" alt="{{ category.name }}">
               {% elif category.image %}
-                <img src="{{ category.image.url }}" alt="{{ category.name }} Cleaning Services in Bhopal">
+                <img src="{{ category.image.url }}" alt="{{ category.name }}">
               {% else %}
                 <div class="no-img">
                   <i class="fas fa-spray-can-sparkles fa-3x" style="color:#fff;opacity:.6;"></i>
@@ -257,9 +566,9 @@ and deep cleaning all type of cleaning at affordable prices.
           <div class="mobile-img-box" style="display:none;">
             {% with category.services.first as first_service %}
               {% if first_service and first_service.image %}
-                <img src="{{ first_service.image.url }}" alt="{{ category.name }} Cleaning Services in Bhopal">
+                <img src="{{ first_service.image.url }}" alt="{{ category.name }}">
               {% elif category.image %}
-                <img src="{{ category.image.url }}" alt="{{ category.name }} Cleaning Services in Bhopal">
+                <img src="{{ category.image.url }}" alt="{{ category.name }}">
               {% else %}
                 <span style="font-size:32px;">🧹</span>
               {% endif %}
@@ -274,99 +583,415 @@ and deep cleaning all type of cleaning at affordable prices.
   </div>
 </section>
 
+<!-- =============================================
+     BUILD YOUR CLEANING SERVICE — POPUP VERSION
+     PRICING TABLE:
+     1 Prof: 1hr=399, 2hr=699, 3hr=899, 4hr=1099, 8hr/FullDay=1799
+     2 Prof: 2hr=1199, 3hr=1499, 4hr=1799, 8hr/FullDay=2999
+     3 Prof: 2hr=1699, 3hr=2099, 4hr=2499, 8hr/FullDay=3999
+     4 Prof: 3hr=2699, 4hr=3299, 8hr/FullDay=5299
+     + ₹50 per task selected
+============================================= -->
+
+<!-- TRIGGER BANNER -->
+<div class="bcs-trigger-banner" onclick="document.getElementById('bcsOverlay').classList.add('active')">
+  <h2>🧹 Build Your Cleaning Service</h2>
+  <p>Choose Staff &bull; Select Hours &bull; Pick Cleaning Tasks &bull; Get Instant Pricing</p>
+  <div class="bcs-price-tag">Starting From ₹399 Only</div>
+  <div class="bcs-click-hint">👆 Click Here to Build Your Plan</div>
+</div>
+
+<!-- POPUP OVERLAY -->
+<div class="bcs-overlay" id="bcsOverlay" onclick="bcsOverlayClose(event)">
+  <div class="bcs-popup">
+
+    <!-- Header -->
+    <div class="bcs-popup-header">
+      <h2>🧹 Build Your Cleaning Service</h2>
+      <button class="bcs-close-btn" onclick="document.getElementById('bcsOverlay').classList.remove('active')">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div class="bcs-wrap">
+      <div class="bcs-steps-col">
+
+        <!-- STEP 1+2 COMBINED: Select Professional → shows hours+price inline -->
+        <div class="bcs-card">
+          <h3>Step 1: Select Professionals &amp; Duration</h3>
+
+          <!-- PROF 1 -->
+          <div class="bcs-prof-row" id="prof-row-1">
+            <button class="bcs-prof-btn" data-prof="1" onclick="bcsSelectProf(this,1)">
+              <span class="bcs-prof-label">👤 1 Professional</span>
+              <span class="bcs-prof-arrow">▼</span>
+            </button>
+            <div class="bcs-dur-panel" id="dur-panel-1">
+              <div class="bcs-dur-grid">
+                
+                <button class="bcs-dur-btn" data-dur="2" onclick="bcsSelectDur(this,2)">
+                  <span class="bcs-dur-hr">2 Hrs</span>
+                  <span class="bcs-dur-price">₹699</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="3" onclick="bcsSelectDur(this,3)">
+                  <span class="bcs-dur-hr">3 Hrs</span>
+                  <span class="bcs-dur-price">₹899</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="4" onclick="bcsSelectDur(this,4)">
+                  <span class="bcs-dur-hr">4 Hrs</span>
+                  <span class="bcs-dur-price">₹1,099</span>
+                  <span class="bcs-dur-badge">Popular</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="8" onclick="bcsSelectDur(this,8)">
+                  <span class="bcs-dur-hr">8 Hrs</span>
+                  <span class="bcs-dur-price">₹1,799</span>
+                </button>
+                
+              </div>
+            </div>
+          </div>
+
+          <!-- PROF 2 -->
+          <div class="bcs-prof-row" id="prof-row-2">
+            <button class="bcs-prof-btn bcs-prof-selected" data-prof="2" onclick="bcsSelectProf(this,2)">
+              <span class="bcs-prof-label">👥 2 Professionals <span class="bcs-rec-badge">⭐ Recommended</span></span>
+              <span class="bcs-prof-arrow">▼</span>
+            </button>
+            <div class="bcs-dur-panel bcs-dur-open" id="dur-panel-2">
+              <div class="bcs-dur-grid">
+                <button class="bcs-dur-btn" data-dur="2" onclick="bcsSelectDur(this,2)">
+                  <span class="bcs-dur-hr">2 Hrs</span>
+                  <span class="bcs-dur-price">₹1,199</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="3" onclick="bcsSelectDur(this,3)">
+                  <span class="bcs-dur-hr">3 Hrs</span>
+                  <span class="bcs-dur-price">₹1,499</span>
+                </button>
+                <button class="bcs-dur-btn bcs-dur-selected" data-dur="4" onclick="bcsSelectDur(this,4)">
+                  <span class="bcs-dur-hr">4 Hrs</span>
+                  <span class="bcs-dur-price">₹1,799</span>
+                  <span class="bcs-dur-badge">Popular</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="8" onclick="bcsSelectDur(this,8)">
+                  <span class="bcs-dur-hr">8 Hrs</span>
+                  <span class="bcs-dur-price">₹2,999</span>
+                </button>
+                
+              </div>
+            </div>
+          </div>
+
+          <!-- PROF 3 -->
+          <div class="bcs-prof-row" id="prof-row-3">
+            <button class="bcs-prof-btn" data-prof="3" onclick="bcsSelectProf(this,3)">
+              <span class="bcs-prof-label">👥👤 3 Professionals</span>
+              <span class="bcs-prof-arrow">▼</span>
+            </button>
+            <div class="bcs-dur-panel" id="dur-panel-3">
+              <div class="bcs-dur-grid">
+                <button class="bcs-dur-btn" data-dur="3" onclick="bcsSelectDur(this,3)">
+                  <span class="bcs-dur-hr">3 Hrs</span>
+                  <span class="bcs-dur-price">₹2,099</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="4" onclick="bcsSelectDur(this,4)">
+                  <span class="bcs-dur-hr">4 Hrs</span>
+                  <span class="bcs-dur-price">₹2,499</span>
+                  <span class="bcs-dur-badge">Popular</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="8" onclick="bcsSelectDur(this,8)">
+                  <span class="bcs-dur-hr">8 Hrs</span>
+                  <span class="bcs-dur-price">₹3,999</span>
+                </button>
+                
+              </div>
+            </div>
+          </div>
+
+          <!-- PROF 4 -->
+          <div class="bcs-prof-row" id="prof-row-4">
+            <button class="bcs-prof-btn" data-prof="4" onclick="bcsSelectProf(this,4)">
+              <span class="bcs-prof-label">👥👥 4 Professionals</span>
+              <span class="bcs-prof-arrow">▼</span>
+            </button>
+            <div class="bcs-dur-panel" id="dur-panel-4">
+              <div class="bcs-dur-grid">
+                <button class="bcs-dur-btn" data-dur="4" onclick="bcsSelectDur(this,4)">
+                  <span class="bcs-dur-hr">4 Hrs</span>
+                  <span class="bcs-dur-price">₹3,299</span>
+                  <span class="bcs-dur-badge">Popular</span>
+                </button>
+                <button class="bcs-dur-btn" data-dur="8" onclick="bcsSelectDur(this,8)">
+                  <span class="bcs-dur-hr">8 Hrs</span>
+                  <span class="bcs-dur-price">₹5,299</span>
+                </button>
+                
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- STEP 3: Tasks -->
+        <div class="bcs-card">
+          <h3>Step 3: Select Cleaning Tasks <span style="font-size:12px;color:#888;font-weight:400;">(+₹50 per task)</span></h3>
+          <div class="bcs-tasks-grid">
+            <div>
+              <h4>Living Area</h4>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Furniture Dusting</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Dining Table Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> TV Unit Dusting</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Shoe Rack Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Door Wiping</label>
+            </div>
+            <div>
+              <h4>Bedroom</h4>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Bed Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Wardrobe Exterior</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Side Table Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Mirror Cleaning</label>
+            </div>
+            <div>
+              <h4>Kitchen (Basic)</h4>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Kitchen Counter</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Outer Cabinets</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Sink Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Chimney Exterior</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Refrigerator Exterior</label>
+            </div>
+            <div>
+              <h4>Bathroom (Basic)</h4>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Basin Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Mirror Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Floor Cleaning</label>
+              <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Toilet Seat Cleaning</label>
+            </div>
+            <div style="grid-column: 1 / -1;">
+              <h4>General Cleaning</h4>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 1.5rem;">
+                <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Fan Dusting</label>
+                <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Cobweb Removal</label>
+                <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Window Cleaning</label>
+                <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Balcony Cleaning</label>
+                <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Sweeping</label>
+                <label class="bcs-task-item"><input type="checkbox" onchange="bcsCountTasks()"> Mopping</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOCKED Deep Cleaning -->
+        <div class="bcs-card">
+          <div class="bcs-locked-title">❌ Deep Cleaning Services (Locked)</div>
+          <div class="bcs-locked-item">🔒 Sofa Shampooing</div>
+          <div class="bcs-locked-item">🔒 Mattress Cleaning</div>
+          <div class="bcs-locked-item">🔒 Kitchen Deep Cleaning</div>
+          <div class="bcs-locked-item">🔒 Bathroom Deep Cleaning</div>
+          <div class="bcs-locked-item">🔒 Floor Machine Scrubbing</div>
+          <div class="bcs-locked-item">🔒 Marble Polishing</div>
+          <div class="bcs-locked-item">🔒 Water Tank Cleaning</div>
+          <div class="bcs-locked-item">🔒 Pest Control</div>
+        </div>
+
+      </div>
+
+      <!-- SUMMARY CARD -->
+      <div class="bcs-summary-col">
+        <div class="bcs-summary-card">
+          <h3>Your Cleaning Plan</h3>
+          <div class="bcs-summary-row">👷 Professionals: <span class="bcs-val" id="bcs-s-prof">2</span></div>
+          <div class="bcs-summary-row">⏱ Duration: <span class="bcs-val" id="bcs-s-dur">4 Hours</span></div>
+          <div class="bcs-summary-row">📋 Tasks Selected: <span class="bcs-val" id="bcs-s-tasks">0</span></div>
+          <hr>
+          <div class="bcs-summary-row">💰 Estimated Price:</div>
+          <div class="bcs-price-big">₹<span id="bcs-s-price">1,799</span> <small>onwards</small></div>
+          <p class="bcs-note">* Overtime: ₹250–₹850/hr extra depending on professionals selected.</p>
+          <a href="/checkout/" class="bcs-btn-book bcs-btn-green">Book Now</a>
+          <a href="https://wa.me/917806061048?text=Hello%2C%20I%20want%20to%20book%20a%20cleaning%20service"
+             target="_blank" class="bcs-btn-book bcs-btn-blue">📲 WhatsApp Booking</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// =============================================
+// EXACT PRICE TABLE
+// =============================================
+var bcsPriceTable = {
+  1: { 1:399,  2:699,  3:899,  4:1099, 8:1799, 9:1799 },
+  2: { 1:null, 2:1199, 3:1499, 4:1799, 8:2999, 9:2999 },
+  3: { 1:null, 2:1699, 3:2099, 4:2499, 8:3999, 9:3999 },
+  4: { 1:null, 2:null, 3:2699, 4:3299, 8:5299, 9:5299 }
+};
+
+var bcsState = { prof: 2, dur: 4, tasks: 0 };
+
+// Close on outside click
+function bcsOverlayClose(e) {
+  if (e.target === document.getElementById('bcsOverlay')) {
+    document.getElementById('bcsOverlay').classList.remove('active');
+  }
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.getElementById('bcsOverlay').classList.remove('active');
+});
+
+function bcsSelectProf(btn, val) {
+  // Deselect all prof buttons + close all panels
+  document.querySelectorAll('.bcs-prof-btn').forEach(function(b) {
+    b.classList.remove('bcs-prof-selected');
+  });
+  document.querySelectorAll('.bcs-dur-panel').forEach(function(p) {
+    p.classList.remove('bcs-dur-open');
+  });
+
+  // Select clicked prof + open its panel
+  btn.classList.add('bcs-prof-selected');
+  var panel = document.getElementById('dur-panel-' + val);
+  if (panel) panel.classList.add('bcs-dur-open');
+
+  bcsState.prof = val;
+
+  // Auto-select first dur button in this panel
+  var firstDurBtn = panel ? panel.querySelector('.bcs-dur-btn') : null;
+  if (firstDurBtn) {
+    panel.querySelectorAll('.bcs-dur-btn').forEach(function(b){ b.classList.remove('bcs-dur-selected'); });
+    firstDurBtn.classList.add('bcs-dur-selected');
+    bcsState.dur = parseInt(firstDurBtn.getAttribute('data-dur'));
+  }
+
+  bcsUpdate();
+}
+
+function bcsSelectDur(btn, val) {
+  // Deselect all dur buttons in the same panel
+  var panel = btn.closest('.bcs-dur-panel');
+  if (panel) {
+    panel.querySelectorAll('.bcs-dur-btn').forEach(function(b){ b.classList.remove('bcs-dur-selected'); });
+  }
+  btn.classList.add('bcs-dur-selected');
+  bcsState.dur = val;
+  bcsUpdate();
+}
+
+function bcsCountTasks() {
+  bcsState.tasks = document.querySelectorAll('.bcs-task-item input[type=checkbox]:checked').length;
+  bcsUpdate();
+}
+
+function bcsUpdate() {
+  var basePrice = (bcsPriceTable[bcsState.prof] && bcsPriceTable[bcsState.prof][bcsState.dur]) || 0;
+  var total = basePrice + (bcsState.tasks * 50);
+  var durLabel = bcsState.dur === 9 ? 'Full Day (8 Hrs)' :
+                 bcsState.dur + ' Hour' + (bcsState.dur > 1 ? 's' : '');
+
+  document.getElementById('bcs-s-prof').textContent = bcsState.prof;
+  document.getElementById('bcs-s-dur').textContent = durLabel;
+  document.getElementById('bcs-s-tasks').textContent = bcsState.tasks;
+  document.getElementById('bcs-s-price').textContent = total.toLocaleString('en-IN');
+}
+
+// Init — open panel 2, select 4hr by default
+bcsUpdate();
+</script>
+
 <!-- WHY CHOOSE US -->
 <section class="why-section">
   <div class="container">
     <div class="section-title">
-      <h2>Why Choose Our Cleaning Services in Bhopal?</h2>
+      <h2>WHY CHOOSE US ?</h2>
       <div class="title-line"></div>
     </div>
+    <div class="why-cards-mobile-wrap">
     <div class="row g-2">
-      <div class="col-lg-4 col-md-6">
+      <div class="col-lg-4 col-md-6 col-12">
         <div class="why-card">
           <div class="why-icon"><i class="fas fa-star"></i></div>
-          <h5 class="fw-bold">4.9 Rated on Google.</h5>
-          <p class="text-muted">Trusted by hundreds of happy customers for home cleaning services in Bhopal. with genuine Google reviews and proven quality service.</p>
+          <div>
+            <h5 class="fw-bold">4.9 Rated on Google.</h5>
+            <p class="text-muted">Trusted by hundreds of happy customers for home cleaning services in Bhopal. with genuine Google reviews and proven quality service.</p>
+          </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-6">
+      <div class="col-lg-4 col-md-6 col-12">
         <div class="why-card">
           <div class="why-icon"><i class="fas fa-rupee-sign"></i></div>
-          <h5 class="fw-bold">Top-Rated Cleaning Company.</h5>
-          <p class="text-muted">Known for professionalism, punctual service, and high cleaning standards for homes and businesses.</p>
+          <div>
+            <h5 class="fw-bold">Top-Rated Cleaning Company.</h5>
+            <p class="text-muted">Known for professionalism, punctual service, and high cleaning standards for homes and businesses.</p>
+          </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-6">
+      <div class="col-lg-4 col-md-6 col-12">
         <div class="why-card">
           <div class="why-icon"><i class="fas fa-user-shield"></i></div>
-          <h5 class="fw-bold">Expert & Trained Cleaners.</h5>
-          <p class="text-muted">Well-trained, polite staff experienced in sofa, home, kitchen, water tank, and office cleaning.</p>
+          <div>
+            <h5 class="fw-bold">Expert Sofa & Home Cleaning Experts in Bhopal.</h5>
+            <p class="text-muted">Well-trained, polite staff experienced in sofa, home, kitchen, water tank, and office cleaning.</p>
+          </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-6">
+      <div class="col-lg-4 col-md-6 col-12">
         <div class="why-card">
           <div class="why-icon"><i class="fas fa-cogs"></i></div>
-          <h5 class="fw-bold">Advanced Cleaning Equipment</h5>
-          <p class="text-muted">We use modern machines and eco-friendly products for deep, safe, and long-lasting cleaning.</p>
+          <div>
+            <h5 class="fw-bold">Advanced Cleaning Equipment</h5>
+            <p class="text-muted">We use modern machines and eco-friendly products for deep, safe, and long-lasting cleaning.</p>
+          </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-6">
+      <div class="col-lg-4 col-md-6 col-12">
         <div class="why-card">
           <div class="why-icon"><i class="fas fa-thumbs-up"></i></div>
-          <h5 class="fw-bold">On-Time & Hassle-Free Service.</h5>
-          <p class="text-muted">Our team arrives on schedule and completes work smoothly without disturbing your routine.</p>
+          <div>
+            <h5 class="fw-bold">On-Time & Hassle-Free Service.</h5>
+            <p class="text-muted">Our team arrives on schedule and completes work smoothly without disturbing your routine.</p>
+          </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-6">
+      <div class="col-lg-4 col-md-6 col-12">
         <div class="why-card">
           <div class="why-icon"><i class="fas fa-link"></i></div>
-          <h5 class="fw-bold">Affordable & Transparent Pricing.</h5>
-          <p class="text-muted">Fair pricing with no hidden charges. Complete clarity before starting the service.</p>
+          <div>
+            <h5 class="fw-bold">Affordable & Transparent Pricing.</h5>
+            <p class="text-muted">Fair pricing with no hidden charges. Complete clarity before starting the service.</p>
+          </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </section>
 
 <!-- Elfsight Google Reviews -->
 <script src="https://elfsightcdn.com/platform.js" async></script>
-<div class="elfsight-app-19930266-816d-4647-9139-42f0e90d5803" data-elfsight-app-lazy></div>
-<!-- SEO CONTENT SECTION -->
-<section class="py-5 bg-white">
+<div class="elfsight-app-d79520b2-6553-4e6d-a65d-aa90ca3dc70f" data-elfsight-app-lazy></div>
 
+<!-- SEO CONTENT — hidden -->
+<section style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
   <div class="container">
-
-    <div class="section-title">
-
-      <h2>
-        Professional Cleaning Services in Bhopal
-      </h2>
-
-      <div class="title-line"></div>
-
-    </div>
-
-    <p class="text-muted"
-       style="line-height:1.9;font-size:16px;">
-
+    <h2>Professional Cleaning Services in Bhopal</h2>
+    <p>
       Utkarsh Cleaning provides professional home cleaning services in Bhopal
-      including sofa cleaning,
-      water tank cleaning,
-      bathroom cleaning,
-      kitchen cleaning,
-      carpet cleaning,
-      office cleaning,
-      water tank cleaning,
-      and deep cleaning services.
-
-      Our trained cleaning experts use modern machines
-      and eco-friendly chemicals to deliver safe and hygienic cleaning.
-
+      for homes, apartments, offices, villas, and commercial spaces.
+      We offer sofa cleaning, carpet cleaning, bathroom cleaning,
+      kitchen cleaning, deep cleaning, office cleaning,
+      water tank cleaning, mattress cleaning, and floor scrubbing services.
+      Our trained cleaning experts use advanced machines and eco-friendly
+      chemicals to deliver safe, hygienic, and affordable cleaning solutions
+      across Bhopal.
+      If you are looking for trusted and affordable cleaning services in Bhopal,
+      Utkarsh Cleaning is your reliable local cleaning company.
     </p>
-
+    <div>
+      <a href="/services/?category=sofa-cleaning">Sofa Cleaning Bhopal</a>
+      <a href="/services/?category=kitchen-deep-cleaning">Kitchen Cleaning Bhopal</a>
+      <a href="/services/?category=Bathroom-deep-cleaning">Bathroom Cleaning Bhopal</a>
+    </div>
   </div>
-
 </section>
+
 <!-- TESTIMONIALS -->
 {% if testimonials %}
 <section class="py-5" style="background:#fff;">
@@ -407,7 +1032,7 @@ and deep cleaning all type of cleaning at affordable prices.
 <section class="py-5" style="background:var(--light-bg);">
   <div class="container">
     <div class="section-title">
-      <h2>Cleaning Tips & Home Cleaning Blogs</h2>
+      <h2>Latest From Our Blog</h2>
       <div class="title-line"></div>
     </div>
     <div class="row g-4">
@@ -415,7 +1040,7 @@ and deep cleaning all type of cleaning at affordable prices.
       <div class="col-md-4">
         <div class="card border-0 shadow-sm h-100">
           {% if blog.image %}
-            <img src="{{ blog.image.url }}" class="card-img-top" style="height:200px;object-fit:cover;" alt="{{ blog.title }} - Cleaning Tips in Bhopal">
+            <img src="{{ blog.image.url }}" class="card-img-top" style="height:200px;object-fit:cover;" alt="{{ blog.title }}">
           {% endif %}
           <div class="card-body">
             <small class="text-muted">{{ blog.created_at|date:"d M Y" }}</small>
@@ -430,56 +1055,23 @@ and deep cleaning all type of cleaning at affordable prices.
   </div>
 </section>
 {% endif %}
-<!-- FAQ SECTION -->
-<section class="py-5 bg-light">
 
+<!-- FAQ — hidden -->
+<section style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
   <div class="container">
-
-    <div class="section-title">
-
-      <h2>Frequently Asked Questions</h2>
-
-      <div class="title-line"></div>
-
+    <h2>Frequently Asked Questions</h2>
+    <div>
+      <h5>What is the best home cleaning service in Bhopal?</h5>
+      <p>Utkarsh Cleaning provides professional and affordable home cleaning services across Bhopal.</p>
     </div>
-
-    <div class="mb-4">
-
-      <h5>
-        Which is the best cleaning company in Bhopal?
-      </h5>
-
-      <p class="text-muted">
-        Utkarsh Cleaning provides trusted home cleaning services in Bhopal.
-      </p>
-
+    <div>
+      <h5>Do you provide sofa cleaning in Bhopal?</h5>
+      <p>Yes, we provide deep sofa shampooing and vacuum cleaning services in Bhopal.</p>
     </div>
-
-    <div class="mb-4">
-
-      <h5>
-        Do you provide sofa cleaning services?
-      </h5>
-
-      <p class="text-muted">
-        Yes, we provide professional sofa cleaning services in Bhopal.
-      </p>
-
+    <div>
+      <h5>How much does deep cleaning cost in Bhopal?</h5>
+      <p>Pricing depends on property size and cleaning requirements.</p>
     </div>
-
-    <div class="mb-4">
-
-      <h5>
-        Which areas do you serve?
-      </h5>
-
-      <p class="text-muted">
-        We provide cleaning services across Bhopal and nearby areas.
-      </p>
-
-    </div>
-
   </div>
-
 </section>
 {% endblock %}
