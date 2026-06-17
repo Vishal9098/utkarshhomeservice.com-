@@ -3,15 +3,13 @@
 Sofa cleaning near me in Bhopal| Secure Checkout
 {% endblock %}
 {% block meta_description %}
-
 Complete your booking securely with Utkarsh Cleaning.
 Book sofa cleaning, kitchen cleaning,
 bathroom cleaning, and deep cleaning services in Bhopal.
-
 {% endblock %}
 {% block content %}
 
-<!-- ✅ Meta Pixel: InitiateCheckout Event -->
+<!-- Meta Pixel: InitiateCheckout Event -->
 <script>
 fbq('track', 'InitiateCheckout', {
   value: {{ total }},
@@ -34,6 +32,7 @@ fbq('track', 'InitiateCheckout', {
   }
 }
 </script>
+
 <div class="breadcrumb-section">
   <div class="container">
     <ol class="breadcrumb mb-0">
@@ -46,21 +45,13 @@ fbq('track', 'InitiateCheckout', {
 
 <section class="py-5">
   <div class="container">
-    <h1 class="fw-bold mb-4"
-    style="font-size:36px; display:none;">
+    <h1 class="fw-bold mb-4" style="font-size:36px; display:none;">Secure Cleaning Service Checkout</h1>
+    <p class="text-muted mb-4" style="max-width:900px;line-height:1.9; display:none;">
+      Complete your home cleaning service booking in Bhopal securely.
+      Select your preferred service date, time slot, payment method,
+      and confirm your booking with Utkarsh Cleaning.
+    </p>
 
-Secure Cleaning Service Checkout
-
-</h1>
-<p class="text-muted mb-4"
-   style="max-width:900px;line-height:1.9; display:none;">
-
-  Complete your home cleaning service booking in Bhopal securely.
-  Select your preferred service date,
-  time slot, payment method,
-  and confirm your booking with Utkarsh Cleaning.
-
-</p>
     {% if messages %}
       {% for msg in messages %}
         <div class="alert alert-{{ msg.tags }} alert-dismissible fade show" role="alert">
@@ -72,9 +63,11 @@ Secure Cleaning Service Checkout
 
     <form method="POST" id="checkout-form">{% csrf_token %}
 
-    <!-- ✅ Customer GPS Location (Hidden Fields) -->
+    <!-- Customer GPS Location (Hidden Fields) -->
     <input type="hidden" name="dest_latitude" id="dest_latitude">
     <input type="hidden" name="dest_longitude" id="dest_longitude">
+    <!-- BCS Plan Hidden Fields -->
+    <input type="hidden" name="bcs_plan" id="bcs_plan_field">
 
     <div class="row g-4">
 
@@ -94,7 +87,6 @@ Secure Cleaning Service Checkout
             <div class="col-md-6">
               <label class="form-label fw-semibold">Email</label>
               <input type="email" name="email" class="form-control" value="{{ user.email }}">
-              
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">Phone *</label>
@@ -113,7 +105,7 @@ Secure Cleaning Service Checkout
             <div class="col-md-6">
               <label class="form-label fw-semibold">Pincode</label>
               <input type="text" name="pincode" class="form-control"
-              value="{% if profile %}{{ profile.pincode }}{% endif %}">
+                     value="{% if profile %}{{ profile.pincode }}{% endif %}">
             </div>
           </div>
         </div>
@@ -135,7 +127,7 @@ Secure Cleaning Service Checkout
             <div class="col-md-6">
               <label class="form-label fw-semibold">🕐 Service Time *</label>
               <select name="service_time" id="service_time" class="form-select" required>
-                <option value="">-- Time select  --</option>
+                <option value="">-- Time select --</option>
                 {% for slot in all_time_slots %}
                 <option value="{{ slot }}">{{ slot }}</option>
                 {% endfor %}
@@ -143,7 +135,7 @@ Secure Cleaning Service Checkout
             </div>
             <div class="col-12">
               <label class="form-label fw-semibold">Special Instructions</label>
-              <textarea name="special_instructions" class="form-control" rows="2"
+              <textarea name="special_instructions" id="special_instructions" class="form-control" rows="2"
                         placeholder="Please mention any special instructions here..."></textarea>
             </div>
           </div>
@@ -183,21 +175,51 @@ Secure Cleaning Service Checkout
 
       <!-- RIGHT COLUMN: Order Summary -->
       <div class="col-lg-5">
+
+        <!-- BCS PLAN CARD (JS se inject hoga agar BCS booking hai) -->
+        <div id="bcs-plan-card" style="display:none;background:#1a2a4a;color:#fff;border-radius:12px;padding:18px 20px;margin-bottom:16px;">
+          <div style="font-size:16px;font-weight:700;margin-bottom:12px;">🧹 Your Cleaning Plan</div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;">
+            <span style="color:#b0c0d8;">👷 Professionals</span>
+            <strong id="bcs-co-prof">—</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;">
+            <span style="color:#b0c0d8;">⏱ Duration</span>
+            <strong id="bcs-co-dur">—</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;">
+            <span style="color:#b0c0d8;">📋 Tasks Selected</span>
+            <strong id="bcs-co-tasks">—</strong>
+          </div>
+          <hr style="border-color:rgba(255,255,255,0.2);margin:10px 0;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:#b0c0d8;font-size:14px;">💰 Estimated Price</span>
+            <strong id="bcs-co-price" style="color:#7dd3b0;font-size:22px;">₹0</strong>
+          </div>
+          <div id="bcs-co-ot" style="margin-top:10px;font-size:11px;color:#f5cba7;background:rgba(255,255,255,0.08);border-radius:6px;padding:7px 10px;line-height:1.5;">
+            ⏰ Overtime: ₹<span id="bcs-co-ot-rate">—</span>/hr extra if service goes beyond selected duration.
+          </div>
+        </div>
+
+        <!-- NORMAL ORDER SUMMARY CARD -->
         <div class="card border-0 shadow-sm p-4 sticky-top" style="top:100px;">
           <h5 class="fw-bold mb-3">Order Summary</h5>
 
-          {% for item in items %}
-          <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
-            <div>
-              <small class="fw-semibold d-block">{{ item.service.name }}</small>
-              <small class="text-muted">Qty: {{ item.quantity }} × ₹{{ item.service.get_final_price }}</small>
+          <!-- Cart items (normal checkout) -->
+          <div id="cart-items-section">
+            {% for item in items %}
+            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+              <div>
+                <small class="fw-semibold d-block">{{ item.service.name }}</small>
+                <small class="text-muted">Qty: {{ item.quantity }} × ₹{{ item.service.get_final_price }}</small>
+              </div>
+              <strong>₹{{ item.get_total }}</strong>
             </div>
-            <strong>₹{{ item.get_total }}</strong>
+            {% endfor %}
           </div>
-          {% endfor %}
 
           <div class="d-flex justify-content-between mt-2 mb-1">
-            <span>Subtotal</span><strong>₹{{ subtotal }}</strong>
+            <span>Subtotal</span><strong id="co-subtotal">₹{{ subtotal }}</strong>
           </div>
           {% if discount > 0 %}
           <div class="d-flex justify-content-between mb-1 text-success">
@@ -207,11 +229,10 @@ Secure Cleaning Service Checkout
           <div class="d-flex justify-content-between mb-1">
             <span>Service Charges</span><strong class="text-success">FREE</strong>
           </div>
-          <!-- GST yahan se hataya gaya — sirf invoice mein dikhega -->
           <hr>
           <div class="d-flex justify-content-between mb-4">
             <span class="fw-bold fs-5">Total</span>
-            <strong class="fs-5" style="color:var(--primary);">₹{{ total }}</strong>
+            <strong class="fs-5" style="color:var(--primary);" id="co-total">₹{{ total }}</strong>
           </div>
 
           <!-- Booking summary preview -->
@@ -224,7 +245,7 @@ Secure Cleaning Service Checkout
             <small class="text-muted d-block" id="booking-time-display"></small>
           </div>
 
-          <!-- ✅ GPS Status Badge -->
+          <!-- GPS Status Badge -->
           <div id="gps-status" class="mb-2 text-center" style="font-size:12px; color:#888;">
             <i class="fas fa-map-marker-alt me-1"></i><span id="gps-text">📍 Location is being detected…</span>
           </div>
@@ -245,23 +266,19 @@ Secure Cleaning Service Checkout
             </small>
           </div>
           <div class="mt-4">
-
-  <div class="d-flex align-items-center mb-2">
-    <i class="fas fa-shield-alt text-success me-2"></i>
-    <small>100% Secure Booking</small>
-  </div>
-
-  <div class="d-flex align-items-center mb-2">
-    <i class="fas fa-user-check text-success me-2"></i>
-    <small>Verified Cleaning Professionals</small>
-  </div>
-
-  <div class="d-flex align-items-center">
-    <i class="fas fa-star text-warning me-2"></i>
-    <small>Trusted Across Bhopal</small>
-  </div>
-
-</div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="fas fa-shield-alt text-success me-2"></i>
+              <small>100% Secure Booking</small>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="fas fa-user-check text-success me-2"></i>
+              <small>Verified Cleaning Professionals</small>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="fas fa-star text-warning me-2"></i>
+              <small>Trusted Across Bhopal</small>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -291,8 +308,8 @@ function updateSubmitState() {
   submitBtn.disabled = !(hasDate && hasTime);
 
   if (!hasDate && !hasTime)   btnHint.textContent = '📅 Select date and time';
-  else if (!hasDate)          btnHint.textContent = '📅 Date select ';
-  else if (!hasTime)          btnHint.textContent = '🕐 Time select ';
+  else if (!hasDate)          btnHint.textContent = '📅 Date select karein';
+  else if (!hasTime)          btnHint.textContent = '🕐 Time select karein';
   else                        btnHint.textContent = '✅ Booking ready!';
 
   if (hasDate && hasTime) {
@@ -310,105 +327,112 @@ timeInput.addEventListener('change', updateSubmitState);
 document.getElementById('checkout-form').addEventListener('submit', function(e) {
   if (!dateInput.value || !timeInput.value) {
     e.preventDefault();
-    alert('Selecting both date and time is required.!');
+    alert('Selecting both date and time is required!');
   }
 });
 
 updateSubmitState();
 
-// ✅ Customer GPS Location automatically capture
+// ===== BCS PLAN DETECTION =====
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('bcs') !== '1') return;
+
+  var prof     = params.get('prof')      || '2';
+  var durLabel = params.get('dur_label') || '4 Hours';
+  var price    = parseInt(params.get('price') || '0');
+  var tasks    = params.get('tasks')     || '0';
+  var otRate   = parseInt(params.get('ot_rate') || '499');
+
+  // BCS plan card show karo
+  var planCard = document.getElementById('bcs-plan-card');
+  if (planCard) {
+    planCard.style.display = 'block';
+    document.getElementById('bcs-co-prof').textContent  = prof + ' Professional' + (parseInt(prof) > 1 ? 's' : '');
+    document.getElementById('bcs-co-dur').textContent   = durLabel;
+    document.getElementById('bcs-co-tasks').textContent = tasks;
+    document.getElementById('bcs-co-price').textContent = '₹' + price.toLocaleString('en-IN');
+    document.getElementById('bcs-co-ot-rate').textContent = otRate.toLocaleString('en-IN');
+  }
+
+  // Cart items section hide karo (BCS booking mein cart nahi hoga)
+  var cartSection = document.getElementById('cart-items-section');
+  if (cartSection) cartSection.style.display = 'none';
+
+  // Subtotal aur Total update karo
+  var subtotalEl = document.getElementById('co-subtotal');
+  var totalEl    = document.getElementById('co-total');
+  if (subtotalEl) subtotalEl.textContent = '₹' + price.toLocaleString('en-IN');
+  if (totalEl)    totalEl.textContent    = '₹' + price.toLocaleString('en-IN');
+
+  // Special instructions mein BCS plan auto-fill
+  var instrField = document.getElementById('special_instructions');
+  if (instrField && !instrField.value) {
+    instrField.value = '[BCS Plan] ' + prof + ' Professional(s) | ' + durLabel + ' | ' + tasks + ' Tasks | Price: ₹' + price.toLocaleString('en-IN') + ' | Overtime: ₹' + otRate + '/hr';
+  }
+
+  // Hidden field mein BCS data save karo (backend ke liye)
+  var bcsField = document.getElementById('bcs_plan_field');
+  if (bcsField) {
+    bcsField.value = JSON.stringify({
+      professionals: prof,
+      duration: durLabel,
+      tasks: tasks,
+      price: price,
+      overtime_rate: otRate
+    });
+  }
+})();
+
+// GPS Location capture
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
     function(pos) {
       document.getElementById('dest_latitude').value  = pos.coords.latitude;
       document.getElementById('dest_longitude').value = pos.coords.longitude;
-      document.getElementById('gps-text').textContent = '✅Location has been saved.!';
+      document.getElementById('gps-text').textContent = '✅ Location has been saved!';
       document.getElementById('gps-text').style.color = 'green';
     },
     function(err) {
-      document.getElementById('gps-text').textContent = '⚠️ "Location not found (order will still be placed).';
+      document.getElementById('gps-text').textContent = '⚠️ Location not found (order will still be placed).';
       document.getElementById('gps-text').style.color = '#f59e0b';
     }
   );
 } else {
-  document.getElementById('gps-text').textContent = '⚠️Your browser does not support location services';
+  document.getElementById('gps-text').textContent = '⚠️ Your browser does not support location services';
 }
 </script>
 
 <!-- FAQ SECTION -->
 <section class="py-5 bg-light" style="display:none;">
-
   <div class="container">
-
     <div class="section-title">
-
       <h2>Frequently Asked Questions</h2>
-
       <div class="title-line"></div>
-
     </div>
-
     <div class="mb-4">
-
-      <h5>
-        Is my payment secure?
-      </h5>
-
-      <p class="text-muted">
-        Yes, all payments and booking details are securely processed.
-      </p>
-
+      <h5>Is my payment secure?</h5>
+      <p class="text-muted">Yes, all payments and booking details are securely processed.</p>
     </div>
-
     <div class="mb-4">
-
-      <h5>
-        Can I book same-day cleaning service?
-      </h5>
-
-      <p class="text-muted">
-        Yes, same-day booking is available in selected areas of Bhopal.
-      </p>
-
+      <h5>Can I book same-day cleaning service?</h5>
+      <p class="text-muted">Yes, same-day booking is available in selected areas of Bhopal.</p>
     </div>
-
     <div class="mb-4">
-
-      <h5>
-        Which payment methods are available?
-      </h5>
-
-      <p class="text-muted">
-        We support Cash on Delivery,
-        UPI,
-        and Online Payments.
-      </p>
-
+      <h5>Which payment methods are available?</h5>
+      <p class="text-muted">We support Cash on Delivery, UPI, and Online Payments.</p>
     </div>
-
   </div>
-
 </section>
 
 <section class="py-5 bg-light" style="display:none;">
-
   <div class="container text-center">
-
-    <h2 class="mb-4">
-      Trusted Cleaning Company in Bhopal
-    </h2>
-
-    <p class="text-muted"
-       style="max-width:900px;margin:auto;line-height:1.9;">
-
-      Utkarsh Cleaning provides trusted sofa cleaning,
-      kitchen cleaning,
-      bathroom cleaning,
-      and deep cleaning services across Bhopal.
-
+    <h2 class="mb-4">Trusted Cleaning Company in Bhopal</h2>
+    <p class="text-muted" style="max-width:900px;margin:auto;line-height:1.9;">
+      Utkarsh Cleaning provides trusted sofa cleaning, kitchen cleaning,
+      bathroom cleaning, and deep cleaning services across Bhopal.
     </p>
-
   </div>
-
 </section>
+
 {% endblock %}

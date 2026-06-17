@@ -424,7 +424,7 @@ Professional home cleaning services in Bhopal including sofa cleaning, kitchen c
      2 Prof: 2hr=1199, 3hr=1499, 4hr=1799, 8hr=2999          | Overtime: ₹499/hr
      3 Prof: 2hr=1699, 3hr=2099, 4hr=2499, 8hr=3999          | Overtime: ₹747/hr
      4 Prof: 4hr=3299, 8hr=5299                               | Overtime: ₹996/hr
-     + ₹50 per task selected -->
+     Task selection no longer adds extra cost; tasks are included free with the booked plan. -->
 
 <!-- TRIGGER BANNER -->
 <div class="bcs-trigger-banner" onclick="document.getElementById('bcsOverlay').classList.add('active')">
@@ -460,6 +460,10 @@ Professional home cleaning services in Bhopal including sofa cleaning, kitchen c
             </button>
             <div class="bcs-dur-panel" id="dur-panel-1">
               <div class="bcs-dur-grid">
+                <button class="bcs-dur-btn" data-dur="1" onclick="bcsSelectDur(this,1)">
+                  <span class="bcs-dur-hr">1 Hr</span>
+                  <span class="bcs-dur-price">₹399</span>
+                </button>
                 <button class="bcs-dur-btn" data-dur="2" onclick="bcsSelectDur(this,2)">
                   <span class="bcs-dur-hr">2 Hrs</span>
                   <span class="bcs-dur-price">₹699</span>
@@ -634,7 +638,7 @@ Professional home cleaning services in Bhopal including sofa cleaning, kitchen c
           <div class="bcs-overtime-note" id="bcs-overtime-note">
             ⏰ Overtime: ₹<span id="bcs-ot-rate">499</span>/hr extra if service goes beyond selected duration.
           </div>
-          <a href="/checkout/" class="bcs-btn-book bcs-btn-green">Book Now</a>
+          <button onclick="bcsBookNow()" class="bcs-btn-book bcs-btn-green" style="border:none;cursor:pointer;">Book Now</button>
           <a href="https://wa.me/917806061048?text=Hello%2C%20I%20want%20to%20book%20a%20cleaning%20service"
              target="_blank" class="bcs-btn-book bcs-btn-blue">📲 WhatsApp Booking</a>
         </div>
@@ -717,8 +721,7 @@ function bcsCountTasks() {
 
 function bcsUpdate() {
   var basePrice = (bcsPriceTable[bcsState.prof] && bcsPriceTable[bcsState.prof][bcsState.dur]) || 0;
-  // var total = basePrice + (bcsState.tasks * 50);
-  var total = basePrice;
+  var total = basePrice; // Task selection no longer adds ₹50/task — tasks are free with the plan
   var durLabel = bcsState.dur + ' Hour' + (bcsState.dur > 1 ? 's' : '');
 
   // Update overtime rate based on selected professionals
@@ -729,6 +732,22 @@ function bcsUpdate() {
   document.getElementById('bcs-s-dur').textContent = durLabel;
   document.getElementById('bcs-s-tasks').textContent = bcsState.tasks;
   document.getElementById('bcs-s-price').textContent = total.toLocaleString('en-IN');
+  window._bcsTotal = total;
+}
+
+function bcsBookNow() {
+  var durLabel = bcsState.dur + ' Hour' + (bcsState.dur > 1 ? 's' : '');
+  var otRate = bcsOvertimeTable[bcsState.prof] || 250;
+  var params = new URLSearchParams({
+    bcs: '1',
+    prof: bcsState.prof,
+    dur: bcsState.dur,
+    dur_label: durLabel,
+    price: window._bcsTotal || 0,
+    tasks: bcsState.tasks,
+    ot_rate: otRate
+  });
+  window.location.href = '/checkout/?' + params.toString();
 }
 
 // Init
@@ -912,5 +931,3 @@ bcsUpdate();
   </div>
 </section>
 {% endblock %}
-
-

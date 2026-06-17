@@ -64,7 +64,7 @@ def service_detail(request, slug):
         'reviews': reviews, 'avg_rating': round(avg_rating, 1)
     })
 
-# ✅ Water tank custom prices
+# Water tank custom prices
 TANK_PRICES = {
     'water-tank-cleaning-service': {1: 500, 2: 900, 3: 1350, 4: 1700},
     '1000-Liter':                  {1: 700, 2: 1200, 3: 1700},
@@ -159,30 +159,42 @@ def apply_coupon(request):
 
 @login_required
 def checkout(request):
+    # ===== BCS PLAN DETECT =====
+    is_bcs = request.GET.get('bcs') == '1' or request.POST.get('bcs_plan')
+
     cart = Cart.objects.filter(user=request.user).first()
     items = list(cart.items.all()) if cart else []
-    if not items:
+
+    # Normal checkout: cart empty ho toh cart page pe bhejo
+    # BCS checkout: cart empty ho toh bhi allow karo
+    if not items and not is_bcs:
         return redirect('cart')
 
-    subtotal = sum(i.get_total() for i in items)
-    discount = 0
-    coupon_obj = None
-    coupon_code = request.session.get('coupon')
-    if coupon_code:
-        try:
-            coupon_obj = Coupon.objects.get(code=coupon_code, is_active=True)
-            if coupon_obj.discount_type == 'percent':
-                discount = subtotal * coupon_obj.discount_value / 100
-            else:
-                discount = coupon_obj.discount_value
-        except:
-            pass
+    # Pricing calculate karo
+    if is_bcs and not items:
+        # BCS price GET params se lo
+        bcs_price = int(request.GET.get('price', 0) or 0)
+        subtotal = bcs_price
+        discount = 0
+        total = bcs_price
+        coupon_obj = None
+    else:
+        subtotal = sum(i.get_total() for i in items)
+        discount = 0
+        coupon_obj = None
+        coupon_code = request.session.get('coupon')
+        if coupon_code:
+            try:
+                coupon_obj = Coupon.objects.get(code=coupon_code, is_active=True)
+                if coupon_obj.discount_type == 'percent':
+                    discount = subtotal * coupon_obj.discount_value / 100
+                else:
+                    discount = coupon_obj.discount_value
+            except:
+                pass
+        total = subtotal - discount
 
-    taxable = subtotal - discount
-    gst_amount = 0
-    total = taxable
     profile = getattr(request.user, 'profile', None)
-
     min_date = date.today() + timedelta(days=1)
     max_date = date.today() + timedelta(days=30)
     next_available = get_next_available_date(min_date)
@@ -198,7 +210,7 @@ def checkout(request):
         'items': items,
         'subtotal': subtotal,
         'discount': discount,
-        'gst_amount': gst_amount,
+        'gst_amount': 0,
         'total': total,
         'profile': profile,
         'min_date': str(min_date),
@@ -206,6 +218,7 @@ def checkout(request):
         'next_available_date': str(next_available) if next_available else '',
         'all_time_slots': all_time_slots,
         'today': date.today(),
+        'is_bcs': is_bcs,
     }
 
     if request.method == 'POST':
@@ -223,12 +236,26 @@ def checkout(request):
             return render(request, 'store/checkout.html', ctx)
 
         if service_date <= date.today():
-            messages.error(request, '❌Minimum 1 day advance booking is required!')
+            messages.error(request, '❌ Minimum 1 day advance booking is required!')
             return render(request, 'store/checkout.html', ctx)
 
         if service_time not in all_time_slots:
             messages.error(request, '❌ Invalid time slot!')
             return render(request, 'store/checkout.html', ctx)
+
+        # BCS plan data POST se lo
+        bcs_plan_json = request.POST.get('bcs_plan', '')
+        special_instructions = request.POST.get('special_instructions', '')
+
+        # BCS booking total POST data se recalculate karo
+        if is_bcs and not items:
+            try:
+                bcs_data = json.loads(bcs_plan_json) if bcs_plan_json else {}
+                total = int(bcs_data.get('price', 0))
+                subtotal = total
+                discount = 0
+            except:
+                pass
 
         with transaction.atomic():
             order = Order.objects.create(
@@ -241,23 +268,26 @@ def checkout(request):
                 pincode=request.POST.get('pincode'),
                 service_date=service_date,
                 service_time=service_time,
-                special_instructions=request.POST.get('special_instructions', ''),
+                special_instructions=special_instructions,
                 payment_method=request.POST.get('payment_method', 'cod'),
                 subtotal=subtotal,
                 discount=discount,
                 total=total,
-                coupon=coupon_obj,
+                coupon=coupon_obj if not is_bcs else None,
             )
 
-            # ✅ custom_price se sahi price save hogi
-            for item in items:
-                OrderItem.objects.create(
-                    order=order,
-                    service=item.service,
-                    quantity=item.quantity,
-                    price=item.custom_price if item.custom_price is not None else item.service.get_final_price()
-                )
+            # Normal cart items save karo
+            if items:
+                for item in items:
+                    OrderItem.objects.create(
+                        order=order,
+                        service=item.service,
+                        quantity=item.quantity,
+                        price=item.custom_price if item.custom_price is not None else item.service.get_final_price()
+                    )
+            # BCS order: special_instructions mein poora plan info hai — admin ko dikhe
 
+        # GPS Location save karo
         dest_lat = request.POST.get('dest_latitude')
         dest_lng = request.POST.get('dest_longitude')
         try:
@@ -272,7 +302,9 @@ def checkout(request):
         except:
             pass
 
-        cart.items.all().delete()
+        # Cart clear karo (normal checkout)
+        if items:
+            cart.items.all().delete()
         if 'coupon' in request.session:
             del request.session['coupon']
 
@@ -587,7 +619,7 @@ def download_invoice(request, order_id):
     for offset in [9, 15, 21]:
         c.setLineWidth(0.3)
         c.line(rx2, y - offset*mm, rx2 + rw2, y - offset*mm)
-   
+
     lx = rx2 + 2*mm
     vx = rx2 + rw2 - 2*mm
     rows_amounts = [
